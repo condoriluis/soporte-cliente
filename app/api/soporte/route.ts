@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   try {
     const webhookRes = await fetch(webhookUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Webhook-Secret": "st_live_Lh7f8s6d5f4g3h2j1k0lc8Z" },
       body: JSON.stringify(parsed.data),
     });
 

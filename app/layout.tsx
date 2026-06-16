@@ -7,9 +7,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Soporte Técnico | EMPRESA – Área de Sistemas y Soporte",
+  title: "Soporte Técnico | SoportePro – Área de Sistemas y Soporte",
   description:
-    "Solicite asistencia técnica al Área de Sistemas y Soporte del Ministerio de Desarrollo Productivo y Economía Plural.",
+    "Solicite asistencia técnica al Área de Sistemas y Soporte de nuestra organización. Respuesta rápida, segura y profesional.",
 };
 
 export default function RootLayout({

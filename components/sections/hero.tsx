@@ -13,14 +13,19 @@ export default function Hero() {
     <section
       className="relative overflow-hidden py-24 md:py-32"
       style={{
-        background:
-          "linear-gradient(135deg, var(--brand-dark) 0%, #0d2240 60%, #153354 100%)",
+        backgroundImage: "url('/img/support.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Decorative circle */}
+      {/* Dark gradient overlay for readability */}
       <div
-        className="pointer-events-none absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full"
-        style={{ background: "rgba(46,125,196,.1)" }}
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(120deg, rgba(5,20,50,0.70) 0%, rgba(10,35,80,0.55) 55%, rgba(5,20,50,0.45) 100%)",
+        }}
       />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,12 +48,12 @@ export default function Hero() {
               Soporte Técnico{" "}
               <span style={{ color: "var(--brand-light)" }}>Profesional</span>
               <br />
-              para la EMPRESA
+              para SoportePro
             </h1>
 
             <p className="mt-4 text-lg max-w-xl mx-auto lg:mx-0" style={{ color: "rgba(255,255,255,.72)" }}>
               Brindamos asistencia técnica oportuna, eficiente y documentada
-              al personal del Ministerio de Desarrollo Productivo y Economía Plural.
+              al personal de nuestra organización.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 justify-center lg:justify-start">

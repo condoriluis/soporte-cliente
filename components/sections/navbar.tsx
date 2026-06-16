@@ -36,7 +36,7 @@ export default function Navbar() {
           <a href="#" className="flex items-center gap-2 no-underline">
             <Shield className="text-white w-6 h-6" />
             <span className="text-white font-bold text-sm tracking-wide">
-              EMPRESA{" "}
+              SoportePro{" "}
               <span className="font-normal" style={{ color: "#a8d4f5" }}>
                 | Sistemas y Soporte
               </span>

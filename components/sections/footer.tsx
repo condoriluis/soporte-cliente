@@ -10,10 +10,10 @@ export default function Footer() {
           <div>
             <p className="flex items-center gap-2 text-white font-bold mb-3">
               <Shield className="w-4 h-4" />
-              EMPRESA
+              SoportePro
             </p>
             <p className="leading-relaxed">
-              Ministerio de Desarrollo Productivo y Economía Plural.
+              Soporte Técnico Institucional.
               <br />
               Área de Sistemas y Soporte Técnico.
             </p>
@@ -37,7 +37,7 @@ export default function Footer() {
             </p>
             <p className="flex items-center gap-2 mb-1">
               <Mail className="w-3.5 h-3.5 opacity-70" />
-              sistemas@empresa.gob.bo
+              chatbot.botflow@empgmail.com
             </p>
             <p className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 opacity-70" />
@@ -49,7 +49,7 @@ export default function Footer() {
         <Separator className="my-8 opacity-15" />
 
         <p className="text-center text-xs">
-          &copy; {new Date().getFullYear()} EMPRESA – Área de Sistemas y Soporte.
+          © {new Date().getFullYear()} SoportePro – Área de Sistemas y Soporte.
           Todos los derechos reservados.
         </p>
       </div>

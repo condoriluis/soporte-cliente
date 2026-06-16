@@ -35,11 +35,11 @@ export default function SupportForm() {
   const form = useForm<SoporteFormData>({
     resolver: zodResolver(soporteSchema),
     defaultValues: {
-      nombre:    "",
-      email:     "",
+      nombre: "",
+      email: "",
       categoria: undefined,
-      pregunta:  "",
-      fecha:     getTodayISO(),
+      pregunta: "",
+      fecha: getTodayISO(),
     },
   });
 
@@ -145,7 +145,7 @@ export default function SupportForm() {
                       <Input
                         {...field}
                         type="email"
-                        placeholder="usuario@empresa.gob.bo"
+                        placeholder="usuario@empresa.com"
                         maxLength={120}
                         autoComplete="email"
                         className="rounded-xl"

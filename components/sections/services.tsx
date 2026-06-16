@@ -75,7 +75,7 @@ export default function Services() {
           />
           <p className="text-muted-foreground max-w-lg mx-auto text-sm">
             El Área de Sistemas y Soporte garantiza la continuidad tecnológica
-            de todos los procesos institucionales de la EMPRESA.
+            de todos los procesos institucionales de SoportePro.
           </p>
         </div>
 

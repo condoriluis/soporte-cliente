@@ -37,7 +37,7 @@ export default function Footer() {
             </p>
             <p className="flex items-center gap-2 mb-1">
               <Mail className="w-3.5 h-3.5 opacity-70" />
-              chatbot.botflow@empgmail.com
+              chatbot.botflow@gmail.com
             </p>
             <p className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 opacity-70" />

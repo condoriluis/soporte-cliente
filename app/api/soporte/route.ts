@@ -58,7 +58,13 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true });
+    const responseText = await webhookRes.text();
+    let webhookData = responseText;
+    try {
+      webhookData = JSON.parse(responseText);
+    } catch {}
+
+    return NextResponse.json({ success: true, data: webhookData });
   } catch {
     return NextResponse.json(
       { error: "No se pudo conectar con el servidor de webhooks." },

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Loader2, Send, Lock, User, Mail, Tag, MessageSquare, Calendar } from "lucide-react";
+import { Loader2, Send, Lock, User, Mail, Tag, MessageSquare, Calendar, CheckCircle2, Copy } from "lucide-react";
 
 import { soporteSchema, CATEGORIAS, type SoporteFormData } from "@/lib/schemas";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,9 @@ function getTodayISO() {
 }
 
 export default function SupportForm() {
+  const [generatedTicket, setGeneratedTicket] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
   const form = useForm<SoporteFormData>({
     resolver: zodResolver(soporteSchema),
     defaultValues: {
@@ -59,15 +62,32 @@ export default function SupportForm() {
         body: JSON.stringify(data),
       });
 
+      const responseBody = await res.json().catch(() => ({}));
+      
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error ?? `HTTP ${res.status}`);
+        throw new Error(responseBody?.error ?? `HTTP ${res.status}`);
+      }
+
+      let ticketCode = "";
+      if (responseBody?.data?.message) {
+        const parts = responseBody.data.message.split("\n");
+        if (parts.length > 1) {
+          ticketCode = parts[parts.length - 1].trim();
+        } else {
+          ticketCode = responseBody.data.message.trim();
+        }
       }
 
       toast.success("¡Ticket generado!", {
-        description: `Su ticket fue registrado el ${data.fecha}. Un técnico se comunicará a la brevedad.`,
-        duration: 6000,
+        description: ticketCode 
+          ? `Su código es: ${ticketCode}. Un técnico se comunicará a la brevedad.`
+          : `Su ticket fue registrado el ${data.fecha}. Un técnico se comunicará a la brevedad.`,
+        duration: 8000,
       });
+
+      if (ticketCode) {
+        setGeneratedTicket(ticketCode);
+      }
 
       form.reset({ nombre: "", email: "", categoria: undefined, pregunta: "", fecha: getTodayISO() });
     } catch (err: unknown) {
@@ -103,8 +123,48 @@ export default function SupportForm() {
 
         {/* Card */}
         <div className="bg-card rounded-2xl border shadow-lg p-8 md:p-12">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-6">
+          {generatedTicket ? (
+            <div className="text-center space-y-6 py-6 md:py-10">
+              <div className="mx-auto w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">¡Ticket Generado con Éxito!</h3>
+                <p className="text-muted-foreground text-sm">
+                  Guarde este código para dar seguimiento a su solicitud.
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 rounded-xl p-8 border flex flex-col items-center gap-4">
+                <code className="text-3xl sm:text-4xl font-mono font-bold text-foreground tracking-wider">
+                  {generatedTicket}
+                </code>
+                <Button 
+                  variant="outline" 
+                  className="gap-2 mt-2 rounded-xl"
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedTicket);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                    toast.success("Código copiado al portapapeles");
+                  }}
+                >
+                  {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  {copied ? "Copiado" : "Copiar código"}
+                </Button>
+              </div>
+
+              <Button 
+                variant="ghost" 
+                onClick={() => setGeneratedTicket(null)}
+                className="mt-4 rounded-xl"
+              >
+                Generar otro ticket
+              </Button>
+            </div>
+          ) : (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-6">
 
               {/* Nombre */}
               <FormField
@@ -264,6 +324,7 @@ export default function SupportForm() {
               </p>
             </form>
           </Form>
+          )}
         </div>
       </div>
     </section>

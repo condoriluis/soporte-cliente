@@ -1,13 +1,13 @@
 const STEPS = [
   {
     n: 1,
-    title: "Registro de Solicitud",
+    title: "Generación de Ticket",
     desc: "Complete el formulario con sus datos y una descripción clara del problema o consulta técnica.",
   },
   {
     n: 2,
     title: "Asignación de Ticket",
-    desc: "El sistema registra su solicitud y se asigna automáticamente a un técnico especializado.",
+    desc: "El sistema registra su ticket y se asigna automáticamente a un técnico especializado.",
   },
   {
     n: 3,

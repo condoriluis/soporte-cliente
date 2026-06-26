@@ -64,15 +64,15 @@ export default function SupportForm() {
         throw new Error(body?.error ?? `HTTP ${res.status}`);
       }
 
-      toast.success("¡Solicitud enviada!", {
-        description: `Su solicitud fue registrada el ${data.fecha}. Un técnico se comunicará a la brevedad.`,
+      toast.success("¡Ticket generado!", {
+        description: `Su ticket fue registrado el ${data.fecha}. Un técnico se comunicará a la brevedad.`,
         duration: 6000,
       });
 
       form.reset({ nombre: "", email: "", categoria: undefined, pregunta: "", fecha: getTodayISO() });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Error desconocido";
-      toast.error("Error al enviar la solicitud", {
+      toast.error("Error al generar el ticket", {
         description: message.includes("conectar")
           ? "Verifique que el servidor n8n esté iniciado y el workflow esté activo."
           : message,
@@ -90,14 +90,14 @@ export default function SupportForm() {
             className="text-xs font-bold tracking-[.14em] uppercase mb-2"
             style={{ color: "var(--brand-accent)" }}
           >
-            Asistencia Directa
+            Generación de Ticket
           </p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
-            Solicitar Soporte Técnico
+            Generar Ticket de Soporte
           </h2>
           <div className="mx-auto mt-4 mb-5 h-1 w-12 rounded-full" style={{ background: "var(--brand-accent)" }} />
           <p className="text-muted-foreground text-sm">
-            Complete el formulario y nuestro equipo le responderá a la brevedad posible.
+            Complete el formulario para generar un nuevo ticket y nuestro equipo le responderá a la brevedad.
           </p>
         </div>
 
@@ -220,7 +220,7 @@ export default function SupportForm() {
                   <FormItem>
                     <FormLabel className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
                       <Calendar className="w-4 h-4" style={{ color: "var(--brand-accent)" }} />
-                      Fecha de solicitud
+                      Fecha de creación del ticket
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -253,7 +253,7 @@ export default function SupportForm() {
                 ) : (
                   <>
                     <Send className="w-4 h-4 mr-2" />
-                    Enviar Solicitud de Soporte
+                    Generar Ticket
                   </>
                 )}
               </Button>

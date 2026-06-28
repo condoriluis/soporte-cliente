@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Cpu, Headphones } from "lucide-react";
+import TrackTicket from "@/components/track-ticket";
 
 const STATS = [
-  { num: "99%",  lbl: "Disponibilidad" },
+  { num: "99%", lbl: "Disponibilidad" },
   { num: "< 4h", lbl: "Tiempo respuesta" },
   { num: "24/5", lbl: "Atención" },
 ];
@@ -68,19 +69,8 @@ export default function Hero() {
                   Solicitar Soporte
                 </a>
               </Button>
-              <Button
-                asChild
-                variant="ghost"
-                size="lg"
-                className="rounded-full font-semibold"
-                style={{
-                  color: "#fff",
-                  border: "1px solid rgba(255,255,255,.4)",
-                  background: "transparent",
-                }}
-              >
-                <a href="#servicios">Conocer más</a>
-              </Button>
+
+              <TrackTicket />
             </div>
 
             {/* Stats */}

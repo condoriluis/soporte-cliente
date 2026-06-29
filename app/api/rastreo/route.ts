@@ -32,7 +32,7 @@ async function fetchFromDashboard(url: string, apiKey: string): Promise<Response
 
 async function fetchTicketEvents(baseUrl: string, apiKey: string, codeTicket: string): Promise<TicketEvent[]> {
   try {
-    const eventsUrl = `${baseUrl}${DASHBOARD_EVENTS_PATH}?linkTo=code_ticket_event&equalTo=${encodeURIComponent(codeTicket)}&orderBy=date_created_ticket_event&orderMode=asc`;
+    const eventsUrl = `${baseUrl}${DASHBOARD_EVENTS_PATH}?linkTo=code_ticket_event&equalTo=${encodeURIComponent(codeTicket)}&orderBy=date_updated_ticket_event&orderMode=asc`;
     const eventsRes = await fetchFromDashboard(eventsUrl, apiKey);
 
     if (!eventsRes.ok) return [];
@@ -44,7 +44,7 @@ async function fetchTicketEvents(baseUrl: string, apiKey: string, codeTicket: st
       evento: String(e.evento_ticket_event ?? ""),
       comentario: e.comentario_ticket_event ? String(e.comentario_ticket_event) : null,
       tecnico: e.tecnico_ticket_event ? String(e.tecnico_ticket_event) : null,
-      fecha: String(e.date_created_ticket_event ?? ""),
+      fecha: String(e.date_updated_ticket_event ?? ""),
     }));
   } catch {
     return [];

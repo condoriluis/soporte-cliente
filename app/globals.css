@@ -49,10 +49,13 @@
 
 :root {
   --radius: 0.625rem;
-  /* Institutional blue theme — MDPyEP */
-  --brand-dark:   #1a3a5c;
-  --brand-accent: #2e7dc4;
-  --brand-light:  #4a9fe0;
+
+  /* Brand tokens — overridden by layout <style> from DB settings */
+  --brand-primary:   #1a3a5c;
+  --brand-secondary: #2e7dc4;
+  --brand-dark:   var(--brand-primary);
+  --brand-accent: var(--brand-secondary);
+  --brand-light:  color-mix(in srgb, var(--brand-secondary) 80%, white);
 
   --background: oklch(0.97 0.005 240);
   --foreground: oklch(0.14 0.03 240);
@@ -60,18 +63,20 @@
   --card-foreground: oklch(0.14 0.03 240);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.14 0.03 240);
-  --primary: oklch(0.34 0.09 240);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.94 0.01 240);
-  --secondary-foreground: oklch(0.34 0.09 240);
+
+  /* Dynamic — driven by brand tokens */
+  --primary: var(--brand-primary);
+  --primary-foreground: #ffffff;
+  --secondary: color-mix(in srgb, var(--brand-secondary) 15%, white);
+  --secondary-foreground: var(--brand-secondary);
   --muted: oklch(0.94 0.01 240);
   --muted-foreground: oklch(0.52 0.04 240);
-  --accent: oklch(0.54 0.14 240);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: var(--brand-secondary);
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.88 0.02 240);
   --input: oklch(0.88 0.02 240);
-  --ring: oklch(0.54 0.14 240);
+  --ring: var(--brand-secondary);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -79,8 +84,8 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--brand-primary);
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
@@ -88,25 +93,27 @@
 }
 
 .dark {
-  /* Dark institutional theme — deep navy */
   --background: oklch(0.13 0.025 240);
   --foreground: oklch(0.93 0.01 240);
   --card: oklch(0.18 0.03 240);
   --card-foreground: oklch(0.93 0.01 240);
   --popover: oklch(0.18 0.03 240);
   --popover-foreground: oklch(0.93 0.01 240);
-  --primary: oklch(0.60 0.15 240);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.22 0.03 240);
-  --secondary-foreground: oklch(0.93 0.01 240);
+
+  /* Dynamic — overridden by layout <style> */
+  --brand-dark: #0f172a;
+  --primary: color-mix(in srgb, var(--brand-primary) 65%, #8ab4f8);
+  --primary-foreground: #ffffff;
+  --secondary: color-mix(in srgb, var(--brand-secondary) 20%, #0f172a);
+  --secondary-foreground: color-mix(in srgb, var(--brand-secondary) 85%, white);
   --muted: oklch(0.22 0.03 240);
   --muted-foreground: oklch(0.62 0.05 240);
-  --accent: oklch(0.54 0.14 240);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: var(--brand-secondary);
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.60 0.15 240);
+  --ring: color-mix(in srgb, var(--brand-secondary) 80%, #8ab4f8);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -114,12 +121,12 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.18 0.03 240);
   --sidebar-foreground: oklch(0.93 0.01 240);
-  --sidebar-primary: oklch(0.60 0.15 240);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: color-mix(in srgb, var(--brand-primary) 65%, #8ab4f8);
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: oklch(0.22 0.03 240);
   --sidebar-accent-foreground: oklch(0.93 0.01 240);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.60 0.15 240);
+  --sidebar-ring: color-mix(in srgb, var(--brand-secondary) 80%, #8ab4f8);
 }
 
 @layer base {

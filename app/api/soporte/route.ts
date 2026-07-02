@@ -1,24 +1,11 @@
 import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
 import { soporteSchema } from "@/lib/schemas";
+import { checkRateLimit } from "@/lib/rate-limit";
+
+const TS_MAX_AGE = 30 * 60 * 1000;
 
 export async function POST(request: Request) {
-  const webhookUrl = process.env.WEBHOOK_URL;
-  const webhookSecret = process.env.WEBHOOK_SECRET;
-
-  if (!webhookUrl) {
-    return NextResponse.json(
-      { error: "Configuración del servidor incompleta: falta WEBHOOK_URL." },
-      { status: 500 }
-    );
-  }
-
-  if (!webhookSecret) {
-    return NextResponse.json(
-      { error: "Configuración del servidor incompleta: falta WEBHOOK_SECRET." },
-      { status: 500 }
-    );
-  }
-
   let body: unknown;
   try {
     body = await request.json();
@@ -34,40 +21,103 @@ export async function POST(request: Request) {
     );
   }
 
-  try {
-
-    const payload = {
-      event: "new_support_ticket",
-      contact_name: parsed.data.nombre,
-      contact_email: parsed.data.email,
-      contact_subject: `Soporte Técnico: ${parsed.data.categoria}`,
-      contact_message: parsed.data.pregunta,
-      timestamp: new Date().toISOString()
-    };
-
-    const webhookRes = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Webhook-Secret": webhookSecret },
-      body: JSON.stringify(payload),
+  // Honeypot — campo oculto que los bots rellenan
+  if (parsed.data.hp) {
+    return NextResponse.json({
+      success: true,
+      data: { message: `Ticket generado con éxito.\nTK-DUMMY-0000` },
     });
+  }
 
-    if (!webhookRes.ok) {
-      return NextResponse.json(
-        { error: `Webhook respondió con HTTP ${webhookRes.status}.` },
-        { status: 502 }
-      );
+  // Time token — máximo 30 minutos
+  const ts = parseInt(parsed.data.ts, 10);
+  if (isNaN(ts) || Date.now() - ts > TS_MAX_AGE) {
+    return NextResponse.json(
+      { error: "Sesión expirada. Recargue la página e intente de nuevo." },
+      { status: 429 }
+    );
+  }
+
+  // Rate limiting por IP
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    ?? request.headers.get("x-real-ip")
+    ?? "unknown";
+
+  const allowed = await checkRateLimit(ip, "support-form");
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Ha superado el límite de solicitudes. Intente más tarde." },
+      { status: 429 }
+    );
+  }
+
+  try {
+    const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let code = "";
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const suffix = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * 36)]).join("");
+      code = `TK-${datePart}-${suffix}`;
+      const exists = await db.ticket.findUnique({ where: { code } });
+      if (!exists) break;
     }
 
-    const responseText = await webhookRes.text();
-    let webhookData = responseText;
-    try {
-      webhookData = JSON.parse(responseText);
-    } catch {}
+    const ticket = await db.ticket.create({
+      data: {
+        code,
+        title: `Soporte Técnico: ${parsed.data.categoria}`,
+        categoria: parsed.data.categoria,
+        descripcion: parsed.data.pregunta,
+        email: parsed.data.email,
+        nombre: parsed.data.nombre,
+        eventos: {
+          create: {
+            evento: "CREADO",
+            comentario: "Ticket creado desde formulario público",
+            tecnico: parsed.data.nombre,
+          },
+        },
+      },
+      include: { eventos: true },
+    });
 
-    return NextResponse.json({ success: true, data: webhookData });
-  } catch {
+    const webhookUrl = process.env.WEBHOOK_URL;
+    const webhookSecret = process.env.WEBHOOK_SECRET;
+
+    if (webhookUrl && webhookSecret) {
+      try {
+        const payload = {
+          event: "new_support_ticket",
+          contact_name: parsed.data.nombre,
+          contact_email: parsed.data.email,
+          contact_subject: `Soporte Técnico: ${parsed.data.categoria}`,
+          contact_message: parsed.data.pregunta,
+          localId: ticket.id,
+          localCode: ticket.code,
+          timestamp: new Date().toISOString(),
+        };
+
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Webhook-Secret": webhookSecret,
+          },
+          body: JSON.stringify(payload),
+        }).catch(() => {});
+      } catch {}
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        message: `Ticket generado con éxito.\n${ticket.code}`,
+      },
+    });
+  } catch (error) {
+    console.error("Error creating ticket:", error);
     return NextResponse.json(
-      { error: "No se pudo conectar con el servidor de webhooks." },
+      { error: "No se pudo crear el ticket." },
       { status: 503 }
     );
   }

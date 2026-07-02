@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ADMIN
+  TECNICO
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  password       String?
+  role           UserRole  @default(TECNICO)
+  isActive       Boolean   @default(true)
+  image          String?
+  failedAttempts Int       @default(0)
+  lockUntil      DateTime?
+  tickets        Ticket[]  @relation("TecnicoTickets")
+  diagnosticos   Diagnostico[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Funcionario {
+  id          String     @id @default(cuid())
+  nombre      String
+  cargo       String?
+  dependencia String?
+  area        String?
+  tipo        String?
+  telefono    String?
+  email       String?
+  equipos     Equipo[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Equipo {
+  id             String        @id @default(cuid())
+  tipo           String
+  nombre         String
+  marca          String?
+  modelo         String?
+  numeroActivo   String?
+  numeroSerie    String?
+  funcionarioId  String?
+  funcionario    Funcionario?  @relation(fields: [funcionarioId], references: [id])
+  diagnosticos   Diagnostico[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Ticket {
+  id          String         @id @default(cuid())
+  code        String         @unique
+  title       String
+  categoria   String
+  descripcion String
+  estado      String         @default("ABIERTO")
+  email       String?
+  nombre      String?
+  webhookId   String?
+  tecnicoId   String?
+  tecnico     User?          @relation("TecnicoTickets", fields: [tecnicoId], references: [id])
+  eventos     TicketEvento[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model TicketEvento {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  evento    String
+  comentario String?
+  tecnico   String?
+  createdAt DateTime @default(now())
+}
+
+model Diagnostico {
+  id                String     @id @default(cuid())
+  numeroFicha       Int?
+  tipo              String
+  descripcionFc     String?
+  diagnostico       String
+  trabajoRealizado  String?
+  equipoId          String
+  equipo            Equipo     @relation(fields: [equipoId], references: [id])
+  tecnicoId         String?
+  tecnico           User?      @relation(fields: [tecnicoId], references: [id])
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  ip        String
+  action    String
+  createdAt DateTime @default(now())
+
+  @@index([ip, action])
+}
+
+model SystemSettings {
+  id              String  @id @default("system-config")
+  institutionName String  @default("SoportePro")
+  logoUrl         String?
+  primaryColor    String  @default("#1a3a5c")
+  secondaryColor  String  @default("#2e7dc4")
+  isConfigured    Boolean @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

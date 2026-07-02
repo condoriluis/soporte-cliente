@@ -35,6 +35,7 @@ export default function SupportForm() {
   const [generatedTicket, setGeneratedTicket] = useState<string | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
 
   const form = useForm<SoporteFormData>({
     resolver: zodResolver(soporteSchema),
@@ -44,6 +45,8 @@ export default function SupportForm() {
       categoria: undefined,
       pregunta: "",
       fecha: getTodayISO(),
+      hp: "",
+      ts: String(Date.now()),
     },
   });
 
@@ -53,6 +56,21 @@ export default function SupportForm() {
   // Refresh date on each render / focus
   useEffect(() => {
     form.setValue("fecha", getTodayISO());
+  }, [form]);
+
+  // Cooldown countdown
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const id = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(id);
+  }, [cooldown]);
+
+  // Refresh timestamp on mount and focus
+  useEffect(() => {
+    form.setValue("ts", String(Date.now()));
+    const onFocus = () => form.setValue("ts", String(Date.now()));
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
   }, [form]);
 
   async function onSubmit(data: SoporteFormData) {
@@ -76,7 +94,6 @@ export default function SupportForm() {
         const msg = String(responseBody.data.message);
         if (msg.includes("Ya tienes un ticket") || msg.includes("proceso")) {
           duplicate = true;
-          // Extract the ticket code like TK-0626200518-167
           const match = msg.match(/(TK-[\d-]+)/);
           if (match) ticketCode = match[1];
         } else {
@@ -111,7 +128,8 @@ export default function SupportForm() {
         setGeneratedTicket(ticketCode);
       }
 
-      form.reset({ nombre: "", email: "", categoria: undefined, pregunta: "", fecha: getTodayISO() });
+      form.reset({ nombre: "", email: "", categoria: undefined, pregunta: "", fecha: getTodayISO(), hp: "", ts: String(Date.now()) });
+      setCooldown(60);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Error desconocido";
       toast.error("Error al generar el ticket", {
@@ -302,6 +320,24 @@ export default function SupportForm() {
                 )}
               />
 
+              {/* Honeypot — invisible para humanos, detectable por bots */}
+              <div className="absolute -left-[9999px]" aria-hidden="true">
+                <FormField
+                  control={form.control}
+                  name="hp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} tabIndex={-1} autoComplete="off" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Time token — anti-replay */}
+              <input type="hidden" {...form.register("ts")} />
+
               {/* Fecha (readonly) */}
               <FormField
                 control={form.control}
@@ -331,7 +367,7 @@ export default function SupportForm() {
               {/* Submit */}
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || cooldown > 0}
                 className="w-full rounded-xl py-6 text-base font-bold text-white transition-all"
                 style={{ background: "var(--brand-accent)" }}
               >
@@ -339,6 +375,11 @@ export default function SupportForm() {
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Enviando…
+                  </>
+                ) : cooldown > 0 ? (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Espere {cooldown}s
                   </>
                 ) : (
                   <>

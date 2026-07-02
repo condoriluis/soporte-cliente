@@ -1,7 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Cpu, Headphones } from "lucide-react";
 import TrackTicket from "@/components/track-ticket";
+import { useState, useEffect } from "react";
+import { getSettings } from "@/lib/actions/settings-actions";
 
 const STATS = [
   { num: "99%", lbl: "Disponibilidad" },
@@ -10,6 +14,14 @@ const STATS = [
 ];
 
 export default function Hero() {
+  const [name, setName] = useState("SoportePro");
+
+  useEffect(() => {
+    getSettings().then((s) => {
+      if (s?.institutionName) setName(s.institutionName);
+    });
+  }, []);
+
   return (
     <section
       className="relative overflow-hidden py-24 md:py-32"
@@ -38,7 +50,7 @@ export default function Hero() {
               style={{
                 background: "rgba(255,255,255,.08)",
                 borderColor: "rgba(255,255,255,.18)",
-                color: "#a8d4f5",
+                color: "var(--brand-light)",
               }}
             >
               <Cpu className="w-3 h-3" />
@@ -49,7 +61,7 @@ export default function Hero() {
               Soporte Técnico{" "}
               <span style={{ color: "var(--brand-light)" }}>Profesional</span>
               <br />
-              para SoportePro
+              para {name}
             </h1>
 
             <p className="mt-4 text-lg max-w-xl mx-auto lg:mx-0" style={{ color: "rgba(255,255,255,.72)" }}>

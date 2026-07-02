@@ -5,6 +5,12 @@ import { Shield, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
+import { getSettings } from "@/lib/actions/settings-actions";
+
+interface Settings {
+  institutionName: string;
+  logoUrl: string | null;
+}
 
 const NAV_LINKS = [
   { href: "#servicios",  label: "Servicios" },
@@ -15,12 +21,20 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
+    getSettings().then((s) => {
+      if (s) setSettings({ institutionName: s.institutionName, logoUrl: s.logoUrl });
+    });
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const name = settings?.institutionName || "SoportePro";
+  const showLogo = settings?.logoUrl && !logoError;
 
   return (
     <nav
@@ -32,18 +46,25 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand */}
           <a href="#" className="flex items-center gap-2 no-underline">
-            <Shield className="text-white w-6 h-6" />
-            <span className="text-white font-bold text-sm tracking-wide">
-              SoportePro{" "}
-              <span className="font-normal" style={{ color: "#a8d4f5" }}>
-                | Sistemas y Soporte
+            {showLogo ? (
+              <img
+                src={settings.logoUrl!}
+                alt={name}
+                className="h-8 w-auto"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <Shield className="text-white w-6 h-6" />
+            )}
+              <span className="text-white font-bold text-sm tracking-wide">
+                {name}{" "}
+                <span className="font-normal" style={{ color: "var(--brand-light)" }}>
+                  | Sistemas y Soporte
+                </span>
               </span>
-            </span>
           </a>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((l) => (
               <a
@@ -62,7 +83,6 @@ export default function Navbar() {
               </a>
             ))}
 
-            {/* Theme toggle */}
             <div className="ml-2">
               <ThemeToggle />
             </div>
@@ -77,7 +97,6 @@ export default function Navbar() {
             </Button>
           </div>
 
-          {/* Mobile: theme toggle + hamburger */}
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
             <button
@@ -91,7 +110,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <div
           className="md:hidden px-4 pb-4 flex flex-col gap-1"

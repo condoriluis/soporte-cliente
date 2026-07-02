@@ -146,7 +146,7 @@ export default function TrackTicket() {
           Rastrear Ticket
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg max-h-[85vh] grid-rows-[auto_minmax(0,1fr)]">
         <DialogHeader>
           <DialogTitle>Rastrear Ticket</DialogTitle>
           <DialogDescription>
@@ -155,70 +155,72 @@ export default function TrackTicket() {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSearch} className="flex gap-2 mt-4">
-          <Input
-            value={ticketId}
-            onChange={(e) => setTicketId(e.target.value)}
-            placeholder="Ej. TK-1234 o correo@empresa.com"
-            disabled={isLoading}
-            className="flex-1"
-          />
-          <Button type="submit" disabled={isLoading || !ticketId.trim()}>
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Search className="w-4 h-4" />
-            )}
-          </Button>
-        </form>
+        <div className="overflow-y-auto pr-1 -mr-1 space-y-4 min-h-0">
+          <form onSubmit={handleSearch} className="flex gap-2">
+            <Input
+              value={ticketId}
+              onChange={(e) => setTicketId(e.target.value)}
+              placeholder="Ej. TK-1234 o correo@empresa.com"
+              disabled={isLoading}
+              className="flex-1"
+            />
+            <Button type="submit" disabled={isLoading || !ticketId.trim()}>
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Search className="w-4 h-4" />
+              )}
+            </Button>
+          </form>
 
-        {activeTicket && (
-          <div className="mt-6">
-            <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
-              <h4 className="font-semibold text-sm border-b pb-2 flex items-center justify-between">
-                <span>Detalles del Ticket</span>
-                <span
-                  className={cn(
-                    "text-xs px-2.5 py-1 rounded-full font-medium tracking-wide",
-                    getStatusColor(activeTicket.status)
-                  )}
-                >
-                  {formatLabel(activeTicket.status)}
-                </span>
-              </h4>
-              <div className="grid grid-cols-2 gap-y-3 text-sm">
-                <div className="text-muted-foreground">Número:</div>
-                <div className="font-medium">{activeTicket.code}</div>
+          {activeTicket && (
+            <div>
+              <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
+                <h4 className="font-semibold text-sm border-b pb-2 flex items-center justify-between">
+                  <span>Detalles del Ticket</span>
+                  <span
+                    className={cn(
+                      "text-xs px-2.5 py-1 rounded-full font-medium tracking-wide",
+                      getStatusColor(activeTicket.status)
+                    )}
+                  >
+                    {formatLabel(activeTicket.status)}
+                  </span>
+                </h4>
+                <div className="grid grid-cols-2 gap-y-3 text-sm">
+                  <div className="text-muted-foreground">Número:</div>
+                  <div className="font-medium">{activeTicket.code}</div>
 
-                <div className="text-muted-foreground">Asunto:</div>
-                <div className="font-medium truncate">
-                  {activeTicket.title}
-                </div>
+                  <div className="text-muted-foreground">Asunto:</div>
+                  <div className="font-medium truncate">
+                    {activeTicket.title}
+                  </div>
 
-                <div className="text-muted-foreground">
-                  <Clock className="w-3.5 h-3.5 inline mr-1" />
-                  Última act.:
-                </div>
-                <div className="font-medium">
-                  {formatDate(activeTicket.updatedAt)}
+                  <div className="text-muted-foreground">
+                    <Clock className="w-3.5 h-3.5 inline mr-1" />
+                    Última act.:
+                  </div>
+                  <div className="font-medium">
+                    {formatDate(activeTicket.updatedAt)}
+                  </div>
                 </div>
               </div>
+
+              {ticketResult && <TicketTimeline events={ticketResult.events} />}
             </div>
+          )}
 
-            {ticketResult && <TicketTimeline events={ticketResult.events} />}
-          </div>
-        )}
-
-        {!activeTicket && result && "notFound" in result && (
-          <div className="mt-6 rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-center space-y-2">
-            <p className="text-sm font-semibold text-destructive">
-              No se encontraron resultados
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Verifica el número ingresado e intenta nuevamente.
-            </p>
-          </div>
-        )}
+          {!activeTicket && result && "notFound" in result && (
+            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-center space-y-2">
+              <p className="text-sm font-semibold text-destructive">
+                No se encontraron resultados
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Verifica el número ingresado e intenta nuevamente.
+              </p>
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );

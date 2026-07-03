@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import BrandStyle from "@/components/brand-style";
 import { SettingsProvider } from "@/lib/settings-context";
 import { db } from "@/lib/db";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  await cookies();
   const settings = await db.systemSettings.findUnique({ where: { id: "system-config" } });
   const p = settings?.primaryColor || "#1a3a5c";
   const s = settings?.secondaryColor || "#2e7dc4";

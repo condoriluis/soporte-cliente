@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Cpu, Headphones } from "lucide-react";
 import TrackTicket from "@/components/track-ticket";
-import { useState, useEffect } from "react";
-import { getSettings } from "@/lib/actions/settings-actions";
+import { useSettings } from "@/lib/settings-context";
 
 const STATS = [
   { num: "99%", lbl: "Disponibilidad" },
@@ -14,13 +13,7 @@ const STATS = [
 ];
 
 export default function Hero() {
-  const [name, setName] = useState("SoportePro");
-
-  useEffect(() => {
-    getSettings().then((s) => {
-      if (s?.institutionName) setName(s.institutionName);
-    });
-  }, []);
+  const settings = useSettings();
 
   return (
     <section
@@ -61,7 +54,7 @@ export default function Hero() {
               Soporte Técnico{" "}
               <span style={{ color: "var(--brand-light)" }}>Profesional</span>
               <br />
-              para {name}
+              para {settings.institutionName}
             </h1>
 
             <p className="mt-4 text-lg max-w-xl mx-auto lg:mx-0" style={{ color: "rgba(255,255,255,.72)" }}>

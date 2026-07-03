@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { getSettings } from "@/lib/actions/settings-actions";
 
 function hexToRgb(hex: string) {
   const h = hex.replace("#", "");
@@ -26,41 +25,41 @@ function mixColor(hex: string, pct: number, mixWith: string = "#ffffff") {
   );
 }
 
-function applyCSS(p: string, s: string) {
-  const root = document.documentElement;
-  const brandLight = mixColor(s, 0.2, "#ffffff");
-  const secondaryLight = mixColor(s, 0.85, "#ffffff");
-  const darkPrimary = mixColor(p, 0.35, "#8ab4f8");
-  const darkSecondary = mixColor(s, 0.8, "#0f172a");
-  const darkSecondaryFg = mixColor(s, 0.15, "#ffffff");
-  const darkRing = mixColor(s, 0.2, "#8ab4f8");
-  const darkSidebarPrimary = mixColor(p, 0.35, "#8ab4f8");
-
-  root.style.setProperty("--brand-primary", p);
-  root.style.setProperty("--brand-secondary", s);
-  root.style.setProperty("--brand-dark", p);
-  root.style.setProperty("--brand-accent", s);
-  root.style.setProperty("--brand-light", brandLight);
-
-  root.style.setProperty("--primary", p);
-  root.style.setProperty("--primary-foreground", "#ffffff");
-  root.style.setProperty("--secondary", secondaryLight);
-  root.style.setProperty("--secondary-foreground", s);
-  root.style.setProperty("--accent", s);
-  root.style.setProperty("--accent-foreground", "#ffffff");
-  root.style.setProperty("--ring", s);
-  root.style.setProperty("--sidebar-primary", p);
-  root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
-}
-
-export default function BrandStyle() {
+export default function BrandStyle({
+  primaryColor,
+  secondaryColor,
+}: {
+  primaryColor: string;
+  secondaryColor: string;
+}) {
   useEffect(() => {
-    getSettings().then((s) => {
-      if (s?.primaryColor && s?.secondaryColor) {
-        applyCSS(s.primaryColor, s.secondaryColor);
-      }
-    });
-  }, []);
+    const root = document.documentElement;
+    const p = primaryColor;
+    const s = secondaryColor;
+    const brandLight = mixColor(s, 0.2, "#ffffff");
+    const secondaryLight = mixColor(s, 0.85, "#ffffff");
+    const darkPrimary = mixColor(p, 0.35, "#8ab4f8");
+    const darkSecondary = mixColor(s, 0.8, "#0f172a");
+    const darkSecondaryFg = mixColor(s, 0.15, "#ffffff");
+    const darkRing = mixColor(s, 0.2, "#8ab4f8");
+    const darkSidebarPrimary = mixColor(p, 0.35, "#8ab4f8");
+
+    root.style.setProperty("--brand-primary", p);
+    root.style.setProperty("--brand-secondary", s);
+    root.style.setProperty("--brand-dark", p);
+    root.style.setProperty("--brand-accent", s);
+    root.style.setProperty("--brand-light", brandLight);
+
+    root.style.setProperty("--primary", p);
+    root.style.setProperty("--primary-foreground", "#ffffff");
+    root.style.setProperty("--secondary", secondaryLight);
+    root.style.setProperty("--secondary-foreground", s);
+    root.style.setProperty("--accent", s);
+    root.style.setProperty("--accent-foreground", "#ffffff");
+    root.style.setProperty("--ring", s);
+    root.style.setProperty("--sidebar-primary", p);
+    root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
+  }, [primaryColor, secondaryColor]);
 
   return null;
 }

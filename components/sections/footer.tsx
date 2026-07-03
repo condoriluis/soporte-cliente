@@ -2,17 +2,10 @@
 
 import { Shield, Clock, Mail, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useState, useEffect } from "react";
-import { getSettings } from "@/lib/actions/settings-actions";
+import { useSettings } from "@/lib/settings-context";
 
 export default function Footer() {
-  const [name, setName] = useState("SoportePro");
-
-  useEffect(() => {
-    getSettings().then((s) => {
-      if (s?.institutionName) setName(s.institutionName);
-    });
-  }, []);
+  const settings = useSettings();
 
   return (
     <footer className="py-12 text-sm" style={{ background: "var(--brand-dark)", color: "rgba(255,255,255,.65)" }}>
@@ -22,7 +15,7 @@ export default function Footer() {
           <div>
             <p className="flex items-center gap-2 text-white font-bold mb-3">
               <Shield className="w-4 h-4" />
-              {name}
+              {settings.institutionName}
             </p>
             <p className="leading-relaxed">
               Soporte Técnico Institucional.
@@ -61,7 +54,7 @@ export default function Footer() {
         <Separator className="my-8 opacity-15" />
 
         <p className="text-center text-xs">
-          &copy; {new Date().getFullYear()} {name} &ndash; &Aacute;rea de Sistemas y Soporte.
+          &copy; {new Date().getFullYear()} {settings.institutionName} &ndash; &Aacute;rea de Sistemas y Soporte.
           Todos los derechos reservados.
         </p>
       </div>

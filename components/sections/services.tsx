@@ -10,8 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useState, useEffect } from "react";
-import { getSettings } from "@/lib/actions/settings-actions";
+import { useSettings } from "@/lib/settings-context";
 
 interface Service {
   icon: LucideIcon;
@@ -59,13 +58,7 @@ const SERVICES: Service[] = [
 ];
 
 export default function Services() {
-  const [name, setName] = useState("SoportePro");
-
-  useEffect(() => {
-    getSettings().then((s) => {
-      if (s?.institutionName) setName(s.institutionName);
-    });
-  }, []);
+  const settings = useSettings();
 
   return (
     <section id="servicios" className="bg-background py-20">
@@ -87,7 +80,7 @@ export default function Services() {
           />
           <p className="text-muted-foreground max-w-lg mx-auto text-sm">
             El Área de Sistemas y Soporte garantiza la continuidad tecnológica
-            de todos los procesos institucionales de {name}.
+            de todos los procesos institucionales de {settings.institutionName}.
           </p>
         </div>
 

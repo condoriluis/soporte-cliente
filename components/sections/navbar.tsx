@@ -5,12 +5,7 @@ import { Shield, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
-import { getSettings } from "@/lib/actions/settings-actions";
-
-interface Settings {
-  institutionName: string;
-  logoUrl: string | null;
-}
+import { useSettings } from "@/lib/settings-context";
 
 const NAV_LINKS = [
   { href: "#servicios",  label: "Servicios" },
@@ -21,20 +16,17 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [settings, setSettings] = useState<Settings | null>(null);
   const [logoError, setLogoError] = useState(false);
+  const settings = useSettings();
 
   useEffect(() => {
-    getSettings().then((s) => {
-      if (s) setSettings({ institutionName: s.institutionName, logoUrl: s.logoUrl });
-    });
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const name = settings?.institutionName || "SoportePro";
-  const showLogo = settings?.logoUrl && !logoError;
+  const name = settings.institutionName;
+  const showLogo = settings.logoUrl && !logoError;
 
   return (
     <nav

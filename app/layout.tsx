@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import BrandStyle from "@/components/brand-style";
+import { SettingsProvider } from "@/lib/settings-context";
 import { db } from "@/lib/db";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -97,11 +98,25 @@ export default async function RootLayout({
         )}
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-          <Toaster richColors position="top-right" />
-        </ThemeProvider>
-        <BrandStyle />
+        <SettingsProvider
+          settings={
+            settings
+              ? {
+                  institutionName: settings.institutionName,
+                  logoUrl: settings.logoUrl,
+                  primaryColor: settings.primaryColor,
+                  secondaryColor: settings.secondaryColor,
+                  isConfigured: settings.isConfigured,
+                }
+              : null
+          }
+        >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
+            <Toaster richColors position="top-right" />
+          </ThemeProvider>
+          <BrandStyle primaryColor={p} secondaryColor={s} />
+        </SettingsProvider>
       </body>
     </html>
   );

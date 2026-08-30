@@ -5,28 +5,16 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const startedAt = Date.now();
-
   try {
     await db.$queryRaw`SELECT 1`;
     return NextResponse.json(
-      {
-        status: "ok",
-        database: "connected",
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        latency: Date.now() - startedAt,
-      },
+      { status: "ok", timestamp: new Date().toISOString() },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (error) {
-    console.error("[health] Base de datos no disponible:", error);
+    console.error("[health] Error en check:", error);
     return NextResponse.json(
-      {
-        status: "error",
-        database: "disconnected",
-        timestamp: new Date().toISOString(),
-      },
+      { status: "error", timestamp: new Date().toISOString() },
       { status: 503, headers: { "Cache-Control": "no-store" } }
     );
   }

@@ -35,8 +35,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = await db.systemSettings.findUnique({ where: { id: "system-config" } });
   const name = settings?.institutionName || "SoportePro";
   return {
-    title: `${name} – Área de Sistemas y Soporte`,
-    description: `Solicite asistencia técnica al Área de Sistemas y Soporte de ${name}.`,
+    title: `${name} – Soporte Técnico de Computadoras`,
+    description: `Servicio de soporte técnico y mantenimiento de computadoras en El Alto – La Paz, Bolivia.`,
   };
 }
 

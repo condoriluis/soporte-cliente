@@ -13,7 +13,11 @@ export default function FloatingWhatsApp() {
   const whatsappUrl = `${CONTACT.whatsappUrl}?text=${encodeURIComponent(CONTACT.whatsappMessage)}`;
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start">
+    <div
+      className="fixed bottom-6 left-6 z-50 flex flex-col items-start"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <AnimatePresence>
         {open && (
           <motion.div
@@ -65,7 +69,11 @@ export default function FloatingWhatsApp() {
         aria-expanded={open}
       >
         <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-[#25D366]" />
-        <WhatsAppIcon className="relative h-7 w-7" />
+        {open ? (
+          <span className="relative text-2xl font-light leading-none">×</span>
+        ) : (
+          <WhatsAppIcon className="relative h-7 w-7" />
+        )}
       </motion.button>
     </div>
   );

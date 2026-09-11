@@ -133,7 +133,7 @@ export default function ConfiguracionPage() {
   );
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Configuración</h2>
         <p className="text-sm text-muted-foreground mt-1">
@@ -141,7 +141,8 @@ export default function ConfiguracionPage() {
         </p>
       </div>
 
-      <div className="rounded-xl border bg-card p-6 space-y-6">
+      <div className="grid gap-6 items-start lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
+        <div className="rounded-xl border bg-card p-6 space-y-6">
         <div className="space-y-2">
           <Label htmlFor="name">Nombre de la Institución</Label>
           <Input
@@ -282,44 +283,50 @@ export default function ConfiguracionPage() {
         </Button>
       </div>
 
-      <div className="rounded-xl border bg-card p-6 space-y-4">
-        <h3 className="font-semibold">Vista Previa — Sistema Completo</h3>
+      <div
+        className="rounded-xl border bg-card p-5 space-y-3 lg:sticky lg:top-2"
+        style={{ maxHeight: "calc(100svh - 2.5rem)", overflowY: "auto" }}
+      >
+        <div>
+          <h3 className="font-semibold text-sm">Vista Previa — Sistema Completo</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Cambia al instante al editar colores o paleta
+          </p>
+        </div>
 
-        {/* Navbar preview */}
         <div className="rounded-lg overflow-hidden border">
-          <div className="flex items-center gap-3 p-4" style={{ backgroundColor: "var(--brand-primary)" }}>
+          <div className="flex items-center gap-3 p-3" style={{ backgroundColor: "var(--brand-primary)" }}>
             {hasLogo ? (
-              <img src={settings.logoUrl || ""} alt="Logo" className="h-9 w-auto object-contain rounded" />
+              <img src={settings.logoUrl || ""} alt="Logo" className="h-8 w-auto object-contain rounded" />
             ) : (
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: "var(--brand-secondary)" }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "var(--brand-secondary)" }}>
                 <span className="text-white font-bold text-xs">SP</span>
               </div>
             )}
-            <span className="text-white font-bold text-sm">
-              {settings?.institutionName || "SoportePro"}
+            <span className="text-white font-bold text-sm truncate">
+              {settings?.institutionName || "Soportik"}
             </span>
             <div className="ml-auto">
-              <div className="h-7 rounded-md px-3 flex items-center text-xs font-medium text-white" style={{ backgroundColor: "var(--brand-secondary)" }}>
+              <div className="h-6 rounded-md px-2.5 flex items-center text-xs font-medium text-white" style={{ backgroundColor: "var(--brand-secondary)" }}>
                 Botón CTA
               </div>
             </div>
           </div>
         </div>
 
-        {/* Component previews */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-lg border p-4 space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg border p-3 space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Botones</p>
             <div className="flex flex-wrap gap-2">
-              <button className="h-8 rounded-md px-4 text-xs font-medium text-white" style={{ backgroundColor: "var(--brand-primary)" }}>
+              <button className="h-7 rounded-md px-3 text-xs font-medium text-white" style={{ backgroundColor: "var(--brand-primary)" }}>
                 Primario
               </button>
-              <button className="h-8 rounded-md px-4 text-xs font-medium" style={{ backgroundColor: "transparent", color: "var(--brand-secondary)", border: "1px solid var(--brand-secondary)" }}>
+              <button className="h-7 rounded-md px-3 text-xs font-medium" style={{ backgroundColor: "transparent", color: "var(--brand-secondary)", border: "1px solid var(--brand-secondary)" }}>
                 Secundario
               </button>
             </div>
           </div>
-          <div className="rounded-lg border p-4 space-y-3">
+          <div className="rounded-lg border p-3 space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Badges</p>
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full px-2.5 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: "var(--brand-primary)" }}>
@@ -330,28 +337,25 @@ export default function ConfiguracionPage() {
               </span>
             </div>
           </div>
-          <div className="rounded-lg border p-4 space-y-3">
+          <div className="rounded-lg border p-3 space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sidebar</p>
             <div className="flex items-center gap-2 p-2 rounded-md text-xs font-medium text-white" style={{ backgroundColor: "var(--brand-primary)" }}>
-              <div className="w-4 h-4 rounded flex items-center justify-center" style={{ backgroundColor: "var(--brand-secondary)" }} />
+              <div className="w-3.5 h-3.5 rounded flex items-center justify-center" style={{ backgroundColor: "var(--brand-secondary)" }} />
               Dashboard
             </div>
           </div>
-          <div className="rounded-lg border p-4 space-y-3">
+          <div className="rounded-lg border p-3 space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Focus Ring</p>
             <input
               readOnly
-              className="w-full h-8 rounded-md border px-2 text-xs"
+              className="w-full h-7 rounded-md border px-2 text-xs"
               style={{ borderColor: "var(--brand-secondary)", outline: "2px solid var(--brand-secondary)", outlineOffset: "2px" }}
               placeholder="Input con focus"
             />
           </div>
         </div>
-
-        <p className="text-xs text-muted-foreground">
-          Vista previa en vivo — los colores cambian al instante al seleccionar una paleta o ajustar los selectores.
-        </p>
       </div>
+    </div>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import SupportForm   from "@/components/sections/support-form";
 import Contact       from "@/components/sections/contact";
 import Footer        from "@/components/sections/footer";
 import FloatingWhatsApp from "@/components/floating-whatsapp";
+import BackToTop from "@/components/back-to-top";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <Contact />
       <Footer />
       <FloatingWhatsApp />
+      <BackToTop />
     </main>
   );
 }

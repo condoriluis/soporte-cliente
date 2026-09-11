@@ -24,7 +24,7 @@ import {
 interface EquipoItem {
   id: string; tipo: string; nombre: string; marca: string | null; modelo: string | null;
   numeroActivo: string | null; numeroSerie: string | null;
-  funcionario: { nombre: string | null; cargo: string | null; dependencia: string | null; area: string | null; tipo: string | null; telefono: string | null } | null;
+  cliente: { nombre: string | null; cargo: string | null; dependencia: string | null; area: string | null; telefono: string | null } | null;
 }
 
 export default function NuevoDiagnosticoPage() {
@@ -65,13 +65,12 @@ export default function NuevoDiagnosticoPage() {
           ? generateImpresoraForm({
               numeroFicha: diag.numeroFicha || 0,
               fecha: new Date().toLocaleDateString("es-ES"),
-              funcionario: {
-                nombre: eq.funcionario?.nombre || "",
-                cargo: eq.funcionario?.cargo || "",
-                dependencia: eq.funcionario?.dependencia || "",
-                area: eq.funcionario?.area || "",
-                tipo: eq.funcionario?.tipo || "",
-                telefono: eq.funcionario?.telefono || "",
+              cliente: {
+                nombre: eq.cliente?.nombre || "",
+                cargo: eq.cliente?.cargo || "",
+                dependencia: eq.cliente?.dependencia || "",
+                area: eq.cliente?.area || "",
+                telefono: eq.cliente?.telefono || "",
               },
               equipo: {
                 codigoInventario: eq.numeroActivo || "",
@@ -161,12 +160,12 @@ export default function NuevoDiagnosticoPage() {
               />
             </div>
 
-            {equipoSeleccionado?.funcionario && (
+            {equipoSeleccionado?.cliente && (
               <div className="rounded-lg bg-muted/50 p-4 text-sm">
-                <p className="font-medium">{equipoSeleccionado.funcionario.nombre}</p>
+                <p className="font-medium">{equipoSeleccionado.cliente.nombre}</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {equipoSeleccionado.funcionario.cargo} • {equipoSeleccionado.funcionario.dependencia || ""}
-                  {equipoSeleccionado.funcionario.area ? ` • ${equipoSeleccionado.funcionario.area}` : ""}
+                  {equipoSeleccionado.cliente.cargo} • {equipoSeleccionado.cliente.dependencia || ""}
+                  {equipoSeleccionado.cliente.area ? ` • ${equipoSeleccionado.cliente.area}` : ""}
                 </p>
               </div>
             )}
@@ -176,8 +175,8 @@ export default function NuevoDiagnosticoPage() {
               name="descripcionFc"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel>Descripción del funcionario</FormLabel>
-                   <FormControl><Textarea {...field} onChange={(e) => field.onChange(e.target.value.toUpperCase())} rows={3} placeholder="Breve descripción del problema según el funcionario..." /></FormControl>
+                   <FormLabel>Descripción del cliente</FormLabel>
+                   <FormControl><Textarea {...field} onChange={(e) => field.onChange(e.target.value.toUpperCase())} rows={3} placeholder="Breve descripción del problema según el cliente..." /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}

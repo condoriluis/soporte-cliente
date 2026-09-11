@@ -33,7 +33,7 @@ function mixColor(hex: string, pct: number, mixWith: string = "#ffffff") {
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await db.systemSettings.findUnique({ where: { id: "system-config" } });
-  const name = settings?.institutionName || "SoportePro";
+  const name = settings?.institutionName || "Soportik";
   return {
     title: `${name} – Soporte Técnico de Computadoras`,
     description: `Servicio de soporte técnico y mantenimiento de computadoras en El Alto – La Paz, Bolivia.`,

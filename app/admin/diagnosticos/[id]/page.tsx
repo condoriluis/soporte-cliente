@@ -63,15 +63,15 @@ export default async function DiagnosticoDetailPage({
                <dt className="text-muted-foreground">N° Serie</dt>
               <dd className="font-mono">{diag.equipo.numeroSerie || "—"}</dd>
             </div>
-            {diag.equipo.funcionario && (
+            {diag.equipo.cliente && (
               <>
                 <div className="flex justify-between border-b pb-2">
-                   <dt className="text-muted-foreground">Funcionario</dt>
-                  <dd className="font-medium">{diag.equipo.funcionario.nombre}</dd>
+                   <dt className="text-muted-foreground">Cliente</dt>
+                  <dd className="font-medium">{diag.equipo.cliente.nombre}</dd>
                 </div>
                 <div className="flex justify-between border-b pb-2">
-                   <dt className="text-muted-foreground">Cargo</dt>
-                  <dd>{diag.equipo.funcionario.cargo || "—"}</dd>
+                   <dt className="text-muted-foreground">Tipo de cliente</dt>
+                  <dd>{diag.equipo.cliente.cargo || "—"}</dd>
                 </div>
               </>
             )}
@@ -95,7 +95,7 @@ export default async function DiagnosticoDetailPage({
 
       {diag.descripcionFc && (
         <div className="rounded-xl border bg-card p-6">
-          <h3 className="font-semibold mb-3">BREVE DESCRIPCIÓN DEL FUNCIONARIO</h3>
+          <h3 className="font-semibold mb-3">BREVE DESCRIPCIÓN DEL CLIENTE</h3>
           <p className="text-sm text-muted-foreground whitespace-pre-wrap">{diag.descripcionFc}</p>
         </div>
       )}

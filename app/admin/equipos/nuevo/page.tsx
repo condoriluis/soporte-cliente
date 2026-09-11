@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Loader2, ArrowLeft, Search, X } from "lucide-react";
 import { equipoSchema, type EquipoFormData } from "@/lib/schemas";
 import { createEquipo } from "@/lib/actions/equipo-actions";
-import { getFuncionarios } from "@/lib/actions/funcionario-actions";
+import { getClientes } from "@/lib/actions/cliente-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,36 +29,36 @@ const TIPOS = [
   { value: "OTRO", label: "Otro" },
 ];
 
-interface FuncionarioOption {
+interface ClienteOption {
   id: string; nombre: string; cargo: string | null; dependencia: string | null;
 }
 
 export default function NuevoEquipoPage() {
   const router = useRouter();
-  const [funcionarios, setFuncionarios] = useState<FuncionarioOption[]>([]);
+  const [clientes, setClientes] = useState<ClienteOption[]>([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
 
   const form = useForm<EquipoFormData>({
     resolver: zodResolver(equipoSchema),
-    defaultValues: { tipo: undefined, nombre: "", marca: "", modelo: "", numeroActivo: "", numeroSerie: "", funcionarioId: "" },
+    defaultValues: { tipo: undefined, nombre: "", marca: "", modelo: "", numeroActivo: "", numeroSerie: "", clienteId: "" },
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const selectedId = form.watch("funcionarioId");
-  const selected = funcionarios.find(f => f.id === selectedId);
+  const selectedId = form.watch("clienteId");
+  const selected = clientes.find(f => f.id === selectedId);
 
   useEffect(() => {
-    getFuncionarios().then((data) => setFuncionarios(data as FuncionarioOption[]));
+    getClientes().then((data) => setClientes(data as ClienteOption[]));
   }, []);
 
   const filtered = search
-    ? funcionarios.filter(f =>
+    ? clientes.filter(f =>
         f.nombre.toLowerCase().includes(search.toLowerCase()) ||
         (f.cargo && f.cargo.toLowerCase().includes(search.toLowerCase())) ||
         (f.dependencia && f.dependencia.toLowerCase().includes(search.toLowerCase()))
       )
-    : funcionarios;
+    : clientes;
 
   const onSubmit = async (data: EquipoFormData) => {
     try {
@@ -107,16 +107,16 @@ export default function NuevoEquipoPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="numeroActivo" render={({ field }) => (
-                                 <FormItem><FormLabel>N° de Activo Fijo</FormLabel><FormControl><Input {...field} placeholder="15090066" /></FormControl><FormMessage /></FormItem>
+                                 <FormItem><FormLabel>N° de Activo</FormLabel><FormControl><Input {...field} placeholder="15090066" /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="numeroSerie" render={({ field }) => (
                                  <FormItem><FormLabel>N° de Serie</FormLabel><FormControl><Input {...field} onChange={(e) => field.onChange(e.target.value.toUpperCase())} placeholder="CN4B4EE05V" /></FormControl><FormMessage /></FormItem>
               )} />
             </div>
 
-            <FormField control={form.control} name="funcionarioId" render={({ field }) => (
+            <FormField control={form.control} name="clienteId" render={({ field }) => (
               <FormItem>
-                <FormLabel>Funcionario asignado</FormLabel>
+                <FormLabel>Cliente</FormLabel>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -135,7 +135,7 @@ export default function NuevoEquipoPage() {
                             )}
                           </div>
                         ) : (
-                          <span className="text-muted-foreground">Buscar funcionario...</span>
+                          <span className="text-muted-foreground">Buscar cliente...</span>
                         )}
                         <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
@@ -146,7 +146,7 @@ export default function NuevoEquipoPage() {
                       <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
                       <input
                         className="flex h-10 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="Buscar por nombre, cargo..."
+                        placeholder="Buscar por nombre, tipo..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         autoFocus

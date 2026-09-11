@@ -67,7 +67,7 @@ export default async function EquipoDetailPage({
 
         <EquipoDetailClient
           equipoId={equipo.id}
-          currentFuncionario={equipo.funcionario ? { id: equipo.funcionario.id, nombre: equipo.funcionario.nombre, cargo: equipo.funcionario.cargo } : null}
+          currentCliente={equipo.cliente ? { id: equipo.cliente.id, nombre: equipo.cliente.nombre, cargo: equipo.cliente.cargo } : null}
           currentUserRole={session?.user?.role}
         />
       </div>

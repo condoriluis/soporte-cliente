@@ -26,7 +26,7 @@ export default async function AdminLayout({
 
   if (!user || !user.isActive) redirect("/login?error=AccountDeactivated");
 
-  const institutionName = settings?.institutionName || "SoportePro";
+  const institutionName = settings?.institutionName || "Soportik";
 
   return (
     <ThemeProvider

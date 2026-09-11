@@ -7,7 +7,7 @@ const cards = [
   { label: "En Proceso", key: "ticketsEnProceso" as const, icon: Clock, color: "text-purple-600 bg-purple-100 dark:bg-purple-500/10" },
   { label: "Resueltos", key: "ticketsResueltos" as const, icon: CheckCircle2, color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-500/10" },
   { label: "Equipos", key: "equipos" as const, icon: Monitor, color: "text-sky-600 bg-sky-100 dark:bg-sky-500/10" },
-  { label: "Funcionarios", key: "funcionarios" as const, icon: Users, color: "text-indigo-600 bg-indigo-100 dark:bg-indigo-500/10" },
+  { label: "Clientes", key: "clientes" as const, icon: Users, color: "text-indigo-600 bg-indigo-100 dark:bg-indigo-500/10" },
   { label: "Diagnósticos", key: "diagnosticos" as const, icon: ClipboardList, color: "text-rose-600 bg-rose-100 dark:bg-rose-500/10" },
   { label: "Técnicos", key: "tecnicos" as const, icon: TrendingUp, color: "text-teal-600 bg-teal-100 dark:bg-teal-500/10" },
 ];

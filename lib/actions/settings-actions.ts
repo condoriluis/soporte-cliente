@@ -25,10 +25,10 @@ export async function getSettings() {
 }
 
 export async function getDashboardStats() {
-  const [tickets, equipos, funcionarios, diagnosticos, tecnicos, ticketsPorEstado] = await Promise.all([
+  const [tickets, equipos, clientes, diagnosticos, tecnicos, ticketsPorEstado] = await Promise.all([
     db.ticket.count(),
     db.equipo.count(),
-    db.funcionario.count(),
+    db.cliente.count(),
     db.diagnostico.count(),
     db.user.count({ where: { isActive: true, role: "TECNICO" } }),
     db.ticket.groupBy({ by: ["estado"], _count: true }),
@@ -40,7 +40,7 @@ export async function getDashboardStats() {
   return {
     tickets,
     equipos,
-    funcionarios,
+    clientes,
     diagnosticos,
     tecnicos,
     ticketsAbiertos: estadoMap["ABIERTO"] || 0,

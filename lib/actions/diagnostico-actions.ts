@@ -25,7 +25,7 @@ export async function getDiagnosticoById(id: string) {
   return db.diagnostico.findUnique({
     where: { id },
     include: {
-      equipo: { include: { funcionario: true } },
+      equipo: { include: { cliente: true } },
       tecnico: { select: { id: true, name: true } },
     },
   });
@@ -46,7 +46,7 @@ export async function createDiagnostico(data: {
       tecnicoId: session?.user?.id,
     },
     include: {
-      equipo: { include: { funcionario: true } },
+      equipo: { include: { cliente: true } },
       tecnico: { select: { id: true, name: true } },
     },
   });

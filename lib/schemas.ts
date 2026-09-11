@@ -96,22 +96,25 @@ export const equipoSchema = z.object({
   modelo: z.string().max(100).transform(sanitize).optional().or(z.literal("")),
   numeroActivo: z.string().max(50).optional().or(z.literal("")),
   numeroSerie: z.string().max(50).optional().or(z.literal("")),
-  funcionarioId: z.string().optional().or(z.literal("")),
+  clienteId: z.string().optional().or(z.literal("")),
 });
 
 export type EquipoFormData = z.infer<typeof equipoSchema>;
 
-export const funcionarioSchema = z.object({
+export const TIPOS_CLIENTE = [
+  { value: "Personal", label: "Personal" },
+  { value: "Empresa", label: "Empresa" },
+] as const;
+
+export const clienteSchema = z.object({
   nombre: z.string().min(3).max(200).transform(sanitize),
   cargo: z.string().max(100).transform(sanitize).optional().or(z.literal("")),
   dependencia: z.string().max(200).transform(sanitize).optional().or(z.literal("")),
   area: z.string().max(200).transform(sanitize).optional().or(z.literal("")),
-  tipo: z.string().max(50).optional().or(z.literal("")),
   telefono: z.string().max(30).optional().or(z.literal("")),
-  email: z.string().email().max(120).optional().or(z.literal("")),
 });
 
-export type FuncionarioFormData = z.infer<typeof funcionarioSchema>;
+export type ClienteFormData = z.infer<typeof clienteSchema>;
 
 export const diagnosticoSchema = z.object({
   tipo: z.enum(["PREVENTIVO", "CORRECTIVO"]),

@@ -7,7 +7,7 @@ import LoginForm from "./login-form";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await db.systemSettings.findUnique({ where: { id: "system-config" } });
-  const name = settings?.institutionName || "SoportePro";
+  const name = settings?.institutionName || "Soportik";
   return {
     title: `Iniciar Sesión | ${name}`,
     description: `Acceso al panel de administración de ${name}.`,
@@ -19,7 +19,7 @@ export default async function LoginPage() {
   if (session?.user?.id) redirect("/admin");
 
   const settings = await db.systemSettings.findUnique({ where: { id: "system-config" } });
-  const name = settings?.institutionName || "SoportePro";
+  const name = settings?.institutionName || "Soportik";
   const logoUrl: string | null = settings?.logoUrl ?? null;
 
   return (

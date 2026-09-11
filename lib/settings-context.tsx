@@ -11,7 +11,7 @@ export interface Settings {
 }
 
 const DEFAULT: Settings = {
-  institutionName: "SoportePro",
+  institutionName: "Soportik",
   logoUrl: null,
   primaryColor: "#1a3a5c",
   secondaryColor: "#2e7dc4",

@@ -3,9 +3,9 @@ import { createStyles, createWorkbook, type CellValue, type Range } from "./util
 export function generateImpresoraForm(data: {
   numeroFicha: number;
   fecha: string;
-  funcionario: {
+  cliente: {
     nombre: string; cargo: string; dependencia: string;
-    area: string; tipo: string; telefono: string;
+    area: string; telefono: string;
   };
   equipo: {
     codigoInventario: string; marca: string; modelo: string;
@@ -20,7 +20,7 @@ export function generateImpresoraForm(data: {
   primaryColor?: string;
 }) {
   const s = createStyles(data.primaryColor || "#1a3a5c");
-  const inst = (data.institutionName || "SoportePro").toUpperCase();
+  const inst = (data.institutionName || "Soportik").toUpperCase();
   const ws_data: CellValue[][] = [];
   const merges: Range[] = [];
   const totalCols = 5;
@@ -45,31 +45,28 @@ export function generateImpresoraForm(data: {
   ]);
 
   ws_data.push([]);
-  ws_data.push([{ v: "1. INFORMACIÓN DEL FUNCIONARIO SOLICITANTE:", s: s.sectionTitle }]);
+  ws_data.push([{ v: "1. INFORMACIÓN DEL CLIENTE:", s: s.sectionTitle }]);
   merges.push({ s: { r: ws_data.length - 1, c: 0 }, e: { r: ws_data.length - 1, c: totalCols - 1 } });
 
   ws_data.push([
-    { v: "NOMBRE DEL FUNCIONARIO SOLICITANTE:", s: s.metaLabel },
-    { v: data.funcionario.nombre, s: s.metaValue },
+    { v: "NOMBRE DEL CLIENTE:", s: s.metaLabel },
+    { v: data.cliente.nombre, s: s.metaValue },
     null,
-    { v: "CARGO:", s: s.metaLabel },
-    { v: data.funcionario.cargo?.toUpperCase(), s: s.metaValue },
+    { v: "TIPO DE CLIENTE:", s: s.metaLabel },
+    { v: data.cliente.cargo?.toUpperCase() || "PERSONAL", s: s.metaValue },
   ]);
 
   ws_data.push([
-    { v: "DEPENDENCIA LABORAL:", s: s.metaLabel },
-    { v: data.funcionario.dependencia?.toUpperCase(), s: s.metaValue },
+    { v: "DIRECCIÓN:", s: s.metaLabel },
+    { v: data.cliente.dependencia?.toUpperCase(), s: s.metaValue },
     null,
-    { v: "DIRECCIÓN / UNIDAD / ÁREA:", s: s.metaLabel },
-    { v: data.funcionario.area, s: s.metaValue },
+    { v: "ZONA / BARRIO:", s: s.metaLabel },
+    { v: data.cliente.area, s: s.metaValue },
   ]);
 
   ws_data.push([
-    { v: "TIPO DE FUNCIONARIO:", s: s.metaLabel },
-    { v: data.funcionario.tipo || "Funcionario de Planta", s: s.bodyText },
-    null,
-    { v: "TELÉFONO / EXTENSIÓN:", s: s.metaLabel },
-    { v: data.funcionario.telefono || "—", s: s.metaValue },
+    { v: "TELÉFONO / WHATSAPP:", s: s.metaLabel },
+    { v: data.cliente.telefono || "—", s: s.metaValue },
   ]);
 
   ws_data.push([]);
@@ -102,7 +99,7 @@ export function generateImpresoraForm(data: {
   ]);
 
   ws_data.push([]);
-  ws_data.push([{ v: "BREVE DESCRIPCIÓN DEL FUNCIONARIO:", s: s.sectionTitle }]);
+  ws_data.push([{ v: "BREVE DESCRIPCIÓN DEL CLIENTE:", s: s.sectionTitle }]);
   merges.push({ s: { r: ws_data.length - 1, c: 0 }, e: { r: ws_data.length - 1, c: totalCols - 1 } });
   ws_data.push([{ v: (data.descripcionFc || "—").toUpperCase(), s: s.bodyText }]);
   const descRow = ws_data.length - 1;
@@ -116,7 +113,7 @@ export function generateImpresoraForm(data: {
   merges.push({ s: { r: diagRow, c: 0 }, e: { r: diagRow, c: totalCols - 1 } });
 
   ws_data.push([
-    { v: "El área de sistemas concluyó el diagnóstico y procedió a devolver el equipo al funcionario solicitante.", s: s.bodyText },
+    { v: "Se concluyó el diagnóstico y se procedió a entregar el equipo al cliente.", s: s.bodyText },
   ]);
   const noteRow = ws_data.length - 1;
   merges.push({ s: { r: noteRow, c: 0 }, e: { r: noteRow, c: totalCols - 1 } });
@@ -136,9 +133,9 @@ export function generateImpresoraForm(data: {
   ]);
   ws_data.push([
     { v: "", s: s.cell },
-    { v: "TÉCNICO ÁREA DE TECNOLOGÍAS DE LA INFORMACIÓN", s: s.metaLabel },
+    { v: "TÉCNICO DE SOPORTE", s: s.metaLabel },
     { v: "", s: s.metaLabel },
-    { v: "RESPONSABLE DE BIENES Y SERVICIOS", s: s.metaLabel },
+    { v: "CLIENTE", s: s.metaLabel },
     { v: "", s: s.metaLabel },
   ]);
 

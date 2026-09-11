@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
 async function main() {
-  const adminExists = await db.user.findUnique({ where: { email: "admin@soportepro.com" } });
+  const adminExists = await db.user.findUnique({ where: { email: "admin@soportik.com" } });
   if (adminExists) {
     console.log("Admin ya existe. Seed omitido.");
     return;
@@ -13,7 +13,7 @@ async function main() {
   const admin = await db.user.create({
     data: {
       name: "Admin Principal",
-      email: "admin@soportepro.com",
+      email: "admin@soportik.com",
       password: adminPassword,
       role: "ADMIN",
       isActive: true,
@@ -24,7 +24,7 @@ async function main() {
   const tecnico = await db.user.create({
     data: {
       name: "Técnico Demo",
-      email: "tecnico@soportepro.com",
+      email: "tecnico@soportik.com",
       password: tecPassword,
       role: "TECNICO",
       isActive: true,
@@ -34,21 +34,20 @@ async function main() {
   await db.systemSettings.create({
     data: {
       id: "system-config",
-      institutionName: "SoportePro",
+      institutionName: "Soportik",
       primaryColor: "#1a3a5c",
       secondaryColor: "#2e7dc4",
       isConfigured: true,
     },
   });
 
-  const fc = await db.funcionario.create({
+  const cl = await db.cliente.create({
     data: {
-      nombre: "Pamela Pantoja Ibieta",
-      cargo: "Habilitado",
-      dependencia: "UNIDAD DE RECURSOS HUMANOS",
-      area: "MDPyEP",
-      tipo: "Funcionario de Planta",
-      telefono: "353",
+      nombre: "Juan Pérez Mamani",
+      cargo: "Personal",
+      dependencia: "Zota C. #425, Z. Villa Exaltación",
+      area: "Satélite",
+      telefono: "76259553",
     },
   });
 
@@ -60,7 +59,7 @@ async function main() {
       modelo: "SCANJET N6350",
       numeroActivo: "15090066",
       numeroSerie: "CN4B4EE05V",
-      funcionarioId: fc.id,
+      clienteId: cl.id,
     },
   });
 
@@ -72,7 +71,7 @@ async function main() {
       modelo: "LJ ENTERPRISE M506",
       numeroActivo: "15130529",
       numeroSerie: "BRBSK3P5RC",
-      funcionarioId: fc.id,
+      clienteId: cl.id,
     },
   });
 
@@ -80,7 +79,7 @@ async function main() {
     data: {
       numeroFicha: 1,
       tipo: "PREVENTIVO",
-      diagnostico: "SE REALIZÓ EL MANTENIMIENTO PREVENTIVO DE SCANERS, LIMPIEZA DE LOS COMPONENTES INTERNOS Y EXTERNOS, Y LOS SCANERS ESTÁN EN CORRECTO FUNCIONAMIENTO.",
+      diagnostico: "SE REALIZÓ EL MANTENIMIENTO PREVENTIVO DE SCANNERS, LIMPIEZA DE LOS COMPONENTES INTERNOS Y EXTERNOS, Y LOS SCANNERS ESTÁN EN CORRECTO FUNCIONAMIENTO.",
       trabajoRealizado: "MANTENIMIENTO PREVENTIVO",
       equipoId: eq1.id,
       tecnicoId: admin.id,
@@ -104,9 +103,9 @@ async function main() {
       code: "TK-DEMO-001",
       title: "Problema con escáner no enciende",
       categoria: "Hardware",
-      descripcion: "El escáner de la oficina de RRHH no enciende desde ayer. Se requiere revisión técnica urgente.",
-      email: "pamela@institucion.com",
-      nombre: "Pamela Pantoja Ibieta",
+      descripcion: "El escáner no enciende desde ayer. Se requiere revisión técnica urgente.",
+      email: "tik.soporte@gmail.com",
+      nombre: "Juan Pérez Mamani",
       estado: "EN_PROCESO",
       tecnicoId: tecnico.id,
     },
@@ -116,7 +115,7 @@ async function main() {
     data: {
       ticketId: ticket.id,
       evento: "CREADO",
-      comentario: "Ticket creado por Pamela",
+      comentario: "Ticket creado por el cliente",
       tecnico: "Sistema",
     },
   });
@@ -131,8 +130,8 @@ async function main() {
   });
 
   console.log("✅ Seed completado exitosamente.");
-  console.log(`   Admin: admin@soportepro.com / admin123`);
-  console.log(`   Técnico: tecnico@soportepro.com / tecnico123`);
+  console.log(`   Admin: admin@soportik.com / admin123`);
+  console.log(`   Técnico: tecnico@soportik.com / tecnico123`);
 }
 
 main()

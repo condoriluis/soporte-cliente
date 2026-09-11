@@ -7,7 +7,7 @@ interface EquipoRow {
   modelo: string | null;
   numeroActivo: string | null;
   numeroSerie: string | null;
-  funcionario?: { nombre: string | null } | null;
+  cliente?: { nombre: string | null } | null;
 }
 
 export function generateEquipoReport(data: {
@@ -16,7 +16,7 @@ export function generateEquipoReport(data: {
   primaryColor?: string;
 }) {
   const s = createStyles(data.primaryColor || "#1a3a5c");
-  const inst = (data.institutionName || "SoportePro").toUpperCase();
+  const inst = (data.institutionName || "Soportik").toUpperCase();
   const ws_data: CellValue[][] = [];
   const merges: Range[] = [];
   const totalCols = 8;
@@ -35,7 +35,7 @@ export function generateEquipoReport(data: {
     { v: "MODELO", s: s.tableHeader },
     { v: "N° ACTIVO", s: s.tableHeader },
     { v: "N° SERIE", s: s.tableHeader },
-    { v: "FUNCIONARIO", s: s.tableHeader },
+    { v: "CLIENTE", s: s.tableHeader },
   ]);
 
   data.equipos.forEach((eq, i) => {
@@ -47,7 +47,7 @@ export function generateEquipoReport(data: {
       { v: eq.modelo || "—", s: s.cell },
       { v: eq.numeroActivo || "—", s: s.cell },
       { v: eq.numeroSerie || "—", s: s.cell },
-      { v: eq.funcionario?.nombre || "—", s: s.cellLeft },
+      { v: eq.cliente?.nombre || "—", s: s.cellLeft },
     ]);
   });
 

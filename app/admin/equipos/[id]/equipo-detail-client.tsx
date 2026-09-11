@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateEquipo, deleteEquipo } from "@/lib/actions/equipo-actions";
-import { getFuncionarios } from "@/lib/actions/funcionario-actions";
+import { getClientes } from "@/lib/actions/cliente-actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -13,45 +13,45 @@ import {
   Popover, PopoverContent, PopoverTrigger,
 } from "@/components/ui/popover";
 
-interface FuncionarioOption {
+interface ClienteOption {
   id: string; nombre: string; cargo: string | null; dependencia: string | null;
 }
 
 interface Props {
   equipoId: string;
-  currentFuncionario: { id: string; nombre: string; cargo: string | null } | null;
+  currentCliente: { id: string; nombre: string; cargo: string | null } | null;
   currentUserRole?: string;
 }
 
-export function EquipoDetailClient({ equipoId, currentFuncionario, currentUserRole }: Props) {
+export function EquipoDetailClient({ equipoId, currentCliente, currentUserRole }: Props) {
   const router = useRouter();
-  const [funcionarios, setFuncionarios] = useState<FuncionarioOption[]>([]);
+  const [clientes, setClientes] = useState<ClienteOption[]>([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
-  const [selectedFuncionarioId, setSelectedFuncionarioId] = useState(currentFuncionario?.id || "");
+  const [selectedClienteId, setSelectedClienteId] = useState(currentCliente?.id || "");
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [assigning, setAssigning] = useState(false);
 
   useEffect(() => {
-    getFuncionarios().then((data) => setFuncionarios(data as FuncionarioOption[]));
+    getClientes().then((data) => setClientes(data as ClienteOption[]));
   }, []);
 
   const filtered = search
-    ? funcionarios.filter(f =>
-        f.nombre.toLowerCase().includes(search.toLowerCase()) ||
-        (f.cargo && f.cargo.toLowerCase().includes(search.toLowerCase()))
+    ? clientes.filter(c =>
+        c.nombre.toLowerCase().includes(search.toLowerCase()) ||
+        (c.cargo && c.cargo.toLowerCase().includes(search.toLowerCase()))
       )
-    : funcionarios;
+    : clientes;
 
-  const selectedFuncionario = funcionarios.find(f => f.id === selectedFuncionarioId);
+  const selectedCliente = clientes.find(c => c.id === selectedClienteId);
 
-  const handleAssign = async (funcionarioId: string) => {
+  const handleAssign = async (clienteId: string) => {
     setAssigning(true);
     try {
-      await updateEquipo(equipoId, { funcionarioId: funcionarioId || null });
-      setSelectedFuncionarioId(funcionarioId);
-      toast.success("Funcionario asignado");
+      await updateEquipo(equipoId, { clienteId: clienteId || null });
+      setSelectedClienteId(clienteId);
+      toast.success("Cliente asignado");
       router.refresh();
     } catch {
       toast.error("Error al asignar");
@@ -78,26 +78,26 @@ export function EquipoDetailClient({ equipoId, currentFuncionario, currentUserRo
     <>
       <div className="rounded-xl border bg-card p-6 space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold">Funcionario Asignado</h3>
+          <h3 className="font-semibold">Cliente Asociado</h3>
           {assigning && <span className="text-xs text-muted-foreground animate-pulse">Asignando...</span>}
         </div>
-        {selectedFuncionario ? (
+        {selectedCliente ? (
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">{selectedFuncionario.nombre}</p>
-              {selectedFuncionario.cargo && (
-                <p className="text-xs text-muted-foreground">{selectedFuncionario.cargo}</p>
+              <p className="font-medium">{selectedCliente.nombre}</p>
+              {selectedCliente.cargo && (
+                <p className="text-xs text-muted-foreground">{selectedCliente.cargo}</p>
               )}
             </div>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">Sin funcionario asignado</p>
+          <p className="text-sm text-muted-foreground">Sin cliente asociado</p>
         )}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" size="sm" className="w-full gap-2">
               <UserCheck className="w-4 h-4" />
-              {selectedFuncionario ? "Cambiar funcionario" : "Asignar funcionario"}
+              {selectedCliente ? "Cambiar cliente" : "Asignar cliente"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
@@ -105,7 +105,7 @@ export function EquipoDetailClient({ equipoId, currentFuncionario, currentUserRo
               <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
               <input
                 className="flex h-10 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
-                placeholder="Buscar funcionario..."
+                placeholder="Buscar cliente..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 autoFocus
@@ -121,26 +121,26 @@ export function EquipoDetailClient({ equipoId, currentFuncionario, currentUserRo
                 className="w-full text-left px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-accent"
                 onClick={() => handleAssign("")}
               >
-                Sin funcionario
+                Sin cliente
               </button>
               {filtered.length === 0 ? (
                 <p className="text-sm text-muted-foreground p-2 text-center">Sin resultados</p>
               ) : (
-                filtered.map((f) => (
+                filtered.map((c) => (
                   <button
-                    key={f.id}
+                    key={c.id}
                     className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center justify-between gap-2 hover:bg-accent ${
-                      f.id === selectedFuncionarioId ? "bg-accent" : ""
+                      c.id === selectedClienteId ? "bg-accent" : ""
                     }`}
-                    onClick={() => handleAssign(f.id)}
+                    onClick={() => handleAssign(c.id)}
                   >
                     <div className="min-w-0">
-                      <p className="font-medium truncate">{f.nombre}</p>
+                      <p className="font-medium truncate">{c.nombre}</p>
                       <p className="text-xs text-muted-foreground truncate">
-                        {f.cargo || "—"}
+                        {c.cargo || "—"}
                       </p>
                     </div>
-                    {f.id === selectedFuncionarioId && (
+                    {c.id === selectedClienteId && (
                       <Badge variant="outline" className="text-[10px] shrink-0">Actual</Badge>
                     )}
                   </button>

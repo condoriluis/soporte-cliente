@@ -29,15 +29,13 @@ model User {
   updatedAt      DateTime  @updatedAt
 }
 
-model Funcionario {
+model Cliente {
   id          String     @id @default(cuid())
   nombre      String
   cargo       String?
   dependencia String?
   area        String?
-  tipo        String?
   telefono    String?
-  email       String?
   equipos     Equipo[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -51,8 +49,8 @@ model Equipo {
   modelo         String?
   numeroActivo   String?
   numeroSerie    String?
-  funcionarioId  String?
-  funcionario    Funcionario?  @relation(fields: [funcionarioId], references: [id])
+  clienteId  String?
+  cliente    Cliente?   @relation(fields: [clienteId], references: [id])
   diagnosticos   Diagnostico[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
@@ -111,7 +109,7 @@ model RateLimit {
 
 model SystemSettings {
   id              String  @id @default("system-config")
-  institutionName String  @default("SoportePro")
+  institutionName String  @default("Soportik")
   logoUrl         String?
   primaryColor    String  @default("#1a3a5c")
   secondaryColor  String  @default("#2e7dc4")

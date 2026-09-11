@@ -5,10 +5,10 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { Prisma } from "@prisma/client";
 
-export async function getEquipos(params?: { tipo?: string; search?: string; funcionarioId?: string }) {
+export async function getEquipos(params?: { tipo?: string; search?: string; clienteId?: string }) {
   const where: Prisma.EquipoWhereInput = {};
   if (params?.tipo) where.tipo = params.tipo;
-  if (params?.funcionarioId) where.funcionarioId = params.funcionarioId;
+  if (params?.clienteId) where.clienteId = params.clienteId;
   if (params?.search) {
     where.OR = [
       { nombre: { contains: params.search, mode: "insensitive" } },
@@ -16,13 +16,14 @@ export async function getEquipos(params?: { tipo?: string; search?: string; func
       { modelo: { contains: params.search, mode: "insensitive" } },
       { numeroSerie: { contains: params.search, mode: "insensitive" } },
       { numeroActivo: { contains: params.search, mode: "insensitive" } },
+      { cliente: { nombre: { contains: params.search, mode: "insensitive" } } },
     ];
   }
 
   return db.equipo.findMany({
     where,
     include: {
-      funcionario: { select: { id: true, nombre: true, cargo: true } },
+      cliente: { select: { id: true, nombre: true, cargo: true } },
       _count: { select: { diagnosticos: true } },
     },
     orderBy: { createdAt: "desc" },
@@ -33,7 +34,7 @@ export async function getEquipoById(id: string) {
   return db.equipo.findUnique({
     where: { id },
     include: {
-      funcionario: true,
+      cliente: true,
       diagnosticos: {
         include: { tecnico: { select: { id: true, name: true } } },
         orderBy: { createdAt: "desc" },
@@ -44,7 +45,7 @@ export async function getEquipoById(id: string) {
 
 export async function createEquipo(data: {
   tipo: string; nombre: string; marca?: string; modelo?: string;
-  numeroActivo?: string; numeroSerie?: string; funcionarioId?: string;
+  numeroActivo?: string; numeroSerie?: string; clienteId?: string;
 }) {
   const equipo = await db.equipo.create({
     data: {
@@ -54,7 +55,7 @@ export async function createEquipo(data: {
       modelo: data.modelo,
       numeroActivo: data.numeroActivo,
       numeroSerie: data.numeroSerie,
-      funcionarioId: data.funcionarioId || undefined,
+      clienteId: data.clienteId || undefined,
     },
   });
   revalidatePath("/admin/equipos");

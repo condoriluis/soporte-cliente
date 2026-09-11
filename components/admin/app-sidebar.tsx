@@ -24,7 +24,7 @@ const menuItems = {
     { href: "/admin", label: "Dashboard", icon: Home },
     { href: "/admin/tickets", label: "Tickets", icon: TicketIcon },
     { href: "/admin/equipos", label: "Equipos", icon: Monitor },
-    { href: "/admin/funcionarios", label: "Funcionarios", icon: Users },
+    { href: "/admin/clientes", label: "Clientes", icon: Users },
     { href: "/admin/diagnosticos", label: "Diagnósticos", icon: ClipboardList },
     { href: "/admin/reportes", label: "Reportes", icon: FileText },
     { href: "/admin/usuarios", label: "Usuarios", icon: Shield },
@@ -34,7 +34,7 @@ const menuItems = {
     { href: "/admin", label: "Dashboard", icon: Home },
     { href: "/admin/tickets", label: "Tickets", icon: TicketIcon },
     { href: "/admin/equipos", label: "Equipos", icon: Monitor },
-    { href: "/admin/funcionarios", label: "Funcionarios", icon: Users },
+    { href: "/admin/clientes", label: "Clientes", icon: Users },
     { href: "/admin/diagnosticos", label: "Diagnósticos", icon: ClipboardList },
   ],
 };
@@ -46,7 +46,7 @@ export default function AppSidebar({ user, settings }: SidebarProps) {
   const [logoError, setLogoError] = useState(false);
   const items = menuItems[user?.role === "ADMIN" ? "ADMIN" : "TECNICO"] || menuItems.TECNICO;
 
-  const name = settings?.institutionName || "SoportePro";
+  const name = settings?.institutionName || "Soportik";
   const showLogo = settings?.logoUrl && !logoError;
 
   function closeMobile() {

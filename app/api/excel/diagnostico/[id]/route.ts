@@ -13,7 +13,7 @@ export async function GET(
   const diag = await db.diagnostico.findUnique({
     where: { id },
     include: {
-      equipo: { include: { funcionario: true } },
+      equipo: { include: { cliente: true } },
       tecnico: { select: { name: true } },
     },
   });
@@ -28,13 +28,12 @@ export async function GET(
     ? generateImpresoraForm({
         numeroFicha: diag.numeroFicha || 0,
         fecha: new Date(diag.createdAt).toLocaleDateString("es-ES"),
-        funcionario: {
-          nombre: diag.equipo.funcionario?.nombre || "",
-          cargo: diag.equipo.funcionario?.cargo || "",
-          dependencia: diag.equipo.funcionario?.dependencia || "",
-          area: diag.equipo.funcionario?.area || "",
-          tipo: diag.equipo.funcionario?.tipo || "",
-          telefono: diag.equipo.funcionario?.telefono || "",
+        cliente: {
+          nombre: diag.equipo.cliente?.nombre || "",
+          cargo: diag.equipo.cliente?.cargo || "",
+          dependencia: diag.equipo.cliente?.dependencia || "",
+          area: diag.equipo.cliente?.area || "",
+          telefono: diag.equipo.cliente?.telefono || "",
         },
         equipo: {
           codigoInventario: diag.equipo.numeroActivo || "",

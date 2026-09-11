@@ -81,7 +81,7 @@ export default function ConfiguracionPage() {
 
   useEffect(() => {
     getSettings().then((data) => {
-      const s = data || { institutionName: "SoportePro", logoUrl: "", primaryColor: "#1a3a5c", secondaryColor: "#2e7dc4" };
+      const s = data || { institutionName: "Soportik", logoUrl: "", primaryColor: "#1a3a5c", secondaryColor: "#2e7dc4" };
       setSettings(s);
       setLoading(false);
       applyColors(s.primaryColor, s.secondaryColor);
@@ -144,7 +144,7 @@ export default function ConfiguracionPage() {
       <div className="grid gap-6 items-start lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
         <div className="rounded-xl border bg-card p-6 space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="name">Nombre de la Institución</Label>
+          <Label htmlFor="name">Nombre del negocio / servicio</Label>
           <Input
             id="name"
             value={settings?.institutionName || ""}

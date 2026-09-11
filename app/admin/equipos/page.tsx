@@ -21,7 +21,7 @@ const tipoColors: Record<string, string> = {
 interface Equipo {
   id: string; tipo: string; nombre: string; marca: string | null;
   modelo: string | null; numeroActivo: string | null; numeroSerie: string | null;
-  funcionario: { id: string; nombre: string } | null;
+  cliente: { id: string; nombre: string } | null;
   _count: { diagnosticos: number };
 }
 
@@ -127,7 +127,7 @@ export default function EquiposPage() {
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Modelo</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">N° Activo</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">N° Serie</th>
-                <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Funcionario</th>
+                <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Cliente</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Diag.</th>
                 {isAdmin && <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Acciones</th>}
               </tr>
@@ -154,7 +154,7 @@ export default function EquiposPage() {
                     <td className="p-3 text-sm text-muted-foreground">{eq.modelo || "—"}</td>
                     <td className="p-3 text-sm text-muted-foreground">{eq.numeroActivo || "—"}</td>
                     <td className="p-3 text-sm text-muted-foreground font-mono">{eq.numeroSerie || "—"}</td>
-                    <td className="p-3 text-sm text-muted-foreground">{eq.funcionario?.nombre || "—"}</td>
+                    <td className="p-3 text-sm text-muted-foreground">{eq.cliente?.nombre || "—"}</td>
                     <td className="p-3 text-sm text-muted-foreground">{eq._count.diagnosticos}</td>
                     {isAdmin && (
                       <td className="p-3">

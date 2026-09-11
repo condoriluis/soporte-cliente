@@ -13,10 +13,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const isEmail = ticket.includes("@");
-    const where = isEmail
-      ? { email: { equals: ticket, mode: "insensitive" as const } }
-      : { code: { equals: ticket, mode: "insensitive" as const } };
+    const where = { code: { equals: ticket, mode: "insensitive" as const } };
 
     const found = await db.ticket.findFirst({
       where,

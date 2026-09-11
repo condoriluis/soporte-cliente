@@ -81,7 +81,6 @@ export async function POST(request: Request) {
         title: `${d.servicio} — ${d.nombre}`,
         categoria: d.servicio,
         descripcion,
-        email: d.email,
         nombre: d.nombre,
         eventos: {
           create: {
@@ -103,7 +102,6 @@ export async function POST(request: Request) {
           event: "new_support_ticket",
           contact_name: d.nombre,
           contact_phone: d.whatsapp,
-          contact_email: d.email,
           contact_subject: `Soporte Técnico: ${d.servicio}`,
           contact_message: descripcion,
           localId: ticket.id,

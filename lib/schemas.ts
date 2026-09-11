@@ -51,12 +51,6 @@ export const soporteSchema = z.object({
     .min(8, "Ingrese un número de WhatsApp válido.")
     .max(20, "El número no puede superar 20 caracteres.")
     .transform(sanitize),
-  email: z
-    .string()
-    .min(1, "El correo electrónico es obligatorio.")
-    .email("Ingrese un correo electrónico válido.")
-    .max(120)
-    .transform((v) => sanitize(v).toLowerCase()),
   servicio: z
     .string()
     .min(1, "Seleccione un servicio.")

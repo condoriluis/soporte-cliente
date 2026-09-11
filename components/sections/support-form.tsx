@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
-  Loader2, Send, Lock, User, Phone, Mail, Wrench, MessageSquare,
+  Loader2, Send, Lock, User, Phone, Wrench, MessageSquare,
   Monitor, MapPin, Calendar, CheckCircle2, Copy, AlertCircle,
 } from "lucide-react";
 
@@ -40,7 +40,6 @@ export default function SupportForm() {
     defaultValues: {
       nombre: "",
       whatsapp: "",
-      email: "",
       servicio: "",
       problema: "",
       tipoEquipo: undefined,
@@ -118,7 +117,7 @@ export default function SupportForm() {
       if (ticketCode) setGeneratedTicket(ticketCode);
 
       form.reset({
-        nombre: "", whatsapp: "", email: "", servicio: "", problema: "",
+        nombre: "", whatsapp: "", servicio: "", problema: "",
         tipoEquipo: undefined, zona: "", modalidad: undefined,
         fechaPreferida: "", hp: "", ts: String(Date.now()),
       });
@@ -233,23 +232,6 @@ export default function SupportForm() {
                     )}
                   />
                 </div>
-
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
-                        <Mail className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
-                        Correo electrónico
-                      </FormLabel>
-                      <FormControl>
-                        <Input {...field} type="email" placeholder="correo@ejemplo.com" maxLength={120} autoComplete="email" className="rounded-xl" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <FormField
                   control={form.control}

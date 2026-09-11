@@ -150,8 +150,7 @@ export default function TrackTicket() {
         <DialogHeader>
           <DialogTitle>Rastrear Ticket</DialogTitle>
           <DialogDescription>
-            Ingresa tu número de ticket o correo institucional para consultar el
-            estado actual.
+            Ingresa tu número de ticket para consultar el estado actual.
           </DialogDescription>
         </DialogHeader>
 
@@ -160,9 +159,9 @@ export default function TrackTicket() {
             <Input
               value={ticketId}
               onChange={(e) => setTicketId(e.target.value)}
-              placeholder="Ej. TK-1234 o correo@empresa.com"
+              placeholder="Ej. TK-1234"
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 h-10 border-primary/40 focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
             />
             <Button type="submit" disabled={isLoading || !ticketId.trim()}>
               {isLoading ? (

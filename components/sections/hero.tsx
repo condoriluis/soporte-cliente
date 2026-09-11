@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Headphones, MessageCircle, ClipboardCheck, FileCheck, ShieldCheck, Radar,
 } from "lucide-react";
@@ -36,18 +35,6 @@ export default function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-36">
         <div className="max-w-3xl">
-          <Badge
-            className="gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-widest uppercase"
-            style={{
-              background: "rgba(255,255,255,.08)",
-              borderColor: "rgba(255,255,255,.18)",
-              color: "var(--brand-light)",
-            }}
-          >
-            <Headphones className="w-3.5 h-3.5" />
-            Área de Sistemas y Soporte Técnico
-          </Badge>
-
           <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight">
             Servicio técnico de PC y laptops,{" "}
             <span style={{ color: "var(--brand-light)" }}>

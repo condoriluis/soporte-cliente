@@ -63,7 +63,7 @@ model Ticket {
   categoria   String
   descripcion String
   estado      String         @default("ABIERTO")
-  email       String?
+  whatsapp    String?
   nombre      String?
   webhookId   String?
   tecnicoId   String?

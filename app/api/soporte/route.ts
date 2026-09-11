@@ -82,6 +82,7 @@ export async function POST(request: Request) {
         categoria: d.servicio,
         descripcion,
         nombre: d.nombre,
+        whatsapp: d.whatsapp,
         eventos: {
           create: {
             evento: "CREADO",

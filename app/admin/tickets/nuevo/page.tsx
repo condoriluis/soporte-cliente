@@ -26,7 +26,7 @@ export default function NuevoTicketPage() {
       title: "",
       categoria: undefined,
       descripcion: "",
-      email: "",
+      whatsapp: "",
       nombre: "",
     },
   });
@@ -63,9 +63,9 @@ export default function NuevoTicketPage() {
               name="nombre"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel>Nombre del solicitante</FormLabel>
+                  <FormLabel>Nombre del cliente</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Nombre completo" />
+                    <Input {...field} placeholder="Ej. Juan Pérez" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -74,12 +74,12 @@ export default function NuevoTicketPage() {
 
             <FormField
               control={form.control}
-              name="email"
+              name="whatsapp"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel>Correo electrónico</FormLabel>
+                  <FormLabel>Teléfono / WhatsApp</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" placeholder="correo@institucion.com" />
+                    <Input {...field} placeholder="Ej. 70000000" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,7 +91,7 @@ export default function NuevoTicketPage() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel>Título del ticket</FormLabel>
+                  <FormLabel>Título del ticket</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Resumen del problema" />
                   </FormControl>
@@ -105,7 +105,7 @@ export default function NuevoTicketPage() {
               name="categoria"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel>Categoría</FormLabel>
+                  <FormLabel>Categoría</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -128,7 +128,7 @@ export default function NuevoTicketPage() {
               name="descripcion"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel>Descripción del problema</FormLabel>
+                  <FormLabel>Descripción del problema</FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={5} placeholder="Describa detalladamente el problema..." />
                   </FormControl>

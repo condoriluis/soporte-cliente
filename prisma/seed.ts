@@ -104,7 +104,7 @@ async function main() {
       title: "Problema con escáner no enciende",
       categoria: "Hardware",
       descripcion: "El escáner no enciende desde ayer. Se requiere revisión técnica urgente.",
-      email: "tik.soporte@gmail.com",
+      whatsapp: "76259553",
       nombre: "Juan Pérez Mamani",
       estado: "EN_PROCESO",
       tecnicoId: tecnico.id,

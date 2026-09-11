@@ -82,7 +82,7 @@ export const ticketSchema = z.object({
   title: z.string().min(3).max(200),
   categoria: z.enum(CATEGORIAS.map((c) => c.value) as [string, ...string[]]),
   descripcion: z.string().min(10).max(2000).transform(sanitize),
-  email: z.string().email().max(120).transform((v) => sanitize(v).toLowerCase()),
+  whatsapp: z.string().min(8, "Ingrese un número de WhatsApp válido").max(20).transform(sanitize),
   nombre: z.string().min(3).max(80).transform(sanitize),
   tecnicoId: z.string().optional(),
 });

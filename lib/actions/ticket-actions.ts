@@ -13,7 +13,7 @@ export async function getTickets(params?: { estado?: string; tecnicoId?: string;
     where.OR = [
       { code: { contains: params.search, mode: "insensitive" } },
       { title: { contains: params.search, mode: "insensitive" } },
-      { email: { contains: params.search, mode: "insensitive" } },
+      { whatsapp: { contains: params.search, mode: "insensitive" } },
       { nombre: { contains: params.search, mode: "insensitive" } },
     ];
   }
@@ -41,7 +41,7 @@ export async function getTicketById(id: string) {
 
 export async function createTicket(data: {
   title: string; categoria: string; descripcion: string;
-  email: string; nombre: string; tecnicoId?: string;
+  whatsapp: string; nombre: string; tecnicoId?: string;
 }) {
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
   const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -59,7 +59,7 @@ export async function createTicket(data: {
       title: data.title,
       categoria: data.categoria,
       descripcion: data.descripcion,
-      email: data.email,
+      whatsapp: data.whatsapp,
       nombre: data.nombre,
       tecnicoId: data.tecnicoId || null,
       eventos: {

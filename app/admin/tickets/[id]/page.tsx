@@ -39,7 +39,7 @@ export default async function TicketDetailPage({
           </div>
           <h2 className="text-2xl font-bold tracking-tight">{ticket.title}</h2>
           <p className="text-sm text-muted-foreground mt-1">
-            {ticket.categoria} • {ticket.nombre} • {ticket.email}
+            {ticket.categoria} • {ticket.nombre}{ticket.whatsapp ? ` • ${ticket.whatsapp}` : ""}
           </p>
         </div>
       </div>

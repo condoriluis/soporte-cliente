@@ -31,7 +31,7 @@ const eventColors: Record<string, string> = {
 
 interface TicketData {
   id: string; code: string; title: string; categoria: string; estado: string;
-  descripcion: string; email: string | null; nombre: string | null; tecnicoId: string | null;
+  descripcion: string; whatsapp: string | null; nombre: string | null; tecnicoId: string | null;
   createdAt: string | Date; updatedAt: string | Date;
   tecnico: { id: string; name: string | null } | null;
   eventos: Array<{ id: string; evento: string; comentario: string | null; tecnico: string | null; createdAt: string | Date }>;
@@ -230,8 +230,8 @@ export function TicketDetailClient({ ticket, tecnicos, currentUserRole }: Props)
               <dd>{ticket.nombre}</dd>
             </div>
             <div className="flex justify-between">
-               <dt className="text-muted-foreground">Email</dt>
-              <dd className="text-xs">{ticket.email}</dd>
+               <dt className="text-muted-foreground">WhatsApp</dt>
+              <dd className="text-xs">{ticket.whatsapp || "—"}</dd>
             </div>
             <div className="flex justify-between">
                <dt className="text-muted-foreground">Técnico</dt>

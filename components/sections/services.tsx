@@ -57,7 +57,7 @@ const SERVICES: Service[] = [
   {
     icon: Settings,
     title: "Instalación de software",
-    description: "Instalación y configuración de sistemas operativos, Office, antivirus y applications.",
+    description: "Instalación y configuración de sistemas operativos, Office, antivirus y aplicaciones.",
     duration: "1-3 horas",
   },
   {
@@ -88,7 +88,7 @@ const SERVICES: Service[] = [
   {
     icon: Home,
     title: "Soporte a domicilio",
-    description: "Vamos a tu ubicación para resolver problemas presencialmente. Cubrimos toda la ciudad.",
+    description: "Vamos a tu ubicación para resolver problemas presencialmente.",
     duration: "Variable",
   },
   {

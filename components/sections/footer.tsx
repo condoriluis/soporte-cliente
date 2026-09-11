@@ -1,8 +1,10 @@
 "use client";
 
-import { Shield, Mail, MapPin, Clock, Phone, MessageCircle } from "lucide-react";
+import { Shield, Mail, MapPin, Clock, Phone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { useSettings } from "@/lib/settings-context";
+import { CONTACT } from "@/lib/contact";
 
 const SERVICES = [
   "Mantenimiento de PC",
@@ -61,29 +63,29 @@ export default function Footer() {
             <h4 className="text-white font-semibold text-sm mb-4">Contacto</h4>
             <div className="space-y-3">
               <a
-                href="https://wa.me/59170000000"
+                href={CONTACT.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2.5 text-sm hover:text-white transition-colors"
               >
-                <MessageCircle className="w-4 h-4 flex-shrink-0" style={{ color: "#25D366" }} />
+                <WhatsAppIcon className="w-4 h-4 flex-shrink-0" style={{ color: "#25D366" }} />
                 WhatsApp
               </a>
               <div className="flex items-center gap-2.5 text-sm">
                 <Phone className="w-4 h-4 flex-shrink-0 opacity-60" />
-                +591 70000000
+                {CONTACT.whatsappDisplay}
               </div>
               <div className="flex items-center gap-2.5 text-sm">
                 <Mail className="w-4 h-4 flex-shrink-0 opacity-60" />
-                soporte@{settings.institutionName.toLowerCase().replace(/\s+/g, "")}.com
+                {CONTACT.email}
               </div>
               <div className="flex items-center gap-2.5 text-sm">
                 <MapPin className="w-4 h-4 flex-shrink-0 opacity-60" />
-                La Paz, Bolivia
+                {CONTACT.location}
               </div>
               <div className="flex items-center gap-2.5 text-sm">
                 <Clock className="w-4 h-4 flex-shrink-0 opacity-60" />
-                Lun - Vie: 8:30 – 17:00
+                {CONTACT.schedule}
               </div>
             </div>
           </div>

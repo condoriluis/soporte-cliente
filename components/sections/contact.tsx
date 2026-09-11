@@ -1,12 +1,11 @@
 "use client";
 
-import { MessageCircle, Mail, MapPin, Clock, Phone } from "lucide-react";
+import { Mail, MapPin, Clock, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSettings } from "@/lib/settings-context";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
+import { CONTACT } from "@/lib/contact";
 
 export default function Contact() {
-  const settings = useSettings();
-
   return (
     <section id="contacto" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,9 +39,12 @@ export default function Contact() {
               className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
               style={{ background: "color-mix(in srgb, #25D366 12%, transparent)" }}
             >
-              <MessageCircle className="w-8 h-8" style={{ color: "#25D366" }} />
+              <WhatsAppIcon className="w-8 h-8" style={{ color: "#25D366" }} />
             </div>
             <h3 className="text-xl font-bold text-foreground mb-2">WhatsApp</h3>
+            <p className="text-2xl font-extrabold mb-2" style={{ color: "var(--brand-primary)" }}>
+              {CONTACT.whatsappDisplay}
+            </p>
             <p className="text-sm text-muted-foreground mb-6">
               La forma más rápida de contactarnos. Respuesta inmediata en horario laboral.
             </p>
@@ -52,8 +54,8 @@ export default function Contact() {
               className="rounded-full font-bold text-white px-8"
               style={{ background: "#25D366" }}
             >
-              <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-5 h-5 mr-2" />
+              <a href={`${CONTACT.whatsappUrl}?text=${encodeURIComponent(CONTACT.whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="w-5 h-5 mr-2" />
                 Escribir por WhatsApp
               </a>
             </Button>
@@ -72,7 +74,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Teléfono / WhatsApp</p>
-                  <p className="text-sm text-muted-foreground">+591 70000000</p>
+                  <p className="text-sm text-muted-foreground">{CONTACT.whatsappDisplay}</p>
                 </div>
               </div>
 
@@ -85,7 +87,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Correo electrónico</p>
-                  <p className="text-sm text-muted-foreground">soporte@{settings.institutionName.toLowerCase().replace(/\s+/g, "")}.com</p>
+                  <a href={`mailto:${CONTACT.email}`} className="text-sm text-muted-foreground hover:underline">
+                    {CONTACT.email}
+                  </a>
                 </div>
               </div>
 
@@ -98,7 +102,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Ubicación</p>
-                  <p className="text-sm text-muted-foreground">La Paz, Bolivia</p>
+                  <p className="text-sm text-muted-foreground">{CONTACT.location}</p>
                 </div>
               </div>
 
@@ -111,8 +115,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Horario de atención</p>
-                  <p className="text-sm text-muted-foreground">Lunes a Viernes: 8:30 – 17:00</p>
-                  <p className="text-xs text-muted-foreground">Urgencias fuera de horario por WhatsApp</p>
+                  <p className="text-sm text-muted-foreground">{CONTACT.schedule}</p>
                 </div>
               </div>
             </div>

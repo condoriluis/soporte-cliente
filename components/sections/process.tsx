@@ -1,8 +1,10 @@
-import { MessageCircle, CalendarCheck, Wrench } from "lucide-react";
+import { CalendarCheck, Wrench } from "lucide-react";
+import type { ComponentType } from "react";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 
-const STEPS = [
+const STEPS: { icon: ComponentType<{ className?: string }>; n: number; title: string; desc: string }[] = [
   {
-    icon: MessageCircle,
+    icon: WhatsAppIcon,
     n: 1,
     title: "Solicita",
     desc: "Escríbenos por WhatsApp o llena el formulario con tu problema y datos de contacto.",

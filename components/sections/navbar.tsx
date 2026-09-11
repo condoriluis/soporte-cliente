@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { Shield, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/lib/settings-context";
+import { CONTACT } from "@/lib/contact";
 
 const NAV_LINKS = [
   { href: "#servicios", label: "Servicios" },
@@ -79,7 +81,8 @@ export default function Navbar() {
               className="rounded-full font-semibold text-white"
               style={{ background: "var(--brand-primary)" }}
             >
-              <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer">
+              <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="w-4 h-4 mr-2 inline-block align-[-2px]" />
                 Solicitar Ahora
               </a>
             </Button>
@@ -122,7 +125,8 @@ export default function Navbar() {
               className="w-full rounded-full font-semibold text-white"
               style={{ background: "var(--brand-primary)" }}
             >
-              <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+              <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                <WhatsAppIcon className="w-4 h-4 mr-2 inline-block align-[-2px]" />
                 Solicitar Ahora
               </a>
             </Button>

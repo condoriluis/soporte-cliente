@@ -1,6 +1,7 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { useRef } from "react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Testimonial {
   name: string;
@@ -56,10 +57,21 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 export default function Testimonials() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const scrollByCard = (direction: 1 | -1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector<HTMLElement>("[data-testimonial]");
+    const gap = 20; // gap-5
+    const step = card ? card.offsetWidth + gap : track.clientWidth;
+    track.scrollBy({ left: direction * step, behavior: "smooth" });
+  };
+
   return (
     <section id="testimonios" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <p
             className="text-xs font-bold tracking-[.14em] uppercase mb-3"
             style={{ color: "var(--brand-primary)" }}
@@ -75,40 +87,63 @@ export default function Testimonials() {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {TESTIMONIALS.map((t) => (
-            <div
-              key={t.name}
-              className="bg-card rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="flex gap-0.5 mb-4">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-current"
-                    style={{ color: "var(--brand-primary)" }}
-                  />
-                ))}
-              </div>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => scrollByCard(-1)}
+            aria-label="Testimonios anteriores"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex items-center justify-center w-10 h-10 rounded-full border bg-card text-foreground shadow-sm transition-colors hover:bg-muted -ml-20"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByCard(1)}
+            aria-label="Siguientes testimonios"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex items-center justify-center w-10 h-10 rounded-full border bg-card text-foreground shadow-sm transition-colors hover:bg-muted -mr-20"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
 
-              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                &ldquo;{t.text}&rdquo;
-              </p>
+          <div
+            ref={trackRef}
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 pb-4"
+          >
+            {TESTIMONIALS.map((t) => (
+              <article
+                key={t.name}
+                data-testimonial
+                className="shrink-0 snap-start w-[82%] sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)] bg-card rounded-2xl border p-6 flex flex-col transition-shadow hover:shadow-lg"
+              >
+                <div className="flex gap-0.5 mb-4">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-current"
+                      style={{ color: "var(--brand-primary)" }}
+                    />
+                  ))}
+                </div>
 
-              <div className="flex items-center gap-3 pt-4 border-t border-border/50">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                  style={{ background: "var(--brand-primary)" }}
-                >
-                  {t.initials}
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                  &ldquo;{t.text}&rdquo;
+                </p>
+
+                <div className="flex items-center gap-3 pt-4 mt-6 border-t border-border/50">
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                    style={{ background: "var(--brand-primary)" }}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

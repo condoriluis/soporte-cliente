@@ -2,9 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Headphones, MessageCircle, ClipboardCheck, FileCheck, ShieldCheck, Radar,
+  Headphones, ClipboardCheck, FileCheck, ShieldCheck, Radar,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import TrackTicket from "@/components/track-ticket";
+import { CONTACT } from "@/lib/contact";
 
 const TRUST = [
   { icon: ClipboardCheck, label: "Diagnóstico sin costo" },
@@ -73,8 +75,8 @@ export default function Hero() {
               className="rounded-full font-semibold text-base px-6"
               style={{ color: "#fff" }}
             >
-              <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-5 h-5 mr-2" />
+              <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="w-5 h-5 mr-2" />
                 WhatsApp
               </a>
             </Button>

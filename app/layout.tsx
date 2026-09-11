@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
 import BrandStyle from "@/components/brand-style";
 import { SettingsProvider } from "@/lib/settings-context";
 import { db } from "@/lib/db";
@@ -113,10 +111,7 @@ export default async function RootLayout({
               : null
           }
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-            <Toaster richColors position="top-right" />
-          </ThemeProvider>
+          {children}
           <BrandStyle primaryColor={p} secondaryColor={s} />
         </SettingsProvider>
       </body>

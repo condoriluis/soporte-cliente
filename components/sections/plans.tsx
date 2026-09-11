@@ -1,7 +1,9 @@
 "use client";
 
-import { Check, MessageCircle } from "lucide-react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
+import { CONTACT } from "@/lib/contact";
 
 interface PlanFeature {
   text: string;
@@ -132,8 +134,8 @@ export default function Plans() {
                     : undefined
                 }
               >
-                <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4 mr-2" />
+                <a href={CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <WhatsAppIcon className="w-4 h-4 mr-2" />
                   Cotizar ahora
                 </a>
               </Button>
@@ -144,7 +146,7 @@ export default function Plans() {
         <p className="text-center text-sm text-muted-foreground mt-8">
           ¿Necesitas algo diferente?{" "}
           <a
-            href="https://wa.me/59170000000"
+            href={CONTACT.whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold underline underline-offset-4"

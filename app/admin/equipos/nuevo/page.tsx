@@ -44,11 +44,12 @@ export default function NuevoEquipoPage() {
     defaultValues: { tipo: undefined, nombre: "", marca: "", modelo: "", numeroActivo: "", numeroSerie: "", funcionarioId: "" },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedId = form.watch("funcionarioId");
   const selected = funcionarios.find(f => f.id === selectedId);
 
   useEffect(() => {
-    getFuncionarios().then((data) => setFuncionarios(data as any));
+    getFuncionarios().then((data) => setFuncionarios(data as FuncionarioOption[]));
   }, []);
 
   const filtered = search

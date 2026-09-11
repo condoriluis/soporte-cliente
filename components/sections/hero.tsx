@@ -2,111 +2,91 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Cpu, Headphones } from "lucide-react";
-import TrackTicket from "@/components/track-ticket";
-import { useSettings } from "@/lib/settings-context";
+import { Headphones, MessageCircle, ArrowRight, Shield, Clock, Zap } from "lucide-react";
 
 const STATS = [
-  { num: "99%", lbl: "Disponibilidad" },
-  { num: "< 4h", lbl: "Tiempo respuesta" },
-  { num: "24/5", lbl: "Atención" },
+  { icon: Shield, num: "+500", lbl: "Equipos atendidos" },
+  { icon: Clock, num: "< 4h", lbl: "Tiempo de respuesta" },
+  { icon: Zap, num: "98%", lbl: "Satisfacción" },
 ];
 
 export default function Hero() {
-  const settings = useSettings();
-
   return (
-    <section
-      className="relative overflow-hidden py-24 md:py-32"
-      style={{
-        backgroundImage: "url('/img/support.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      {/* Dark gradient overlay for readability */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(120deg, rgba(5,20,50,0.70) 0%, rgba(10,35,80,0.55) 55%, rgba(5,20,50,0.45) 100%)",
-        }}
-      />
+    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/30">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full opacity-[0.04]"
+          style={{ background: "var(--brand-primary)" }}
+        />
+        <div
+          className="absolute -bottom-20 -left-20 w-[300px] h-[300px] rounded-full opacity-[0.03]"
+          style={{ background: "var(--brand-secondary)" }}
+        />
+      </div>
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          {/* Copy */}
-          <div className="flex-1 text-center lg:text-left">
-            <Badge
-              className="mb-5 gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold tracking-widest uppercase"
-              style={{
-                background: "rgba(255,255,255,.08)",
-                borderColor: "rgba(255,255,255,.18)",
-                color: "var(--brand-light)",
-              }}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
+        <div className="max-w-3xl mx-auto text-center">
+          <Badge
+            className="mb-6 gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wider uppercase"
+            style={{
+              background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)",
+              borderColor: "color-mix(in srgb, var(--brand-primary) 15%, transparent)",
+              color: "var(--brand-primary)",
+            }}
+          >
+            <Headphones className="w-3.5 h-3.5" />
+            Soporte técnico profesional
+          </Badge>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-[1.1] tracking-tight">
+            Tu PC y laptop en{" "}
+            <span style={{ color: "var(--brand-primary)" }}>
+              mejores manos
+            </span>
+          </h1>
+
+          <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            Mantenimiento, limpieza, optimización y asistencia técnica
+            para equipos de escritorio y laptops.{" "}
+            <span className="font-semibold text-foreground">Rápido, profesional y garantizado.</span>
+          </p>
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full font-bold text-base px-8 text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all"
+              style={{ background: "var(--brand-primary)" }}
             >
-              <Cpu className="w-3 h-3" />
-              Área de Sistemas y Soporte Técnico
-            </Badge>
-
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight">
-              Soporte Técnico{" "}
-              <span style={{ color: "var(--brand-light)" }}>Profesional</span>
-              <br />
-              para {settings.institutionName}
-            </h1>
-
-            <p className="mt-4 text-lg max-w-xl mx-auto lg:mx-0" style={{ color: "rgba(255,255,255,.72)" }}>
-              Brindamos asistencia técnica oportuna, eficiente y documentada
-              al personal de nuestra organización.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3 justify-center lg:justify-start">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full font-bold"
-                style={{ background: "#fff", color: "var(--brand-dark)" }}
-              >
-                <a href="#formulario">
-                  <Headphones className="w-4 h-4 mr-2" />
-                  Solicitar Soporte
-                </a>
-              </Button>
-
-              <TrackTicket />
-            </div>
-
-            {/* Stats */}
-            <div className="mt-10 grid grid-cols-3 gap-3">
-              {STATS.map((s) => (
-                <div
-                  key={s.lbl}
-                  className="rounded-xl px-3 py-4 text-center overflow-hidden"
-                  style={{
-                    background: "rgba(255,255,255,.07)",
-                    border: "1px solid rgba(255,255,255,.12)",
-                  }}
-                >
-                  <p className="text-xl sm:text-2xl font-extrabold" style={{ color: "var(--brand-light)" }}>
-                    {s.num}
-                  </p>
-                  <p className="text-[0.6rem] sm:text-xs uppercase tracking-wide leading-tight mt-1 break-words" style={{ color: "rgba(255,255,255,.6)" }}>
-                    {s.lbl}
-                  </p>
-                </div>
-              ))}
-            </div>
+              <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Solicitar por WhatsApp
+              </a>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="rounded-full font-semibold text-base px-8 border-2"
+              style={{ borderColor: "color-mix(in srgb, var(--brand-primary) 30%, transparent)" }}
+            >
+              <a href="#formulario">
+                Llenar formulario
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
           </div>
 
-          {/* Illustration */}
-          <div className="hidden lg:flex flex-1 justify-center">
-            <Headphones
-              strokeWidth={0.6}
-              className="w-56 h-56 opacity-20"
-              style={{ color: "var(--brand-light)" }}
-            />
+          <div className="mt-16 grid grid-cols-3 gap-4 max-w-lg mx-auto">
+            {STATS.map((s) => (
+              <div key={s.lbl} className="text-center">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-2" style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}>
+                  <s.icon className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
+                </div>
+                <p className="text-xl sm:text-2xl font-extrabold text-foreground">{s.num}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{s.lbl}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

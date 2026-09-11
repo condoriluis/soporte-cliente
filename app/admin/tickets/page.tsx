@@ -21,8 +21,8 @@ const statusColors: Record<string, string> = {
 
 interface Ticket {
   id: string; code: string; title: string; categoria: string;
-  estado: string; createdAt: string;
-  tecnico: { id: string; name: string } | null;
+  estado: string; createdAt: string | Date;
+  tecnico: { id: string; name: string | null } | null;
 }
 
 export default function TicketsPage() {
@@ -41,10 +41,11 @@ export default function TicketsPage() {
   const fetchData = async (s?: string, e?: string) => {
     setLoading(true);
     const data = await getTickets({ search: s || undefined, estado: e || undefined });
-    setTickets(data as any);
+    setTickets(data as Ticket[]);
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
   useEffect(() => { fetchData(search || undefined, estado || undefined); }, []);
 
   const handleDelete = async () => {
@@ -55,8 +56,8 @@ export default function TicketsPage() {
       toast.success("Ticket eliminado");
       setDeleteTarget(null);
       fetchData(search || undefined, estado || undefined);
-    } catch (e: any) {
-      toast.error(e.message || "Error al eliminar");
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
     }
     setDeleting(false);
   };

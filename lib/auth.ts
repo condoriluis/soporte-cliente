@@ -56,24 +56,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           role: user.role,
           isActive: user.isActive,
-        } as any;
+        };
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: any; user?: any }) {
-      if (user) {
+    async jwt({ token, user }) {
+      if (user && "role" in user) {
         token.sub = user.id;
         token.role = user.role;
         token.isActive = user.isActive;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      if (token.sub && session.user) {
-        if (!token.isActive) return null as any;
-        session.user.id = token.sub;
-        session.user.role = token.role;
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub ?? "";
+        session.user.role = token.role ?? "TECNICO";
+        session.user.isActive = token.isActive ?? true;
       }
       return session;
     },

@@ -62,19 +62,32 @@ export async function POST(request: Request) {
       if (!exists) break;
     }
 
+    const d = parsed.data;
+    const descripcion = [
+      `Servicio: ${d.servicio}`,
+      `Equipo: ${d.tipoEquipo}`,
+      `Modalidad: ${d.modalidad === "remoto" ? "Soporte remoto" : "A domicilio"}`,
+      d.zona ? `Zona: ${d.zona}` : "",
+      d.fechaPreferida ? `Fecha preferida: ${d.fechaPreferida}` : "",
+      "",
+      d.problema,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
     const ticket = await db.ticket.create({
       data: {
         code,
-        title: `Soporte Técnico: ${parsed.data.categoria}`,
-        categoria: parsed.data.categoria,
-        descripcion: parsed.data.pregunta,
-        email: parsed.data.email,
-        nombre: parsed.data.nombre,
+        title: `${d.servicio} — ${d.nombre}`,
+        categoria: d.servicio,
+        descripcion,
+        email: d.email,
+        nombre: d.nombre,
         eventos: {
           create: {
             evento: "CREADO",
-            comentario: "Ticket creado desde formulario público",
-            tecnico: parsed.data.nombre,
+            comentario: `Solicitud de ${d.servicio}. Equipo: ${d.tipoEquipo} (${d.modalidad}). Contacto WhatsApp: ${d.whatsapp}`,
+            tecnico: d.nombre,
           },
         },
       },
@@ -88,10 +101,11 @@ export async function POST(request: Request) {
       try {
         const payload = {
           event: "new_support_ticket",
-          contact_name: parsed.data.nombre,
-          contact_email: parsed.data.email,
-          contact_subject: `Soporte Técnico: ${parsed.data.categoria}`,
-          contact_message: parsed.data.pregunta,
+          contact_name: d.nombre,
+          contact_phone: d.whatsapp,
+          contact_email: d.email,
+          contact_subject: `Soporte Técnico: ${d.servicio}`,
+          contact_message: descripcion,
           localId: ticket.id,
           localCode: ticket.code,
           timestamp: new Date().toISOString(),

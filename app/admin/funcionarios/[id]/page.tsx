@@ -36,7 +36,7 @@ export default function FuncionarioDetailPage() {
   useEffect(() => {
     getFuncionarioById(id).then((data) => {
       if (!data) return router.push("/admin/funcionarios");
-      setFc(data as any);
+      setFc(data as Funcionario);
       setForm({
         nombre: data.nombre, cargo: data.cargo || "", dependencia: data.dependencia || "",
         area: data.area || "", tipo: data.tipo || "", telefono: data.telefono || "", email: data.email || "",
@@ -52,9 +52,9 @@ export default function FuncionarioDetailPage() {
       toast.success("Funcionario actualizado");
       setEditing(false);
       const data = await getFuncionarioById(id);
-      setFc(data as any);
-    } catch (e: any) {
-      toast.error(e.message || "Error al actualizar");
+      setFc(data as Funcionario);
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al actualizar");
     }
     setSaving(false);
   };
@@ -65,8 +65,8 @@ export default function FuncionarioDetailPage() {
       await deleteFuncionario(id);
       toast.success("Funcionario eliminado");
       router.push("/admin/funcionarios");
-    } catch (e: any) {
-      toast.error(e.message || "Error al eliminar");
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
     }
     setDeleting(false);
   };

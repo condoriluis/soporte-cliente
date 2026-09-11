@@ -15,6 +15,7 @@ interface ConfirmDialogProps {
   description: string;
   confirmText?: string;
   cancelText?: string;
+  loadingText?: string;
   variant?: "destructive" | "default";
   loading?: boolean;
 }
@@ -27,6 +28,7 @@ export function ConfirmDialog({
   description,
   confirmText = "Eliminar",
   cancelText = "Cancelar",
+  loadingText = "Procesando...",
   variant = "destructive",
   loading = false,
 }: ConfirmDialogProps) {
@@ -34,8 +36,8 @@ export function ConfirmDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 mb-2">
-            <AlertTriangle className="h-6 w-6 text-destructive" />
+          <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2 ${variant === "destructive" ? "bg-destructive/10" : "bg-primary/10"}`}>
+            <AlertTriangle className={`h-6 w-6 ${variant === "destructive" ? "text-destructive" : "text-primary"}`} />
           </div>
           <DialogTitle className="text-center">{title}</DialogTitle>
           <DialogDescription className="text-center">
@@ -51,7 +53,7 @@ export function ConfirmDialog({
             onClick={onConfirm}
             disabled={loading}
           >
-            {loading ? "Eliminando..." : confirmText}
+            {loading ? loadingText : confirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

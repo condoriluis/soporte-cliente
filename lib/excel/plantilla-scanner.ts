@@ -1,4 +1,4 @@
-import { createStyles, createWorkbook } from "./utils";
+import { createStyles, createWorkbook, type CellValue, type Range } from "./utils";
 
 export function generateScannerForm(data: {
   equipos: { nombre: string; numeroActivo: string; numeroSerie: string }[];
@@ -10,8 +10,8 @@ export function generateScannerForm(data: {
 }) {
   const s = createStyles(data.primaryColor || "#1a3a5c");
   const inst = (data.institutionName || "SoportePro").toUpperCase();
-  const ws_data: any[][] = [];
-  const merges: any[] = [];
+  const ws_data: CellValue[][] = [];
+  const merges: Range[] = [];
   const totalCols = 5;
 
   ws_data.push([{ v: `${inst}`, s: s.headerMain }]);

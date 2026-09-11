@@ -3,9 +3,10 @@
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 
 export async function getDiagnosticos(params?: { tipo?: string; equipoId?: string; tecnicoId?: string }) {
-  const where: any = {};
+  const where: Prisma.DiagnosticoWhereInput = {};
   if (params?.tipo) where.tipo = params.tipo;
   if (params?.equipoId) where.equipoId = params.equipoId;
   if (params?.tecnicoId) where.tecnicoId = params.tecnicoId;

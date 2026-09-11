@@ -30,12 +30,14 @@ export default function LoginForm({ institutionName, logoUrl }: { institutionNam
 
   useEffect(() => {
     const err = searchParams.get("error");
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (err === "AccountDeactivated") {
       setError("Tu cuenta ha sido desactivada.");
     } else if (err?.startsWith("LOCKED_")) {
       const mins = err.split("_")[1];
       setError(`Cuenta bloqueada. Intenta de nuevo en ${mins} minuto(s).`);
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [searchParams]);
 
   const onSubmit = async (data: LoginValues) => {

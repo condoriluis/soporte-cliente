@@ -59,6 +59,22 @@ export default function BrandStyle({
     root.style.setProperty("--ring", s);
     root.style.setProperty("--sidebar-primary", p);
     root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
+
+    if (root.classList.contains("dark")) {
+      root.style.setProperty("--brand-dark", "#0f172a");
+      root.style.setProperty("--brand-accent", s);
+      root.style.setProperty("--brand-light", brandLight);
+      root.style.setProperty("--primary", darkPrimary);
+      root.style.setProperty("--primary-foreground", "#ffffff");
+      root.style.setProperty("--secondary", darkSecondary);
+      root.style.setProperty("--secondary-foreground", darkSecondaryFg);
+      root.style.setProperty("--accent", s);
+      root.style.setProperty("--accent-foreground", "#ffffff");
+      root.style.setProperty("--ring", darkRing);
+      root.style.setProperty("--sidebar-primary", darkSidebarPrimary);
+      root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
+      root.style.setProperty("--sidebar-ring", darkRing);
+    }
   }, [primaryColor, secondaryColor]);
 
   return null;

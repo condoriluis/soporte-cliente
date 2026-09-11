@@ -32,7 +32,7 @@ export async function registerUser(data: { name: string; email: string; password
       name: data.name,
       email: data.email,
       password: hashedPassword,
-      role: role as any,
+      role,
     },
     select: { id: true, name: true, email: true, role: true },
   });

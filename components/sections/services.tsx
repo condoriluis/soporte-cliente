@@ -1,112 +1,172 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  Monitor,
-  Code2,
-  Wifi,
-  ShieldCheck,
-  CloudUpload,
-  Users,
+  Monitor, Laptop, Wrench, Thermometer, Zap, HardDrive,
+  Settings, Printer, Wifi, KeyRound, MonitorCheck, Home,
+  Building2, ArrowRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useSettings } from "@/lib/settings-context";
 
 interface Service {
   icon: LucideIcon;
   title: string;
   description: string;
+  duration: string;
+  popular?: boolean;
 }
 
 const SERVICES: Service[] = [
   {
     icon: Monitor,
-    title: "Soporte de Hardware",
-    description:
-      "Diagnóstico, mantenimiento preventivo y correctivo de equipos de cómputo, impresoras y periféricos.",
+    title: "Mantenimiento de PC",
+    description: "Limpieza interna, cambio de pasta térmica, revisión de componentes y optimización completa.",
+    duration: "2-3 horas",
+    popular: true,
   },
   {
-    icon: Code2,
-    title: "Soporte de Software",
-    description:
-      "Instalación, configuración y resolución de problemas en sistemas operativos y aplicaciones institucionales.",
+    icon: Laptop,
+    title: "Mantenimiento de laptop",
+    description: "Service completo para laptops: limpieza, optimización, revisión de batería y pantalla.",
+    duration: "2-4 horas",
+    popular: true,
+  },
+  {
+    icon: Wrench,
+    title: "Limpieza interna",
+    description: "Remoción de polvo, limpieza de ventiladores, ductos de aire y componentes internos.",
+    duration: "1-2 horas",
+  },
+  {
+    icon: Thermometer,
+    title: "Cambio de pasta térmica",
+    description: "Reemplazo de pasta térmica del procesador y GPU para mejorar la disipación de calor.",
+    duration: "1 hora",
+  },
+  {
+    icon: Zap,
+    title: "Optimización de Windows",
+    description: "Limpieza de software innecesario, desactivación de servicios y ajuste del sistema.",
+    duration: "1-2 horas",
+  },
+  {
+    icon: HardDrive,
+    title: "Liberación de espacio",
+    description: "Eliminación de archivos temporales, programas en desuso y liberación de disco duro.",
+    duration: "1 hora",
+  },
+  {
+    icon: Settings,
+    title: "Instalación de software",
+    description: "Instalación y configuración de sistemas operativos, Office, antivirus y applications.",
+    duration: "1-3 horas",
+  },
+  {
+    icon: Printer,
+    title: "Impresoras",
+    description: "Instalación, configuración, limpieza de cabezales y resolución de problemas de impresión.",
+    duration: "1-2 horas",
   },
   {
     icon: Wifi,
-    title: "Redes y Conectividad",
-    description:
-      "Gestión de la red institucional, puntos de acceso, VPN y diagnóstico de fallas de conectividad.",
+    title: "Wi-Fi y Redes",
+    description: "Configuración de redes, routers, puntos de acceso y resolución de conectividad.",
+    duration: "1-2 horas",
   },
   {
-    icon: ShieldCheck,
-    title: "Seguridad Informática",
-    description:
-      "Protección de datos, gestión de antivirus, control de accesos y políticas de seguridad institucional.",
+    icon: KeyRound,
+    title: "Recuperación de acceso",
+    description: "Recuperación de contraseñas, cuentas bloqueadas y accesos autorizados perdidos.",
+    duration: "30 min - 1 hora",
   },
   {
-    icon: CloudUpload,
-    title: "Respaldo y Recuperación",
-    description:
-      "Backup automatizado de información crítica y planes de recuperación ante desastres tecnológicos.",
+    icon: MonitorCheck,
+    title: "Soporte remoto",
+    description: "Asistencia técnica en línea para problemas de software sin necesidad de traslado.",
+    duration: "30 min - 1 hora",
+    popular: true,
   },
   {
-    icon: Users,
-    title: "Capacitación y Mesa de Ayuda",
-    description:
-      "Orientación al usuario final, talleres de herramientas institucionales y atención centralizada de incidencias.",
+    icon: Home,
+    title: "Soporte a domicilio",
+    description: "Vamos a tu ubicación para resolver problemas presencialmente. Cubrimos toda la ciudad.",
+    duration: "Variable",
+  },
+  {
+    icon: Building2,
+    title: "Soporte para negocios",
+    description: "Planes de mantenimiento para PyMEs. Múltiples equipos, soporte prioritario y seguimiento.",
+    duration: "Según plan",
+    popular: true,
   },
 ];
 
 export default function Services() {
-  const settings = useSettings();
-
   return (
-    <section id="servicios" className="bg-background py-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
+    <section id="servicios" className="py-20 md:py-28 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
           <p
-            className="text-xs font-bold tracking-[.14em] uppercase mb-2"
-            style={{ color: "var(--brand-accent)" }}
+            className="text-xs font-bold tracking-[.14em] uppercase mb-3"
+            style={{ color: "var(--brand-primary)" }}
           >
-            ¿Qué ofrecemos?
+            Nuestros servicios
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
-            Nuestros Servicios de Soporte
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Todo lo que tu equipo necesita
           </h2>
           <div
-            className="mx-auto mt-4 mb-5 h-1 w-12 rounded-full"
-            style={{ background: "var(--brand-accent)" }}
+            className="mx-auto mt-4 h-1 w-16 rounded-full"
+            style={{ background: "var(--brand-primary)" }}
           />
-          <p className="text-muted-foreground max-w-lg mx-auto text-sm">
-            El Área de Sistemas y Soporte garantiza la continuidad tecnológica
-            de todos los procesos institucionales de {settings.institutionName}.
+          <p className="mt-5 text-muted-foreground max-w-xl mx-auto">
+            Soluciones técnicas completas para computadoras de escritorio, laptops y dispositivos de oficina.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES.map(({ icon: Icon, title, description }) => (
-            <Card
-              key={title}
-              className="group border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-default"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {SERVICES.map((s) => (
+            <div
+              key={s.title}
+              className="group relative rounded-2xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
             >
-              <CardContent className="p-8">
-                <div
-                  className="w-14 h-14 flex items-center justify-center rounded-2xl mb-5 transition-colors"
-                  style={{ background: "#e8f1fb" }}
+              {s.popular && (
+                <span
+                  className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full text-white"
+                  style={{ background: "var(--brand-primary)" }}
                 >
-                  <Icon
-                    className="w-7 h-7 transition-colors"
-                    style={{ color: "var(--brand-accent)" }}
-                  />
-                </div>
-                <h3 className="font-bold text-base mb-2 text-foreground">
-                  {title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
-              </CardContent>
-            </Card>
+                  Popular
+                </span>
+              )}
+
+              <div
+                className="w-12 h-12 flex items-center justify-center rounded-xl mb-4 transition-colors"
+                style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
+              >
+                <s.icon
+                  className="w-6 h-6"
+                  style={{ color: "var(--brand-primary)" }}
+                />
+              </div>
+
+              <h3 className="font-bold text-foreground mb-1.5">{s.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                {s.description}
+              </p>
+
+              <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                <span className="text-xs text-muted-foreground font-medium">
+                  Duración: {s.duration}
+                </span>
+                <a
+                  href="#formulario"
+                  className="inline-flex items-center gap-1 text-xs font-semibold transition-colors"
+                  style={{ color: "var(--brand-primary)" }}
+                >
+                  Solicitar
+                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                </a>
+              </div>
+            </div>
           ))}
         </div>
       </div>

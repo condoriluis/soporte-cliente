@@ -9,9 +9,11 @@ export default function NotFound() {
   const [fromAdmin, setFromAdmin] = useState(false);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     setFromAdmin(
       document.referrer.includes("/admin") || window.location.pathname.startsWith("/admin")
     );
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   return (

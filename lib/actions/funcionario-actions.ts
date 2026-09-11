@@ -3,9 +3,10 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
+import { Prisma } from "@prisma/client";
 
 export async function getFuncionarios(params?: { search?: string }) {
-  const where: any = {};
+  const where: Prisma.FuncionarioWhereInput = {};
   if (params?.search) {
     where.OR = [
       { nombre: { contains: params.search, mode: "insensitive" } },
@@ -42,7 +43,7 @@ export async function createFuncionario(data: {
   return fc;
 }
 
-export async function updateFuncionario(id: string, data: any) {
+export async function updateFuncionario(id: string, data: Prisma.FuncionarioUpdateInput) {
   const session = await auth();
   if (session?.user?.role !== "ADMIN") throw new Error("No autorizado");
   const fc = await db.funcionario.update({ where: { id }, data });

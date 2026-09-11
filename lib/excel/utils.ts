@@ -1,4 +1,9 @@
 import XLSX from "xlsx-js-style";
+import type { CellStyle, ColInfo, Range, RowInfo, WorkBook } from "xlsx-js-style";
+
+export type { ColInfo, Range, RowInfo, WorkBook } from "xlsx-js-style";
+
+export type CellValue = { v: string | number | boolean | Date; s?: CellStyle } | null;
 
 export const cleanColor = (hex: string) => (hex || "#1a3a5c").replace("#", "").toUpperCase();
 
@@ -18,7 +23,7 @@ export const numberToSpanish = (n: number): string => {
   return tens[t] + (o > 0 ? " Y " + ones[o] : "");
 };
 
-export function createStyles(primary: string, secondary?: string) {
+export function createStyles(primary: string): Record<string, CellStyle> {
   const p = cleanColor(primary);
   return {
     headerMain: {
@@ -52,7 +57,12 @@ export function createStyles(primary: string, secondary?: string) {
       font: { bold: true, sz: 9, color: { rgb: "FFFFFF" } },
       fill: { fgColor: { rgb: p } },
       alignment: { horizontal: "center", vertical: "center", wrapText: true },
-      border: { top: { style: "thin" }, bottom: { style: "thin" }, left: { style: "thin" }, right: { style: "thin" } },
+      border: {
+        top: { style: "thin", color: { rgb: "CCCCCC" } },
+        bottom: { style: "thin", color: { rgb: "CCCCCC" } },
+        left: { style: "thin", color: { rgb: "CCCCCC" } },
+        right: { style: "thin", color: { rgb: "CCCCCC" } },
+      },
     },
     cell: {
       font: { sz: 9 },
@@ -85,7 +95,7 @@ export function createStyles(primary: string, secondary?: string) {
   };
 }
 
-export function createWorkbook(sheetName: string, ws_data: any[][], merges: any[], cols: any[], rows?: any) {
+export function createWorkbook(sheetName: string, ws_data: CellValue[][], merges: Range[], cols: ColInfo[], rows?: RowInfo[]) {
   const ws = XLSX.utils.aoa_to_sheet(ws_data);
   ws["!merges"] = merges;
   ws["!cols"] = cols;
@@ -95,6 +105,6 @@ export function createWorkbook(sheetName: string, ws_data: any[][], merges: any[
   return wb;
 }
 
-export function downloadWorkbook(wb: any, fileName: string) {
+export function downloadWorkbook(wb: WorkBook, fileName: string) {
   XLSX.writeFile(wb, fileName);
 }

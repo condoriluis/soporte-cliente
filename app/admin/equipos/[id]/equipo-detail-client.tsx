@@ -34,7 +34,7 @@ export function EquipoDetailClient({ equipoId, currentFuncionario, currentUserRo
   const [assigning, setAssigning] = useState(false);
 
   useEffect(() => {
-    getFuncionarios().then((data) => setFuncionarios(data as any));
+    getFuncionarios().then((data) => setFuncionarios(data as FuncionarioOption[]));
   }, []);
 
   const filtered = search

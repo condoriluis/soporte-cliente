@@ -29,14 +29,21 @@ const eventColors: Record<string, string> = {
   CERRADO: "bg-slate-500",
 };
 
+interface TicketData {
+  id: string; code: string; title: string; categoria: string; estado: string;
+  descripcion: string; email: string | null; nombre: string | null; tecnicoId: string | null;
+  createdAt: string | Date; updatedAt: string | Date;
+  tecnico: { id: string; name: string | null } | null;
+  eventos: Array<{ id: string; evento: string; comentario: string | null; tecnico: string | null; createdAt: string | Date }>;
+}
+
 interface Props {
-  ticket: any;
-  tecnicos: any[];
-  currentUserId?: string;
+  ticket: TicketData;
+  tecnicos: Array<{ id: string; name: string | null }>;
   currentUserRole?: string;
 }
 
-export function TicketDetailClient({ ticket, tecnicos, currentUserId, currentUserRole }: Props) {
+export function TicketDetailClient({ ticket, tecnicos, currentUserRole }: Props) {
   const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState(ticket.estado);
   const [selectedTecnico, setSelectedTecnico] = useState(ticket.tecnicoId || "");
@@ -98,7 +105,7 @@ export function TicketDetailClient({ ticket, tecnicos, currentUserId, currentUse
     setShowDelete(false);
   };
 
-  const formatDate = (d: string) =>
+  const formatDate = (d: string | Date) =>
     new Date(d).toLocaleDateString("es-ES", {
       day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
     });
@@ -114,7 +121,7 @@ export function TicketDetailClient({ ticket, tecnicos, currentUserId, currentUse
         <div className="rounded-xl border bg-card p-6">
           <h3 className="font-semibold mb-4">Historial del Ticket</h3>
           <div className="relative">
-            {ticket.eventos.map((ev: any, i: number) => (
+            {ticket.eventos.map((ev, i: number) => (
               <div key={ev.id} className="relative flex gap-4 pb-6 last:pb-0">
                 <div className="flex flex-col items-center">
                   <div className={`w-3 h-3 rounded-full ring-[3px] ring-background z-10 shrink-0 ${eventColors[ev.evento] || "bg-primary"}`} />

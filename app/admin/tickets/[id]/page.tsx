@@ -47,7 +47,6 @@ export default async function TicketDetailPage({
       <TicketDetailClient
         ticket={ticket}
         tecnicos={tecnicos}
-        currentUserId={session?.user?.id}
         currentUserRole={session?.user?.role}
       />
     </div>

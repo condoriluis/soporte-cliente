@@ -52,59 +52,56 @@ function mixColor(hex: string, pct: number, mixWith = "#ffffff") {
   return rgbToHex(a.r + (b.r - a.r) * pct, a.g + (b.g - a.g) * pct, a.b + (b.b - a.b) * pct);
 }
 
+function applyColors(p: string, s: string) {
+  const root = document.documentElement;
+  const brandLight = mixColor(s, 0.2, "#ffffff");
+  const secondaryLight = mixColor(s, 0.85, "#ffffff");
+
+  root.style.setProperty("--brand-primary", p);
+  root.style.setProperty("--brand-secondary", s);
+  root.style.setProperty("--brand-dark", p);
+  root.style.setProperty("--brand-accent", s);
+  root.style.setProperty("--brand-light", brandLight);
+  root.style.setProperty("--primary", p);
+  root.style.setProperty("--primary-foreground", "#ffffff");
+  root.style.setProperty("--secondary", secondaryLight);
+  root.style.setProperty("--secondary-foreground", s);
+  root.style.setProperty("--accent", s);
+  root.style.setProperty("--accent-foreground", "#ffffff");
+  root.style.setProperty("--ring", s);
+  root.style.setProperty("--sidebar-primary", p);
+  root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
+}
+
 export default function ConfiguracionPage() {
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<{ institutionName: string; logoUrl: string | null; primaryColor: string; secondaryColor: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [logoPreviewError, setLogoPreviewError] = useState(false);
 
   useEffect(() => {
     getSettings().then((data) => {
-      const s = data || { institutionName: "SoportePro", primaryColor: "#1a3a5c", secondaryColor: "#2e7dc4" };
+      const s = data || { institutionName: "SoportePro", logoUrl: "", primaryColor: "#1a3a5c", secondaryColor: "#2e7dc4" };
       setSettings(s);
       setLoading(false);
       applyColors(s.primaryColor, s.secondaryColor);
     });
   }, []);
 
-  function applyColors(p: string, s: string) {
-    const root = document.documentElement;
-    const brandLight = mixColor(s, 0.2, "#ffffff");
-    const secondaryLight = mixColor(s, 0.85, "#ffffff");
-    const darkPrimary = mixColor(p, 0.35, "#8ab4f8");
-    const darkSecondary = mixColor(s, 0.8, "#0f172a");
-    const darkSecondaryFg = mixColor(s, 0.15, "#ffffff");
-    const darkRing = mixColor(s, 0.2, "#8ab4f8");
-    const darkSidebarPrimary = mixColor(p, 0.35, "#8ab4f8");
-
-    root.style.setProperty("--brand-primary", p);
-    root.style.setProperty("--brand-secondary", s);
-    root.style.setProperty("--brand-dark", p);
-    root.style.setProperty("--brand-accent", s);
-    root.style.setProperty("--brand-light", brandLight);
-    root.style.setProperty("--primary", p);
-    root.style.setProperty("--primary-foreground", "#ffffff");
-    root.style.setProperty("--secondary", secondaryLight);
-    root.style.setProperty("--secondary-foreground", s);
-    root.style.setProperty("--accent", s);
-    root.style.setProperty("--accent-foreground", "#ffffff");
-    root.style.setProperty("--ring", s);
-    root.style.setProperty("--sidebar-primary", p);
-    root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
-  }
-
   const handleChange = (key: string, value: string) => {
+    if (!settings) return;
     const next = { ...settings, [key]: value };
     setSettings(next);
     if (key === "primaryColor" || key === "secondaryColor") {
       applyColors(
-        key === "primaryColor" ? value : next.primaryColor,
-        key === "secondaryColor" ? value : next.secondaryColor
+        key === "primaryColor" ? value : (next.primaryColor as string),
+        key === "secondaryColor" ? value : (next.secondaryColor as string)
       );
     }
   };
 
   const selectPalette = (palette: typeof PALETTES[number]) => {
+    if (!settings) return;
     const next = { ...settings, primaryColor: palette.primary, secondaryColor: palette.secondary };
     setSettings(next);
     applyColors(palette.primary, palette.secondary);
@@ -116,7 +113,7 @@ export default function ConfiguracionPage() {
     try {
       await updateSystemSettings({
         institutionName: settings.institutionName,
-        logoUrl: settings.logoUrl || null,
+        logoUrl: settings.logoUrl || undefined,
         primaryColor: settings.primaryColor,
         secondaryColor: settings.secondaryColor,
       });
@@ -169,7 +166,7 @@ export default function ConfiguracionPage() {
             <div className="flex items-center gap-3 mt-2 p-3 rounded-lg border bg-muted/30">
               {hasLogo ? (
                 <img
-                  src={settings.logoUrl}
+                  src={settings.logoUrl || ""}
                   alt="Vista previa del logo"
                   className="h-10 w-auto object-contain rounded"
                   onError={() => setLogoPreviewError(true)}
@@ -292,7 +289,7 @@ export default function ConfiguracionPage() {
         <div className="rounded-lg overflow-hidden border">
           <div className="flex items-center gap-3 p-4" style={{ backgroundColor: "var(--brand-primary)" }}>
             {hasLogo ? (
-              <img src={settings.logoUrl} alt="Logo" className="h-9 w-auto object-contain rounded" />
+              <img src={settings.logoUrl || ""} alt="Logo" className="h-9 w-auto object-contain rounded" />
             ) : (
               <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: "var(--brand-secondary)" }}>
                 <span className="text-white font-bold text-xs">SP</span>

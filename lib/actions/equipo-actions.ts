@@ -3,9 +3,10 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
+import { Prisma } from "@prisma/client";
 
 export async function getEquipos(params?: { tipo?: string; search?: string; funcionarioId?: string }) {
-  const where: any = {};
+  const where: Prisma.EquipoWhereInput = {};
   if (params?.tipo) where.tipo = params.tipo;
   if (params?.funcionarioId) where.funcionarioId = params.funcionarioId;
   if (params?.search) {
@@ -47,7 +48,7 @@ export async function createEquipo(data: {
 }) {
   const equipo = await db.equipo.create({
     data: {
-      tipo: data.tipo as any,
+      tipo: data.tipo,
       nombre: data.nombre,
       marca: data.marca,
       modelo: data.modelo,
@@ -60,7 +61,7 @@ export async function createEquipo(data: {
   return equipo;
 }
 
-export async function updateEquipo(id: string, data: any) {
+export async function updateEquipo(id: string, data: Prisma.EquipoUncheckedUpdateInput) {
   const equipo = await db.equipo.update({ where: { id }, data });
   revalidatePath(`/admin/equipos/${id}`);
   return equipo;

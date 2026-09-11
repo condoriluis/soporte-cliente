@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getFuncionarios, deleteFuncionario } from "@/lib/actions/funcionario-actions";
-import { Plus, Search, Trash2, Pencil, Loader2 } from "lucide-react";
+import { Plus, Search, Trash2, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/app/admin/user-context";
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -27,10 +27,11 @@ export default function FuncionariosPage() {
   const fetchData = async (s?: string) => {
     setLoading(true);
     const data = await getFuncionarios({ search: s || undefined });
-    setFuncionarios(data as any);
+    setFuncionarios(data as Funcionario[]);
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchData(); }, []);
 
   const handleDelete = async () => {
@@ -41,8 +42,8 @@ export default function FuncionariosPage() {
       toast.success("Funcionario eliminado");
       setDeleteTarget(null);
       fetchData(search || undefined);
-    } catch (e: any) {
-      toast.error(e.message || "Error al eliminar");
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
     }
     setDeleting(false);
   };

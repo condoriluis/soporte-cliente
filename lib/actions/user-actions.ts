@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { auth } from "@/lib/auth";
+import type { UserRole } from "@prisma/client";
 
 export async function getUsuarios() {
   const session = await auth();
@@ -26,7 +27,7 @@ export async function createUsuario(data: { name: string; email: string; passwor
 
   const hashed = await bcrypt.hash(data.password, 10);
   const user = await db.user.create({
-    data: { name: data.name, email: data.email, password: hashed, role: data.role as any },
+    data: { name: data.name, email: data.email, password: hashed, role: data.role as UserRole },
   });
   revalidatePath("/admin/usuarios");
   return user;
@@ -35,7 +36,7 @@ export async function createUsuario(data: { name: string; email: string; passwor
 export async function updateUsuario(id: string, data: { name?: string; role?: string; isActive?: boolean }) {
   const session = await auth();
   if (session?.user?.role !== "ADMIN") throw new Error("No autorizado");
-  const user = await db.user.update({ where: { id }, data: { ...data, role: data.role as any } });
+  const user = await db.user.update({ where: { id }, data: { ...data, role: data.role as UserRole } });
   revalidatePath("/admin/usuarios");
   return user;
 }

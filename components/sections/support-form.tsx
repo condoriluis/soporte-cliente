@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Loader2, Send, Lock, User, Mail, Tag, MessageSquare, Calendar, CheckCircle2, Copy, AlertCircle } from "lucide-react";
+import {
+  Loader2, Send, Lock, User, Phone, Mail, Wrench, MessageSquare,
+  Monitor, MapPin, Calendar, CheckCircle2, Copy, AlertCircle,
+} from "lucide-react";
 
-import { soporteSchema, CATEGORIAS, type SoporteFormData } from "@/lib/schemas";
+import { soporteSchema, SERVICIOS, type SoporteFormData } from "@/lib/schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,11 +29,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-function getTodayISO() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
-
 export default function SupportForm() {
   const [generatedTicket, setGeneratedTicket] = useState<string | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
@@ -41,37 +39,34 @@ export default function SupportForm() {
     resolver: zodResolver(soporteSchema),
     defaultValues: {
       nombre: "",
+      whatsapp: "",
       email: "",
-      categoria: undefined,
-      pregunta: "",
-      fecha: getTodayISO(),
+      servicio: "",
+      problema: "",
+      tipoEquipo: undefined,
+      zona: "",
+      modalidad: undefined,
+      fechaPreferida: "",
       hp: "",
       ts: String(Date.now()),
     },
   });
 
-  const { isSubmitting, isSubmitSuccessful } = form.formState;
-  const preguntaValue = form.watch("pregunta") ?? "";
+  const { isSubmitting } = form.formState;
+  const problemaValue = form.watch("problema") ?? "";
 
-  // Refresh date on each render / focus
-  useEffect(() => {
-    form.setValue("fecha", getTodayISO());
-  }, [form]);
-
-  // Cooldown countdown
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const id = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
-    return () => clearInterval(id);
-  }, [cooldown]);
-
-  // Refresh timestamp on mount and focus
   useEffect(() => {
     form.setValue("ts", String(Date.now()));
     const onFocus = () => form.setValue("ts", String(Date.now()));
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
   }, [form]);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const id = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(id);
+  }, [cooldown]);
 
   async function onSubmit(data: SoporteFormData) {
     try {
@@ -82,7 +77,7 @@ export default function SupportForm() {
       });
 
       const responseBody = await res.json().catch(() => ({}));
-      
+
       if (!res.ok) {
         throw new Error(responseBody?.error ?? `HTTP ${res.status}`);
       }
@@ -98,74 +93,68 @@ export default function SupportForm() {
           if (match) ticketCode = match[1];
         } else {
           const parts = msg.split("\n");
-          if (parts.length > 1) {
-            ticketCode = parts[parts.length - 1].trim();
-          } else {
-            ticketCode = msg.trim();
-          }
+          ticketCode = parts.length > 1 ? parts[parts.length - 1].trim() : msg.trim();
         }
       }
 
       if (duplicate) {
         setIsDuplicate(true);
         toast.error("Ticket en proceso", {
-          description: ticketCode 
+          description: ticketCode
             ? `Ya tienes el ticket ${ticketCode} abierto.`
             : "Ya tienes un ticket en proceso, espera nuestra respuesta.",
           duration: 8000,
         });
       } else {
         setIsDuplicate(false);
-        toast.success("¡Ticket generado!", {
-          description: ticketCode 
-            ? `Su código es: ${ticketCode}. Un técnico se comunicará a la brevedad.`
-            : `Su ticket fue registrado el ${data.fecha}. Un técnico se comunicará a la brevedad.`,
+        toast.success("¡Solicitud enviada!", {
+          description: ticketCode
+            ? `Tu código es: ${ticketCode}. Un técnico se comunicará a la brevedad.`
+            : `Tu solicitud fue registrada. Un técnico se comunicará a la brevedad.`,
           duration: 8000,
         });
       }
 
-      if (ticketCode) {
-        setGeneratedTicket(ticketCode);
-      }
+      if (ticketCode) setGeneratedTicket(ticketCode);
 
-      form.reset({ nombre: "", email: "", categoria: undefined, pregunta: "", fecha: getTodayISO(), hp: "", ts: String(Date.now()) });
+      form.reset({
+        nombre: "", whatsapp: "", email: "", servicio: "", problema: "",
+        tipoEquipo: undefined, zona: "", modalidad: undefined,
+        fechaPreferida: "", hp: "", ts: String(Date.now()),
+      });
       setCooldown(60);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Error desconocido";
-      toast.error("Error al generar el ticket", {
-        description: message.includes("conectar")
-          ? "Verifique que el servidor n8n esté iniciado y el workflow esté activo."
-          : message,
-        duration: 7000,
-      });
+      toast.error("Error al enviar", { description: message, duration: 7000 });
     }
   }
 
   return (
-    <section id="formulario" className="py-20" style={{ background: "var(--background)" }}>
+    <section id="formulario" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-10">
           <p
-            className="text-xs font-bold tracking-[.14em] uppercase mb-2"
-            style={{ color: "var(--brand-accent)" }}
+            className="text-xs font-bold tracking-[.14em] uppercase mb-3"
+            style={{ color: "var(--brand-primary)" }}
           >
-            Generación de Ticket
+            Solicitar servicio
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground">
-            Generar Ticket de Soporte
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Cuéntanos tu problema
           </h2>
-          <div className="mx-auto mt-4 mb-5 h-1 w-12 rounded-full" style={{ background: "var(--brand-accent)" }} />
+          <div
+            className="mx-auto mt-4 mb-5 h-1 w-16 rounded-full"
+            style={{ background: "var(--brand-primary)" }}
+          />
           <p className="text-muted-foreground text-sm">
-            Complete el formulario para generar un nuevo ticket y nuestro equipo le responderá a la brevedad.
+            Completa el formulario y un técnico se pondrá en contacto contigo.
           </p>
         </div>
 
-        {/* Card */}
-        <div className="bg-card rounded-2xl border shadow-lg p-8 md:p-12">
+        <div className="bg-card rounded-2xl border shadow-lg p-6 sm:p-8 md:p-10">
           {generatedTicket ? (
             <div className="text-center space-y-6 py-6 md:py-10">
-              <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center ${isDuplicate ? 'bg-amber-500/10' : 'bg-emerald-500/10'}`}>
+              <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center ${isDuplicate ? "bg-amber-500/10" : "bg-emerald-500/10"}`}>
                 {isDuplicate ? (
                   <AlertCircle className="w-8 h-8 text-amber-500" />
                 ) : (
@@ -174,27 +163,27 @@ export default function SupportForm() {
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-foreground mb-2">
-                  {isDuplicate ? "¡Ya tienes un ticket abierto!" : "¡Ticket Generado con Éxito!"}
+                  {isDuplicate ? "Ya tienes un ticket abierto" : "¡Solicitud enviada!"}
                 </h3>
                 <p className="text-muted-foreground text-sm">
-                  {isDuplicate 
-                    ? "Por favor espera a que resolvamos tu solicitud actual antes de crear otra."
-                    : "Guarde este código para dar seguimiento a su solicitud."}
+                  {isDuplicate
+                    ? "Espera a que resolvamos tu solicitud actual."
+                    : "Guarda este código para dar seguimiento."}
                 </p>
               </div>
-              
-              <div className="bg-muted/30 rounded-xl p-8 border flex flex-col items-center gap-4">
-                <code className="text-3xl sm:text-4xl font-mono font-bold text-foreground tracking-wider">
+
+              <div className="bg-muted/50 rounded-xl p-6 border flex flex-col items-center gap-4">
+                <code className="text-2xl sm:text-3xl font-mono font-bold text-foreground tracking-wider">
                   {generatedTicket}
                 </code>
-                <Button 
-                  variant="outline" 
-                  className="gap-2 mt-2 rounded-xl"
+                <Button
+                  variant="outline"
+                  className="gap-2 rounded-xl"
                   onClick={() => {
                     navigator.clipboard.writeText(generatedTicket);
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2000);
-                    toast.success("Código copiado al portapapeles");
+                    toast.success("Código copiado");
                   }}
                 >
                   {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
@@ -202,199 +191,249 @@ export default function SupportForm() {
                 </Button>
               </div>
 
-              <Button 
-                variant="ghost" 
-                onClick={() => setGeneratedTicket(null)}
-                className="mt-4 rounded-xl"
-              >
-                Generar otro ticket
+              <Button variant="ghost" onClick={() => setGeneratedTicket(null)} className="rounded-xl">
+                Enviar otra solicitud
               </Button>
             </div>
           ) : (
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <FormField
+                    control={form.control}
+                    name="nombre"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                          <User className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                          Nombre completo
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ej. Juan Pérez" maxLength={80} autoComplete="name" className="rounded-xl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/* Nombre */}
-              <FormField
-                control={form.control}
-                name="nombre"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
-                      <User className="w-4 h-4" style={{ color: "var(--brand-accent)" }} />
-                      Nombre completo
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Ej. Juan Pérez López"
-                        maxLength={80}
-                        autoComplete="name"
-                        className="rounded-xl border-border focus-visible:ring-2"
-                        style={{ "--tw-ring-color": "var(--brand-accent)" } as React.CSSProperties}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name="whatsapp"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                          <Phone className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                          WhatsApp
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ej. 70000000" maxLength={20} autoComplete="tel" className="rounded-xl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
-                      <Mail className="w-4 h-4" style={{ color: "var(--brand-accent)" }} />
-                      Correo electrónico institucional
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        placeholder="usuario@empresa.com"
-                        maxLength={120}
-                        autoComplete="email"
-                        className="rounded-xl"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Categoría */}
-              <FormField
-                control={form.control}
-                name="categoria"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
-                      <Tag className="w-4 h-4" style={{ color: "var(--brand-accent)" }} />
-                      Categoría del problema
-                    </FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="rounded-xl">
-                          <SelectValue placeholder="Seleccione una categoría…" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {CATEGORIAS.map((c) => (
-                          <SelectItem key={c.value} value={c.value}>
-                            {c.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Pregunta */}
-              <FormField
-                control={form.control}
-                name="pregunta"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
-                      <MessageSquare className="w-4 h-4" style={{ color: "var(--brand-accent)" }} />
-                      Descripción del problema o consulta
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Describa detalladamente su problema o consulta técnica…"
-                        rows={5}
-                        maxLength={1000}
-                        className="rounded-xl resize-none"
-                      />
-                    </FormControl>
-                    <div className="text-right text-xs text-muted-foreground mt-1">
-                      {preguntaValue.length} / 1000
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Honeypot — invisible para humanos, detectable por bots */}
-              <div className="absolute -left-[9999px]" aria-hidden="true">
                 <FormField
                   control={form.control}
-                  name="hp"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                        <Mail className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                        Correo electrónico
+                      </FormLabel>
                       <FormControl>
-                        <Input {...field} tabIndex={-1} autoComplete="off" />
+                        <Input {...field} type="email" placeholder="correo@ejemplo.com" maxLength={120} autoComplete="email" className="rounded-xl" />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
 
-              {/* Time token — anti-replay */}
-              <input type="hidden" {...form.register("ts")} />
+                <FormField
+                  control={form.control}
+                  name="servicio"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                        <Wrench className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                        Servicio que necesitas
+                      </FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="rounded-xl">
+                            <SelectValue placeholder="Seleccione un servicio..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {SERVICIOS.map((s) => (
+                            <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Fecha (readonly) */}
-              <FormField
-                control={form.control}
-                name="fecha"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
-                      <Calendar className="w-4 h-4" style={{ color: "var(--brand-accent)" }} />
-                      Fecha de creación del ticket
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        readOnly
-                        tabIndex={-1}
-                        className="rounded-xl bg-muted cursor-default text-muted-foreground"
-                      />
-                    </FormControl>
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                      <Lock className="w-3 h-3" />
-                      La fecha se registra automáticamente.
-                    </p>
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="problema"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                        <MessageSquare className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                        Describe tu problema
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Ej: Mi laptop se calienta mucho y se apaga sola..."
+                          rows={4}
+                          maxLength={1000}
+                          className="rounded-xl resize-none"
+                        />
+                      </FormControl>
+                      <div className="text-right text-xs text-muted-foreground">
+                        {problemaValue.length} / 1000
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Submit */}
-              <Button
-                type="submit"
-                disabled={isSubmitting || cooldown > 0}
-                className="w-full rounded-xl py-6 text-base font-bold text-white transition-all"
-                style={{ background: "var(--brand-accent)" }}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Enviando…
-                  </>
-                ) : cooldown > 0 ? (
-                  <>
-                    <Send className="w-4 h-4 mr-2" />
-                    Espere {cooldown}s
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4 mr-2" />
-                    Generar Ticket
-                  </>
-                )}
-              </Button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <FormField
+                    control={form.control}
+                    name="tipoEquipo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                          <Monitor className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                          Tipo de equipo
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="rounded-xl">
+                              <SelectValue placeholder="Seleccione..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="PC">PC de escritorio</SelectItem>
+                            <SelectItem value="Laptop">Laptop</SelectItem>
+                            <SelectItem value="Otro">Otro</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <p className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5 mt-2">
-                <Lock className="w-3 h-3" />
-                Sus datos están protegidos conforme a la normativa institucional de seguridad de la información.
-              </p>
-            </form>
-          </Form>
+                  <FormField
+                    control={form.control}
+                    name="modalidad"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                          <MapPin className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                          Modalidad
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="rounded-xl">
+                              <SelectValue placeholder="Seleccione..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="domicilio">A domicilio</SelectItem>
+                            <SelectItem value="remoto">Soporte remoto</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <FormField
+                    control={form.control}
+                    name="zona"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                          <MapPin className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                          Zona / Distrito
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ej. Zona Sur, Miraflores" maxLength={100} className="rounded-xl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="fechaPreferida"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1.5 font-semibold text-sm">
+                          <Calendar className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                          Fecha preferida
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} type="date" className="rounded-xl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="hidden" aria-hidden="true">
+                  <FormField
+                    control={form.control}
+                    name="hp"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input {...field} tabIndex={-1} autoComplete="off" />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <input type="hidden" {...form.register("ts")} />
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || cooldown > 0}
+                  className="w-full rounded-xl py-6 text-base font-bold text-white transition-all"
+                  style={{ background: "var(--brand-primary)" }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : cooldown > 0 ? (
+                    `Espere ${cooldown}s`
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      Enviar solicitud
+                    </>
+                  )}
+                </Button>
+
+                <p className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5">
+                  <Lock className="w-3 h-3" />
+                  Tus datos están protegidos y no se comparten con terceros.
+                </p>
+              </form>
+            </Form>
           )}
         </div>
       </div>

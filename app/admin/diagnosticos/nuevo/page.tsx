@@ -13,7 +13,6 @@ import { generateScannerForm } from "@/lib/excel/plantilla-scanner";
 import { generateImpresoraForm } from "@/lib/excel/plantilla-impresora";
 import { downloadWorkbook } from "@/lib/excel/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -22,11 +21,17 @@ import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form";
 
+interface EquipoItem {
+  id: string; tipo: string; nombre: string; marca: string | null; modelo: string | null;
+  numeroActivo: string | null; numeroSerie: string | null;
+  funcionario: { nombre: string | null; cargo: string | null; dependencia: string | null; area: string | null; tipo: string | null; telefono: string | null } | null;
+}
+
 export default function NuevoDiagnosticoPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [equipos, setEquipos] = useState<any[]>([]);
-  const [equipoSeleccionado, setEquipoSeleccionado] = useState<any>(null);
+  const [equipos, setEquipos] = useState<EquipoItem[]>([]);
+  const [equipoSeleccionado, setEquipoSeleccionado] = useState<EquipoItem | null>(null);
 
   const form = useForm<DiagnosticoFormData>({
     resolver: zodResolver(diagnosticoSchema),
@@ -40,13 +45,14 @@ export default function NuevoDiagnosticoPage() {
   });
 
   useEffect(() => {
-    getEquipos().then(setEquipos);
+    getEquipos().then((data) => setEquipos(data as EquipoItem[]));
   }, []);
 
   useEffect(() => {
     const eqId = form.watch("equipoId");
     const eq = equipos.find((e) => e.id === eqId);
     setEquipoSeleccionado(eq || null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("equipoId"), equipos]);
 
   const onSubmit = async (data: DiagnosticoFormData) => {

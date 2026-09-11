@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import type { UserRole } from "@prisma/client";
 import { getUsuarios, createUsuario, updateUsuario, resetUsuarioPassword, deleteUsuario } from "@/lib/actions/user-actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,16 +15,15 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Plus, Shield, RotateCcw, Trash2, Loader2, KeyRound, Pencil } from "lucide-react";
+import { Plus, RotateCcw, Trash2, Loader2, KeyRound, Pencil } from "lucide-react";
 
 interface Usuario {
-  id: string; name: string | null; email: string | null; role: string;
-  isActive: boolean; failedAttempts: number; lockUntil: string | null;
-  createdAt: string; _count: { tickets: number; diagnosticos: number };
+  id: string; name: string | null; email: string | null; role: UserRole;
+  isActive: boolean; failedAttempts: number; lockUntil: Date | string | null;
+  createdAt: Date | string; _count: { tickets: number; diagnosticos: number };
 }
 
 export default function UsuariosPage() {
-  const router = useRouter();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(true);
   const [openNew, setOpenNew] = useState(false);
@@ -39,7 +38,7 @@ export default function UsuariosPage() {
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    getUsuarios().then((data) => { setUsuarios(data as any); setLoading(false); });
+    getUsuarios().then((data) => { setUsuarios(data as Usuario[]); setLoading(false); });
   }, []);
 
   const handleCreate = async () => {
@@ -49,15 +48,15 @@ export default function UsuariosPage() {
       setOpenNew(false);
       setFormData({ name: "", email: "", password: "", role: "TECNICO" });
       const data = await getUsuarios();
-      setUsuarios(data as any);
-    } catch (e: any) { toast.error(e.message || "Error"); }
+      setUsuarios(data as Usuario[]);
+    } catch (e: unknown) { toast.error(e instanceof Error ? e.message : "Error"); }
   };
 
   const handleToggleActive = async (id: string, isActive: boolean) => {
     await updateUsuario(id, { isActive: !isActive });
     toast.success(`Usuario ${isActive ? "desactivado" : "activado"}`);
     const data = await getUsuarios();
-    setUsuarios(data as any);
+    setUsuarios(data as Usuario[]);
   };
 
   const handleResetPassword = async () => {
@@ -69,8 +68,8 @@ export default function UsuariosPage() {
       toast.success(`Contraseña restablecida para ${resetTarget.email}`);
       setResetTarget(null);
       setResetPassword("");
-    } catch (e: any) {
-      toast.error(e.message || "Error al restablecer");
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al restablecer");
     }
     setResetting(false);
   };
@@ -83,9 +82,9 @@ export default function UsuariosPage() {
       toast.success("Usuario actualizado");
       setEditTarget(null);
       const data = await getUsuarios();
-      setUsuarios(data as any);
-    } catch (e: any) {
-      toast.error(e.message || "Error al actualizar");
+      setUsuarios(data as Usuario[]);
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al actualizar");
     }
     setEditing(false);
   };
@@ -98,8 +97,8 @@ export default function UsuariosPage() {
       toast.success("Usuario eliminado");
       setDeleteTarget(null);
       const data = await getUsuarios();
-      setUsuarios(data as any);
-    } catch (e: any) { toast.error(e.message || "Error"); }
+      setUsuarios(data as Usuario[]);
+    } catch (e: unknown) { toast.error(e instanceof Error ? e.message : "Error"); }
     setDeleting(false);
   };
 

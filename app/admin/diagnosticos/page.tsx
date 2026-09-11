@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getDiagnosticos } from "@/lib/actions/diagnostico-actions";
-import { Plus, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default async function DiagnosticosPage({

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getEquipos, deleteEquipo } from "@/lib/actions/equipo-actions";
-import { Plus, Search, Monitor, Trash2, Loader2 } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/app/admin/user-context";
@@ -41,10 +41,11 @@ export default function EquiposPage() {
   const fetchData = async (s?: string, t?: string) => {
     setLoading(true);
     const data = await getEquipos({ search: s || undefined, tipo: t || undefined });
-    setEquipos(data as any);
+    setEquipos(data as Equipo[]);
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
   useEffect(() => { fetchData(search || undefined, tipo || undefined); }, []);
 
   const handleDelete = async () => {
@@ -55,8 +56,8 @@ export default function EquiposPage() {
       toast.success("Equipo eliminado");
       setDeleteTarget(null);
       fetchData(search || undefined, tipo || undefined);
-    } catch (e: any) {
-      toast.error(e.message || "Error al eliminar");
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
     }
     setDeleting(false);
   };

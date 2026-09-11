@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
 
 export interface Settings {
   institutionName: string;
@@ -27,8 +27,9 @@ export function SettingsProvider({
   children: ReactNode;
   settings: Settings | null;
 }) {
+  const value = useMemo(() => settings ?? DEFAULT, [settings]);
   return (
-    <SettingsContext.Provider value={settings ?? DEFAULT}>
+    <SettingsContext.Provider value={value}>
       {children}
     </SettingsContext.Provider>
   );

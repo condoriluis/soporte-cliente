@@ -3,9 +3,10 @@
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 
 export async function getTickets(params?: { estado?: string; tecnicoId?: string; search?: string }) {
-  const where: any = {};
+  const where: Prisma.TicketWhereInput = {};
   if (params?.estado) where.estado = params.estado;
   if (params?.tecnicoId) where.tecnicoId = params.tecnicoId;
   if (params?.search) {

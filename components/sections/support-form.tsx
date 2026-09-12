@@ -28,6 +28,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { SERVICIO_PRESELECT_EVENT } from "@/components/preselect-link";
 
 export default function SupportForm() {
   const [generatedTicket, setGeneratedTicket] = useState<string | null>(null);
@@ -66,6 +67,18 @@ export default function SupportForm() {
     const id = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
     return () => clearInterval(id);
   }, [cooldown]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const nombre = (e as CustomEvent<{ nombre: string }>).detail?.nombre;
+      if (nombre && SERVICIOS.some((s) => s.value === nombre)) {
+        form.setValue("servicio", nombre);
+        toast.success("Servicio seleccionado", { description: nombre, duration: 3000 });
+      }
+    };
+    window.addEventListener(SERVICIO_PRESELECT_EVENT, handler);
+    return () => window.removeEventListener(SERVICIO_PRESELECT_EVENT, handler);
+  }, [form]);
 
   async function onSubmit(data: SoporteFormData) {
     try {

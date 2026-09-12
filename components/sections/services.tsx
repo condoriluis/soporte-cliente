@@ -6,6 +6,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { getServicios } from "@/lib/actions/servicio-actions";
 import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
+import { PreselectLink } from "@/components/preselect-link";
 
 interface Service {
   nombre: string;
@@ -95,8 +96,8 @@ export default async function Services() {
               const Icon = ICONS[s.nombre] || Settings;
               return (
                 <FadeInStaggerItem key={s.nombre}>
-                  <a
-                    href="#formulario"
+                  <PreselectLink
+                    nombre={s.nombre}
                     className="group hover:no-underline relative flex flex-col h-full overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
                     style={{
                       borderColor: "transparent",
@@ -138,7 +139,7 @@ export default async function Services() {
                         <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                       </span>
                     </div>
-                  </a>
+                  </PreselectLink>
                 </FadeInStaggerItem>
               );
             })}
@@ -153,8 +154,8 @@ export default async function Services() {
             const Icon = ICONS[s.nombre] || Settings;
             return (
               <FadeInStaggerItem key={s.nombre}>
-                <a
-                  href="#formulario"
+                <PreselectLink
+                  nombre={s.nombre}
                   className="group hover:no-underline flex items-start gap-4 rounded-2xl border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-foreground/[0.01]"
                 >
                   <div
@@ -181,7 +182,7 @@ export default async function Services() {
                       </span>
                     </div>
                   </div>
-                </a>
+                </PreselectLink>
               </FadeInStaggerItem>
             );
           })}

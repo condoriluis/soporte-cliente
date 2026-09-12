@@ -4,14 +4,13 @@ import {
   Building2, ArrowUpRight, ArrowRight, Clock, Sparkles,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { getServicios, getTipoCambioUsd } from "@/lib/actions/servicio-actions";
+import { getServicios } from "@/lib/actions/servicio-actions";
 import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
 
 interface Service {
   nombre: string;
   description: string;
   duration: string;
-  precioBs: number;
   popular: boolean;
 }
 
@@ -48,7 +47,7 @@ const HIGHLIGHTS: Record<string, string> = {
 };
 
 export default async function Services() {
-  const [servicios, tasa] = await Promise.all([getServicios(), getTipoCambioUsd()]);
+  const servicios = await getServicios();
 
   const data: Service[] = servicios
     .filter((s) => s.activo)
@@ -56,7 +55,6 @@ export default async function Services() {
       nombre: s.nombre,
       description: s.descripcion || HIGHLIGHTS[s.nombre] || "",
       duration: s.duracion || "A consultar",
-      precioBs: s.precioBs,
       popular: s.popular,
     }));
 
@@ -99,7 +97,7 @@ export default async function Services() {
                 <FadeInStaggerItem key={s.nombre}>
                   <a
                     href="#formulario"
-                    className="group hover:no-underline relative block h-full overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
+                    className="group hover:no-underline relative flex flex-col h-full overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
                     style={{
                       borderColor: "transparent",
                       background:
@@ -126,25 +124,18 @@ export default async function Services() {
                     </div>
 
                     <h3 className="font-bold text-foreground">{s.nombre}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-1.5 mb-5">
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-1.5 mb-5 flex-1">
                       {s.description}
                     </p>
 
-                    <div className="flex items-end justify-between border-t pt-4" style={{ borderColor: "color-mix(in srgb, var(--brand-primary) 12%, transparent)" }}>
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          desde{" "}
-                          <span className="text-lg font-extrabold text-foreground">
-                            Bs {s.precioBs}
-                          </span>
-                        </p>
-                        <p className="text-[11px] text-muted-foreground">
-                          ≈ $us {(s.precioBs / (tasa || 6.97)).toFixed(0)}
-                        </p>
-                      </div>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-medium" style={{ color: "var(--brand-primary)" }}>
-                        <Clock className="w-3.5 h-3.5" />
+                    <div className="flex items-center justify-between border-t pt-4" style={{ borderColor: "color-mix(in srgb, var(--brand-primary) 12%, transparent)" }}>
+                      <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                        <Clock className="w-4 h-4" style={{ color: "var(--brand-primary)" }} />
                         {s.duration}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-sm font-semibold" style={{ color: "var(--brand-primary)" }}>
+                        Solicitar
+                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                       </span>
                     </div>
                   </a>
@@ -180,14 +171,11 @@ export default async function Services() {
                     </p>
 
                     <div className="flex items-center justify-between mt-3">
-                      <span className="text-xs font-semibold text-foreground/80">
-                        Bs {s.precioBs}
-                        <span className="text-muted-foreground font-normal"> · </span>
-                        <span className="text-muted-foreground font-normal">
-                          $us {(s.precioBs / (tasa || 6.97)).toFixed(0)}
-                        </span>
+                      <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Clock className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
+                        {s.duration}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--brand-secondary)" }}>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--brand-primary)" }}>
                         Solicitar
                         <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
                       </span>

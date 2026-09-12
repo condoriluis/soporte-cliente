@@ -12,7 +12,7 @@ import { toast } from "sonner";
 interface Cliente {
   id: string; nombre: string; cargo: string | null;
   dependencia: string | null; telefono: string | null;
-  _count: { equipos: number };
+  _count: { equipos: number; tickets: number };
 }
 
 export default function ClientesPage() {
@@ -88,14 +88,15 @@ export default function ClientesPage() {
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Dirección</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Teléfono</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Equipos</th>
+                <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Tickets</th>
                 {isAdmin && <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Acciones</th>}
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={isAdmin ? 6 : 5} className="p-8 text-center text-muted-foreground animate-pulse">Cargando...</td></tr>
+                <tr><td colSpan={isAdmin ? 7 : 6} className="p-8 text-center text-muted-foreground animate-pulse">Cargando...</td></tr>
               ) : clientes.length === 0 ? (
-                <tr><td colSpan={isAdmin ? 6 : 5} className="p-8 text-center text-muted-foreground">No hay clientes registrados</td></tr>
+                <tr><td colSpan={isAdmin ? 7 : 6} className="p-8 text-center text-muted-foreground">No hay clientes registrados</td></tr>
               ) : (
                 clientes.map((f) => (
                   <tr key={f.id} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
@@ -106,6 +107,7 @@ export default function ClientesPage() {
                     <td className="p-3 text-sm text-muted-foreground">{f.dependencia || "—"}</td>
                     <td className="p-3 text-sm text-muted-foreground">{f.telefono || "—"}</td>
                     <td className="p-3 text-sm text-muted-foreground">{f._count.equipos}</td>
+                    <td className="p-3 text-sm text-muted-foreground">{f._count.tickets}</td>
                     {isAdmin && (
                       <td className="p-3">
                         <div className="flex gap-1">

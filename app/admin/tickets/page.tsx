@@ -23,6 +23,7 @@ interface Ticket {
   id: string; code: string; title: string; categoria: string;
   estado: string; createdAt: string | Date;
   tecnico: { id: string; name: string | null } | null;
+  cliente?: { id: string; nombre: string; telefono: string | null; area: string | null } | null;
 }
 
 export default function TicketsPage() {
@@ -124,6 +125,7 @@ export default function TicketsPage() {
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Código</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Título</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Categoría</th>
+                <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Cliente</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Estado</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Técnico</th>
                 <th className="text-left p-3 text-xs font-semibold text-muted-foreground uppercase">Fecha</th>
@@ -132,9 +134,9 @@ export default function TicketsPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={isAdmin ? 7 : 6} className="p-8 text-center text-muted-foreground animate-pulse">Cargando...</td></tr>
+                <tr><td colSpan={isAdmin ? 8 : 7} className="p-8 text-center text-muted-foreground animate-pulse">Cargando...</td></tr>
               ) : tickets.length === 0 ? (
-                <tr><td colSpan={isAdmin ? 7 : 6} className="p-8 text-center text-muted-foreground">No hay tickets registrados</td></tr>
+                <tr><td colSpan={isAdmin ? 8 : 7} className="p-8 text-center text-muted-foreground">No hay tickets registrados</td></tr>
               ) : (
                 tickets.map((ticket) => (
                   <tr key={ticket.id} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
@@ -146,6 +148,15 @@ export default function TicketsPage() {
                     <td className="p-3 text-sm max-w-xs truncate">{ticket.title}</td>
                     <td className="p-3">
                       <span className="text-xs text-muted-foreground">{ticket.categoria}</span>
+                    </td>
+                    <td className="p-3 text-sm">
+                      {ticket.cliente ? (
+                        <Link href={`/admin/clientes/${ticket.cliente.id}`} className="font-medium text-primary hover:underline">
+                          {ticket.cliente.nombre}
+                        </Link>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="p-3">
                       <Badge className={`text-xs font-medium ${statusColors[ticket.estado] || ""}`} variant="outline">

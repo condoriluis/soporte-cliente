@@ -37,6 +37,7 @@ model Cliente {
   area        String?
   telefono    String?
   equipos     Equipo[]
+  tickets     Ticket[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
@@ -66,6 +67,8 @@ model Ticket {
   whatsapp    String?
   nombre      String?
   webhookId   String?
+  clienteId   String?
+  cliente     Cliente?       @relation(fields: [clienteId], references: [id])
   tecnicoId   String?
   tecnico     User?          @relation("TecnicoTickets", fields: [tecnicoId], references: [id])
   eventos     TicketEvento[]
@@ -113,7 +116,21 @@ model SystemSettings {
   logoUrl         String?
   primaryColor    String  @default("#1a3a5c")
   secondaryColor  String  @default("#2e7dc4")
+  cambioUsd       Float   @default(6.97)
   isConfigured    Boolean @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+model Servicio {
+  id          String   @id @default(cuid())
+  nombre      String   @unique
+  descripcion String?
+  duracion    String?
+  precioBs    Float    @default(0)
+  popular     Boolean  @default(false)
+  activo      Boolean  @default(true)
+  orden       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

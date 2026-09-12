@@ -4,6 +4,11 @@ import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@prisma/client";
+import { findOrCreateCliente } from "@/lib/cliente-utils";
+
+const clienteSelect = {
+  select: { id: true, nombre: true, telefono: true, area: true },
+} as const;
 
 export async function getTickets(params?: { estado?: string; tecnicoId?: string; search?: string }) {
   const where: Prisma.TicketWhereInput = {};
@@ -22,6 +27,7 @@ export async function getTickets(params?: { estado?: string; tecnicoId?: string;
     where,
     include: {
       tecnico: { select: { id: true, name: true } },
+      cliente: clienteSelect,
       eventos: { orderBy: { createdAt: "asc" } },
       _count: { select: { eventos: true } },
     },
@@ -34,6 +40,7 @@ export async function getTicketById(id: string) {
     where: { id },
     include: {
       tecnico: { select: { id: true, name: true } },
+      cliente: clienteSelect,
       eventos: { orderBy: { createdAt: "asc" } },
     },
   });
@@ -41,7 +48,7 @@ export async function getTicketById(id: string) {
 
 export async function createTicket(data: {
   title: string; categoria: string; descripcion: string;
-  whatsapp: string; nombre: string; tecnicoId?: string;
+  whatsapp: string; nombre: string; tecnicoId?: string; clienteId?: string;
 }) {
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
   const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -53,6 +60,14 @@ export async function createTicket(data: {
     if (!exists) break;
   }
 
+  let cliente: { id: string } | null = null;
+  if (data.whatsapp) {
+    cliente = await findOrCreateCliente({ nombre: data.nombre, whatsapp: data.whatsapp });
+  } else if (data.clienteId) {
+    const row = await db.cliente.findUnique({ where: { id: data.clienteId }, select: { id: true } });
+    cliente = row;
+  }
+
   const ticket = await db.ticket.create({
     data: {
       code,
@@ -62,6 +77,7 @@ export async function createTicket(data: {
       whatsapp: data.whatsapp,
       nombre: data.nombre,
       tecnicoId: data.tecnicoId || null,
+      clienteId: cliente?.id || null,
       eventos: {
         create: { evento: "CREADO", comentario: "Ticket creado", tecnico: data.nombre },
       },

@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
 
 export async function updateSystemSettings(data: {
   institutionName?: string; logoUrl?: string;
-  primaryColor?: string; secondaryColor?: string;
+  primaryColor?: string; secondaryColor?: string; cambioUsd?: number;
 }) {
   const session = await auth();
   if (session?.user?.role !== "ADMIN") throw new Error("No autorizado");

@@ -81,6 +81,9 @@ export default function NuevoTicketPage() {
                   <FormControl>
                     <Input {...field} placeholder="Ej. 70000000" />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Se buscará al cliente por este número; si no existe, se creará automáticamente en el módulo Clientes.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}

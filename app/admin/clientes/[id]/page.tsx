@@ -5,21 +5,34 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getClienteById, updateCliente, deleteCliente } from "@/lib/actions/cliente-actions";
 import { TIPOS_CLIENTE } from "@/lib/schemas";
-import { ArrowLeft, Plus, Monitor, Pencil, Trash2, Loader2, Save, X } from "lucide-react";
+import { ArrowLeft, Plus, Monitor, Pencil, Trash2, Loader2, Save, X, Ticket as TicketIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/app/admin/user-context";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { toast } from "sonner";
+
+const statusColor = (estado: string): string => {
+  const colors: Record<string, string> = {
+    ABIERTO: "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400",
+    EN_PROCESO: "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400",
+    ESPERANDO_CLIENTE: "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400",
+    RESUELTO: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400",
+    CERRADO: "bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-400",
+  };
+  return colors[estado] || "";
+};
 
 interface Cliente {
   id: string; nombre: string; cargo: string | null; dependencia: string | null;
   area: string | null; telefono: string | null;
   equipos: Array<{ id: string; nombre: string; marca: string | null; modelo: string | null; _count: { diagnosticos: number } }>;
+  tickets: Array<{ id: string; code: string; title: string; estado: string; createdAt: string | Date }>;
 }
 
 export default function ClienteDetailPage() {
@@ -189,6 +202,35 @@ export default function ClienteDetailPage() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="rounded-xl border bg-card p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <TicketIcon className="w-4 h-4 text-muted-foreground" />
+          <h3 className="font-semibold">Tickets de Soporte</h3>
+        </div>
+        {cl.tickets.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Sin tickets registrados</p>
+        ) : (
+          <div className="space-y-2">
+            {cl.tickets.map((ticket) => (
+              <Link
+                key={ticket.id}
+                href={`/admin/tickets/${ticket.id}`}
+                className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+              >
+                <span className="font-mono text-xs font-semibold text-primary">{ticket.code}</span>
+                <span className="flex-1 min-w-0 text-sm truncate">{ticket.title}</span>
+                <Badge className={`text-xs ${statusColor(ticket.estado)}`} variant="outline">
+                  {ticket.estado.replace(/_/g, " ")}
+                </Badge>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  {new Date(ticket.createdAt).toLocaleDateString("es-ES")}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <ConfirmDialog

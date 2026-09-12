@@ -17,7 +17,7 @@ export async function getClientes(params?: { search?: string }) {
   }
   return db.cliente.findMany({
     where,
-    include: { _count: { select: { equipos: true } } },
+    include: { _count: { select: { equipos: true, tickets: true } } },
     orderBy: { nombre: "asc" },
   });
 }
@@ -29,6 +29,11 @@ export async function getClienteById(id: string) {
       equipos: {
         include: { _count: { select: { diagnosticos: true } } },
         orderBy: { createdAt: "desc" },
+      },
+      tickets: {
+        select: { id: true, code: true, title: true, estado: true, createdAt: true },
+        orderBy: { createdAt: "desc" },
+        take: 20,
       },
     },
   });

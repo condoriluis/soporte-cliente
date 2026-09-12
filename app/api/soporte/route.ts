@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { soporteSchema } from "@/lib/schemas";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { findOrCreateCliente } from "@/lib/cliente-utils";
 
 const TS_MAX_AGE = 30 * 60 * 1000;
 
@@ -63,6 +64,29 @@ export async function POST(request: Request) {
     }
 
     const d = parsed.data;
+
+    const cliente = await findOrCreateCliente({
+      nombre: d.nombre,
+      whatsapp: d.whatsapp,
+      zona: d.zona,
+    });
+
+    const tipoEquipo = d.tipoEquipo === "Otro" ? "OTRO" : "PC";
+    const equipoPendiente = await db.equipo.findFirst({
+      where: { clienteId: cliente.id, tipo: tipoEquipo, marca: null, numeroSerie: null },
+      select: { id: true },
+    });
+    if (!equipoPendiente) {
+      await db.equipo.create({
+        data: {
+          tipo: tipoEquipo,
+          nombre: `${d.tipoEquipo} — ${d.nombre}`,
+          clienteId: cliente.id,
+        },
+        select: { id: true },
+      });
+    }
+
     const descripcion = [
       `Servicio: ${d.servicio}`,
       `Equipo: ${d.tipoEquipo}`,
@@ -83,6 +107,7 @@ export async function POST(request: Request) {
         descripcion,
         nombre: d.nombre,
         whatsapp: d.whatsapp,
+        clienteId: cliente.id,
         eventos: {
           create: {
             evento: "CREADO",
@@ -107,6 +132,7 @@ export async function POST(request: Request) {
           contact_message: descripcion,
           localId: ticket.id,
           localCode: ticket.code,
+          localClientId: cliente.id,
           timestamp: new Date().toISOString(),
         };
 

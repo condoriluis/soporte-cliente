@@ -116,6 +116,18 @@ export const clienteSchema = z.object({
 
 export type ClienteFormData = z.infer<typeof clienteSchema>;
 
+export const servicioSchema = z.object({
+  nombre: z.string().min(3, "El nombre debe tener al menos 3 caracteres.").max(120).transform(sanitize),
+  descripcion: z.string().max(300).transform(sanitize).optional().or(z.literal("")),
+  duracion: z.string().max(50).transform(sanitize).optional().or(z.literal("")),
+  precioBs: z.coerce.number().min(0, "El precio no puede ser negativo.").refine((v) => v > 0, "Ingrese un precio en bolivianos."),
+  popular: z.boolean().optional(),
+  activo: z.boolean().optional(),
+  orden: z.coerce.number().int().min(0).optional(),
+});
+
+export type ServicioFormData = z.infer<typeof servicioSchema>;
+
 export const diagnosticoSchema = z.object({
   tipo: z.enum(["PREVENTIVO", "CORRECTIVO"]),
   equipoId: z.string().min(1, "Seleccione un equipo"),

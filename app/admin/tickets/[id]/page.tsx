@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getTicketById } from "@/lib/actions/ticket-actions";
 import { getTecnicos } from "@/lib/actions/ticket-actions";
 import { auth } from "@/lib/auth";
 import { TicketDetailClient } from "./ticket-detail-client";
 import { Badge } from "@/components/ui/badge";
+import { ExternalLink } from "lucide-react";
 
 const statusColors: Record<string, string> = {
   ABIERTO: "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400",
@@ -41,6 +43,16 @@ export default async function TicketDetailPage({
           <p className="text-sm text-muted-foreground mt-1">
             {ticket.categoria} • {ticket.nombre}{ticket.whatsapp ? ` • ${ticket.whatsapp}` : ""}
           </p>
+          {ticket.cliente && (
+            <Link
+              href={`/admin/clientes/${ticket.cliente.id}`}
+              className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline mt-1"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              Cliente: {ticket.cliente.nombre}
+              {ticket.cliente.area ? ` (${ticket.cliente.area})` : ""}
+            </Link>
+          )}
         </div>
       </div>
 

@@ -9,6 +9,7 @@ const TECNICO_ROUTES = [
   "/admin/equipos",
   "/admin/clientes",
   "/admin/diagnosticos",
+  "/admin/servicios",
   "/admin/reportes",
 ];
 

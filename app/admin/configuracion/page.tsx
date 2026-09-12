@@ -74,14 +74,14 @@ function applyColors(p: string, s: string) {
 }
 
 export default function ConfiguracionPage() {
-  const [settings, setSettings] = useState<{ institutionName: string; logoUrl: string | null; primaryColor: string; secondaryColor: string } | null>(null);
+  const [settings, setSettings] = useState<{ institutionName: string; logoUrl: string | null; primaryColor: string; secondaryColor: string; cambioUsd: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [logoPreviewError, setLogoPreviewError] = useState(false);
 
   useEffect(() => {
     getSettings().then((data) => {
-      const s = data || { institutionName: "Soportik", logoUrl: "", primaryColor: "#1a3a5c", secondaryColor: "#2e7dc4" };
+      const s = data || { institutionName: "Soportik", logoUrl: "", primaryColor: "#1a3a5c", secondaryColor: "#2e7dc4", cambioUsd: 6.97 };
       setSettings(s);
       setLoading(false);
       applyColors(s.primaryColor, s.secondaryColor);
@@ -90,7 +90,10 @@ export default function ConfiguracionPage() {
 
   const handleChange = (key: string, value: string) => {
     if (!settings) return;
-    const next = { ...settings, [key]: value };
+    const next = {
+      ...settings,
+      [key]: key === "cambioUsd" ? (parseFloat(value) || 0) : value,
+    } as typeof settings;
     setSettings(next);
     if (key === "primaryColor" || key === "secondaryColor") {
       applyColors(
@@ -116,6 +119,7 @@ export default function ConfiguracionPage() {
         logoUrl: settings.logoUrl || undefined,
         primaryColor: settings.primaryColor,
         secondaryColor: settings.secondaryColor,
+        cambioUsd: settings.cambioUsd,
       });
       setLogoPreviewError(false);
       toast.success("Configuración guardada — los cambios se reflejan automáticamente en todo el sistema");
@@ -150,6 +154,24 @@ export default function ConfiguracionPage() {
             value={settings?.institutionName || ""}
             onChange={(e) => handleChange("institutionName", e.target.value)}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="cambioUsd">Tipo de cambio (Bs → USD)</Label>
+          <div className="flex items-center gap-3">
+            <Input
+              id="cambioUsd"
+              type="number"
+              step="0.01"
+              min="1"
+              value={settings?.cambioUsd ?? 6.97}
+              onChange={(e) => handleChange("cambioUsd", e.target.value)}
+              className="max-w-[180px]"
+            />
+            <p className="text-xs text-muted-foreground">
+              1 USD = {settings?.cambioUsd ?? 6.97} Bs — se usa para calcular el precio en dólares de los servicios automáticamente
+            </p>
+          </div>
         </div>
 
         <div className="space-y-2">

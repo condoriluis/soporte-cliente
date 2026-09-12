@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, TicketIcon, Monitor, Users, ClipboardList, FileText, Settings, Shield, ChevronLeft, ChevronRight, LogOut, Menu, X } from "lucide-react";
+import { Home, TicketIcon, Monitor, Users, ClipboardList, FileText, Settings, Shield, ChevronLeft, ChevronRight, LogOut, Menu, X, BadgeDollarSign } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -26,6 +26,7 @@ const menuItems = {
     { href: "/admin/equipos", label: "Equipos", icon: Monitor },
     { href: "/admin/clientes", label: "Clientes", icon: Users },
     { href: "/admin/diagnosticos", label: "Diagnósticos", icon: ClipboardList },
+    { href: "/admin/servicios", label: "Servicios y Precios", icon: BadgeDollarSign },
     { href: "/admin/reportes", label: "Reportes", icon: FileText },
     { href: "/admin/usuarios", label: "Usuarios", icon: Shield },
     { href: "/admin/configuracion", label: "Configuración", icon: Settings },
@@ -36,6 +37,7 @@ const menuItems = {
     { href: "/admin/equipos", label: "Equipos", icon: Monitor },
     { href: "/admin/clientes", label: "Clientes", icon: Users },
     { href: "/admin/diagnosticos", label: "Diagnósticos", icon: ClipboardList },
+    { href: "/admin/servicios", label: "Servicios y Precios", icon: BadgeDollarSign },
   ],
 };
 

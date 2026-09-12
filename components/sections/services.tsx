@@ -1,174 +1,213 @@
-"use client";
-
 import {
   Monitor, Laptop, Wrench, Thermometer, Zap, HardDrive,
   Settings, Printer, Wifi, KeyRound, MonitorCheck, Home,
-  Building2, ArrowRight,
+  Building2, ArrowUpRight, ArrowRight, Clock, Sparkles,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { getServicios, getTipoCambioUsd } from "@/lib/actions/servicio-actions";
+import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
 
 interface Service {
-  icon: LucideIcon;
-  title: string;
+  nombre: string;
   description: string;
   duration: string;
-  popular?: boolean;
+  precioBs: number;
+  popular: boolean;
 }
 
-const SERVICES: Service[] = [
-  {
-    icon: Monitor,
-    title: "Mantenimiento de PC",
-    description: "Limpieza interna, cambio de pasta térmica, revisión de componentes y optimización completa.",
-    duration: "2-3 horas",
-    popular: true,
-  },
-  {
-    icon: Laptop,
-    title: "Mantenimiento de laptop",
-    description: "Service completo para laptops: limpieza, optimización, revisión de batería y pantalla.",
-    duration: "2-4 horas",
-    popular: true,
-  },
-  {
-    icon: Wrench,
-    title: "Limpieza interna",
-    description: "Remoción de polvo, limpieza de ventiladores, ductos de aire y componentes internos.",
-    duration: "1-2 horas",
-  },
-  {
-    icon: Thermometer,
-    title: "Cambio de pasta térmica",
-    description: "Reemplazo de pasta térmica del procesador y GPU para mejorar la disipación de calor.",
-    duration: "1 hora",
-  },
-  {
-    icon: Zap,
-    title: "Optimización de Windows",
-    description: "Limpieza de software innecesario, desactivación de servicios y ajuste del sistema.",
-    duration: "1-2 horas",
-  },
-  {
-    icon: HardDrive,
-    title: "Liberación de espacio",
-    description: "Eliminación de archivos temporales, programas en desuso y liberación de disco duro.",
-    duration: "1 hora",
-  },
-  {
-    icon: Settings,
-    title: "Instalación de software",
-    description: "Instalación y configuración de sistemas operativos, Office, antivirus y aplicaciones.",
-    duration: "1-3 horas",
-  },
-  {
-    icon: Printer,
-    title: "Impresoras",
-    description: "Instalación, configuración, limpieza de cabezales y resolución de problemas de impresión.",
-    duration: "1-2 horas",
-  },
-  {
-    icon: Wifi,
-    title: "Wi-Fi y Redes",
-    description: "Configuración de redes, routers, puntos de acceso y resolución de conectividad.",
-    duration: "1-2 horas",
-  },
-  {
-    icon: KeyRound,
-    title: "Recuperación de acceso",
-    description: "Recuperación de contraseñas, cuentas bloqueadas y accesos autorizados perdidos.",
-    duration: "30 min - 1 hora",
-  },
-  {
-    icon: MonitorCheck,
-    title: "Soporte remoto",
-    description: "Asistencia técnica en línea para problemas de software sin necesidad de traslado.",
-    duration: "30 min - 1 hora",
-    popular: true,
-  },
-  {
-    icon: Home,
-    title: "Soporte a domicilio",
-    description: "Vamos a tu ubicación para resolver problemas presencialmente.",
-    duration: "Variable",
-  },
-  {
-    icon: Building2,
-    title: "Soporte para negocios",
-    description: "Planes de mantenimiento para PyMEs. Múltiples equipos, soporte prioritario y seguimiento.",
-    duration: "Según plan",
-    popular: true,
-  },
-];
+const ICONS: Record<string, LucideIcon> = {
+  "Mantenimiento de PC": Monitor,
+  "Mantenimiento de laptop": Laptop,
+  "Limpieza interna": Wrench,
+  "Cambio de pasta térmica": Thermometer,
+  "Optimización de Windows": Zap,
+  "Liberación de espacio": HardDrive,
+  "Instalación de software": Settings,
+  "Impresoras": Printer,
+  "Wi-Fi / redes": Wifi,
+  "Recuperación de acceso": KeyRound,
+  "Soporte remoto": MonitorCheck,
+  "Soporte a domicilio": Home,
+  "Soporte para negocios": Building2,
+};
 
-export default function Services() {
+const HIGHLIGHTS: Record<string, string> = {
+  "Mantenimiento de PC": "La base de todo equipo que respira.",
+  "Mantenimiento de laptop": "Portátiles ágiles y frescas.",
+  "Limpieza interna": "Adiós al polvo acumulado.",
+  "Cambio de pasta térmica": "Menos calor, más rendimiento.",
+  "Optimización de Windows": "Arranque y respuesta inmediatos.",
+  "Liberación de espacio": "Disco ordenado, mente tranquila.",
+  "Instalación de software": "Todo listo para trabajar.",
+  "Impresoras": "Sin papeles atascados ni cabezales secos.",
+  "Wi-Fi / redes": "Señal estable en toda tu casa u oficina.",
+  "Recuperación de acceso": "Volvemos a entrar, sin dramas.",
+  "Soporte remoto": "Te ayudamos sin moverte del sofá.",
+  "Soporte a domicilio": "Llegamos a tu ubicación.",
+  "Soporte para negocios": "Tu oficina siempre operativa.",
+};
+
+export default async function Services() {
+  const [servicios, tasa] = await Promise.all([getServicios(), getTipoCambioUsd()]);
+
+  const data: Service[] = servicios
+    .filter((s) => s.activo)
+    .map((s) => ({
+      nombre: s.nombre,
+      description: s.descripcion || HIGHLIGHTS[s.nombre] || "",
+      duration: s.duracion || "A consultar",
+      precioBs: s.precioBs,
+      popular: s.popular,
+    }));
+
+  const populares = data.filter((s) => s.popular);
+  const regulares = data.filter((s) => !s.popular);
+
   return (
-    <section id="servicios" className="py-20 md:py-28 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <p
-            className="text-xs font-bold tracking-[.14em] uppercase mb-3"
-            style={{ color: "var(--brand-primary)" }}
-          >
+    <section id="servicios" className="relative py-20 md:py-28 bg-background overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--brand-primary) 7%, transparent) 1px, transparent 0)",
+          backgroundSize: "26px 26px",
+          maskImage: "radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent)",
+        }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <FadeIn className="text-center mb-14 md:mb-20">
+          <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[.14em] uppercase mb-3 px-3 py-1 rounded-full text-white" style={{ background: "var(--brand-primary)" }}>
+            <Sparkles className="w-3.5 h-3.5" />
             Nuestros servicios
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
             Todo lo que tu equipo necesita
           </h2>
-          <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full"
-            style={{ background: "var(--brand-primary)" }}
-          />
-          <p className="mt-5 text-muted-foreground max-w-xl mx-auto">
-            Soluciones técnicas completas para computadoras de escritorio, laptops y dispositivos de oficina.
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+            Precios claros desde el inicio. El diagnóstico es sin costo y solo
+            trabajamos cuando confirmas el presupuesto.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {SERVICES.map((s) => (
-            <div
-              key={s.title}
-              className="group relative rounded-2xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
-            >
-              {s.popular && (
-                <span
-                  className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full text-white"
-                  style={{ background: "var(--brand-primary)" }}
-                >
-                  Popular
-                </span>
-              )}
+        {populares.length > 0 && (
+          <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+            {populares.map((s) => {
+              const Icon = ICONS[s.nombre] || Settings;
+              return (
+                <FadeInStaggerItem key={s.nombre}>
+                  <a
+                    href="#formulario"
+                    className="group hover:no-underline relative block h-full overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
+                    style={{
+                      borderColor: "transparent",
+                      background:
+                        "linear-gradient(160deg, color-mix(in srgb, var(--brand-primary) 7%, var(--card)) 0%, var(--card) 55%)",
+                      boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 14%, transparent)",
+                    }}
+                  >
+                    <div
+                      aria-hidden
+                      className="absolute inset-x-0 top-0 h-1"
+                      style={{ background: `linear-gradient(90deg, var(--brand-primary), var(--brand-secondary))` }}
+                    />
+                    <div className="flex items-start justify-between mb-5">
+                      <div
+                        className="w-11 h-11 flex items-center justify-center rounded-xl text-white transition-transform duration-300 group-hover:scale-110"
+                        style={{ background: `linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))` }}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <ArrowUpRight
+                        className="w-4 h-4 transition-all duration-300 opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0"
+                        style={{ color: "var(--brand-primary)" }}
+                      />
+                    </div>
 
-              <div
-                className="w-12 h-12 flex items-center justify-center rounded-xl mb-4 transition-colors"
-                style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
-              >
-                <s.icon
-                  className="w-6 h-6"
-                  style={{ color: "var(--brand-primary)" }}
-                />
-              </div>
+                    <h3 className="font-bold text-foreground">{s.nombre}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-1.5 mb-5">
+                      {s.description}
+                    </p>
 
-              <h3 className="font-bold text-foreground mb-1.5">{s.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                {s.description}
-              </p>
+                    <div className="flex items-end justify-between border-t pt-4" style={{ borderColor: "color-mix(in srgb, var(--brand-primary) 12%, transparent)" }}>
+                      <div>
+                        <p className="text-xs text-muted-foreground">
+                          desde{" "}
+                          <span className="text-lg font-extrabold text-foreground">
+                            Bs {s.precioBs}
+                          </span>
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          ≈ $us {(s.precioBs / (tasa || 6.97)).toFixed(0)}
+                        </p>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-medium" style={{ color: "var(--brand-primary)" }}>
+                        <Clock className="w-3.5 h-3.5" />
+                        {s.duration}
+                      </span>
+                    </div>
+                  </a>
+                </FadeInStaggerItem>
+              );
+            })}
+          </FadeInStagger>
+        )}
 
-              <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                <span className="text-xs text-muted-foreground font-medium">
-                  Duración: {s.duration}
-                </span>
+        <FadeInStagger
+          stagger={0.05}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          {regulares.map((s) => {
+            const Icon = ICONS[s.nombre] || Settings;
+            return (
+              <FadeInStaggerItem key={s.nombre}>
                 <a
                   href="#formulario"
-                  className="inline-flex items-center gap-1 text-xs font-semibold transition-colors"
-                  style={{ color: "var(--brand-primary)" }}
+                  className="group hover:no-underline flex items-start gap-4 rounded-2xl border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-foreground/[0.01]"
                 >
-                  Solicitar
-                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  <div
+                    className="w-10 h-10 shrink-0 flex items-center justify-center rounded-lg transition-colors duration-300"
+                    style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-foreground">{s.nombre}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
+                      {s.description}
+                    </p>
+
+                    <div className="flex items-center justify-between mt-3">
+                      <span className="text-xs font-semibold text-foreground/80">
+                        Bs {s.precioBs}
+                        <span className="text-muted-foreground font-normal"> · </span>
+                        <span className="text-muted-foreground font-normal">
+                          $us {(s.precioBs / (tasa || 6.97)).toFixed(0)}
+                        </span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--brand-secondary)" }}>
+                        Solicitar
+                        <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
+                  </div>
                 </a>
-              </div>
-            </div>
-          ))}
-        </div>
+              </FadeInStaggerItem>
+            );
+          })}
+        </FadeInStagger>
+
+        <FadeIn className="text-center mt-12">
+          <p className="text-sm text-muted-foreground">
+            ¿No encuentras el servicio?{" "}
+            <a href="#formulario" className="font-semibold underline underline-offset-4" style={{ color: "var(--brand-primary)" }}>
+              Escríbenos
+            </a>{" "}
+            y te ayudamos a encontrar la solución.
+          </p>
+        </FadeIn>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { CONTACT } from "@/lib/contact";
+import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
 
 interface PlanFeature {
   text: string;
@@ -59,7 +60,7 @@ export default function Plans() {
   return (
     <section id="planes" className="py-20 md:py-28 bg-background">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <FadeIn className="text-center mb-16">
           <p
             className="text-xs font-bold tracking-[.14em] uppercase mb-3"
             style={{ color: "var(--brand-primary)" }}
@@ -76,13 +77,13 @@ export default function Plans() {
           <p className="mt-5 text-muted-foreground max-w-lg mx-auto">
             Si no estás seguro, contáctanos y te ayudamos a elegir el servicio ideal.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {PLANS.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative rounded-2xl border-2 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+<FadeInStaggerItem key={plan.name}>
+              <div
+                className={`relative h-full rounded-2xl border-2 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
                 plan.popular
                   ? "border-transparent shadow-lg"
                   : "bg-card"
@@ -139,22 +140,25 @@ export default function Plans() {
                   Cotizar ahora
                 </a>
               </Button>
-            </div>
+              </div>
+            </FadeInStaggerItem>
           ))}
-        </div>
+        </FadeInStagger>
 
-        <p className="text-center text-sm text-muted-foreground mt-8">
-          ¿Necesitas algo diferente?{" "}
-          <a
-            href={CONTACT.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold underline underline-offset-4"
-            style={{ color: "var(--brand-primary)" }}
-          >
-            Solicita una cotización personalizada
-          </a>
-        </p>
+        <FadeIn>
+          <p className="text-center text-sm text-muted-foreground mt-8">
+            ¿Necesitas algo diferente?{" "}
+            <a
+              href={CONTACT.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline underline-offset-4"
+              style={{ color: "var(--brand-primary)" }}
+            >
+              Solicita una cotización personalizada
+            </a>
+          </p>
+        </FadeIn>
       </div>
     </section>
   );

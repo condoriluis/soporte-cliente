@@ -4,12 +4,13 @@ import { Mail, MapPin, Clock, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { CONTACT } from "@/lib/contact";
+import { FadeIn } from "@/components/fade-in";
 
 export default function Contact() {
   return (
     <section id="contacto" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <FadeIn className="text-center mb-16">
           <p
             className="text-xs font-bold tracking-[.14em] uppercase mb-3"
             style={{ color: "var(--brand-primary)" }}
@@ -26,15 +27,16 @@ export default function Contact() {
           <p className="mt-5 text-muted-foreground max-w-lg mx-auto">
             Escríbenos por WhatsApp para una respuesta inmediata o completa el formulario de solicitud.
           </p>
-        </div>
+        </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div
-            className="rounded-2xl border p-8 text-center flex flex-col items-center"
-            style={{
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--brand-primary) 5%, var(--card)), var(--card))",
-            }}
-          >
+          <FadeIn direction="right">
+            <div
+              className="rounded-2xl border p-8 text-center flex flex-col items-center h-full"
+              style={{
+                background: "linear-gradient(135deg, color-mix(in srgb, var(--brand-primary) 5%, var(--card)), var(--card))",
+              }}
+            >
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
               style={{ background: "color-mix(in srgb, #25D366 12%, transparent)" }}
@@ -59,9 +61,11 @@ export default function Contact() {
                 Escribir por WhatsApp
               </a>
             </Button>
-          </div>
+            </div>
+          </FadeIn>
 
-          <div className="rounded-2xl border bg-card p-8">
+          <FadeIn direction="left" className="h-full">
+            <div className="rounded-2xl border bg-card p-8 h-full">
             <h3 className="text-xl font-bold text-foreground mb-6">Información de contacto</h3>
 
             <div className="space-y-5">
@@ -119,7 +123,8 @@ export default function Contact() {
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>

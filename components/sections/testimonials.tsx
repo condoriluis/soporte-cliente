@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { FadeIn } from "@/components/fade-in";
 
 interface Testimonial {
   name: string;
@@ -71,7 +72,7 @@ export default function Testimonials() {
   return (
     <section id="testimonios" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <FadeIn className="text-center mb-12">
           <p
             className="text-xs font-bold tracking-[.14em] uppercase mb-3"
             style={{ color: "var(--brand-primary)" }}
@@ -85,9 +86,10 @@ export default function Testimonials() {
             className="mx-auto mt-4 h-1 w-16 rounded-full"
             style={{ background: "var(--brand-primary)" }}
           />
-        </div>
+        </FadeIn>
 
-        <div className="relative">
+        <FadeIn>
+          <div className="relative">
           <button
             type="button"
             onClick={() => scrollByCard(-1)}
@@ -143,8 +145,9 @@ export default function Testimonials() {
                 </div>
               </article>
             ))}
+            </div>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

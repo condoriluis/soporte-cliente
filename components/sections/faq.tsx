@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
 
 interface FAQItem {
   question: string;
@@ -54,7 +55,7 @@ export default function FAQ() {
   return (
     <section id="faq" className="py-20 md:py-28 bg-background">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <FadeIn className="text-center mb-16">
           <p
             className="text-xs font-bold tracking-[.14em] uppercase mb-3"
             style={{ color: "var(--brand-primary)" }}
@@ -68,14 +69,14 @@ export default function FAQ() {
             className="mx-auto mt-4 h-1 w-16 rounded-full"
             style={{ background: "var(--brand-primary)" }}
           />
-        </div>
+        </FadeIn>
 
-        <div className="space-y-3">
+        <FadeInStagger className="space-y-3">
           {FAQ_DATA.map((item, i) => (
-            <div
-              key={i}
-              className="rounded-xl border bg-card overflow-hidden transition-all"
-            >
+            <FadeInStaggerItem key={i}>
+              <div
+                className="rounded-xl border bg-card overflow-hidden transition-all"
+              >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full flex items-center justify-between px-6 py-4 text-left"
@@ -100,9 +101,10 @@ export default function FAQ() {
                   {item.answer}
                 </p>
               </div>
-            </div>
+              </div>
+            </FadeInStaggerItem>
           ))}
-        </div>
+        </FadeInStagger>
       </div>
     </section>
   );

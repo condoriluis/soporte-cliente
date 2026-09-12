@@ -7,6 +7,7 @@ import {
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import TrackTicket from "@/components/track-ticket";
 import { CONTACT } from "@/lib/contact";
+import { FadeIn } from "@/components/fade-in";
 
 const TRUST = [
   { icon: ClipboardCheck, label: "Diagnóstico sin costo" },
@@ -37,23 +38,28 @@ export default function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-36">
         <div className="max-w-3xl">
-          <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight">
-            Servicio técnico de PC y laptops,{" "}
-            <span style={{ color: "var(--brand-light)" }}>
-              rápido y garantizado
-            </span>
-          </h1>
+          <FadeIn duration={0.6}>
+            <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight">
+              Servicio técnico de PC y laptops,{" "}
+              <span style={{ color: "var(--brand-light)" }}>
+                rápido y garantizado
+              </span>
+            </h1>
+          </FadeIn>
 
-          <p
-            className="mt-6 text-lg sm:text-xl max-w-2xl leading-relaxed"
-            style={{ color: "rgba(255,255,255,.78)" }}
-          >
-            Reparamos, mantenemos y optimizamos equipos de escritorio y
-            laptops en nuestro taller o a domicilio. El diagnóstico es sin
-            costo y te decimos el precio exacto antes de empezar.
-          </p>
+          <FadeIn delay={0.12} duration={0.6}>
+            <p
+              className="mt-6 text-lg sm:text-xl max-w-2xl leading-relaxed"
+              style={{ color: "rgba(255,255,255,.78)" }}
+            >
+              Reparamos, mantenemos y optimizamos equipos de escritorio y
+              laptops en nuestro taller o a domicilio. El diagnóstico es sin
+              costo y te decimos el precio exacto antes de empezar.
+            </p>
+          </FadeIn>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
+          <FadeIn delay={0.24} duration={0.6}>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
             <Button
               asChild
               size="lg"
@@ -80,9 +86,11 @@ export default function Hero() {
                 WhatsApp
               </a>
             </Button>
-          </div>
+            </div>
+          </FadeIn>
 
-          <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
+          <FadeIn delay={0.36} duration={0.6}>
+            <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
             {TRUST.map((t) => (
               <div
                 key={t.label}
@@ -98,7 +106,8 @@ export default function Hero() {
                 </span>
               </div>
             ))}
-          </div>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>

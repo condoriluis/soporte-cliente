@@ -1,6 +1,7 @@
 import { CalendarCheck, Wrench } from "lucide-react";
 import type { ComponentType } from "react";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
+import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
 
 const STEPS: { icon: ComponentType<{ className?: string }>; n: number; title: string; desc: string }[] = [
   {
@@ -27,7 +28,7 @@ export default function Process() {
   return (
     <section id="proceso" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <FadeIn className="text-center mb-16">
           <p
             className="text-xs font-bold tracking-[.14em] uppercase mb-3"
             style={{ color: "var(--brand-primary)" }}
@@ -41,11 +42,11 @@ export default function Process() {
             className="mx-auto mt-4 h-1 w-16 rounded-full"
             style={{ background: "var(--brand-primary)" }}
           />
-        </div>
+        </FadeIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {STEPS.map((step, i) => (
-            <div key={step.n} className="relative text-center">
+            <FadeInStaggerItem key={step.n} className="relative text-center">
               {i < STEPS.length - 1 && (
                 <div className="hidden md:block absolute top-10 left-[60%] w-[80%] border-t-2 border-dashed border-border" />
               )}
@@ -66,9 +67,9 @@ export default function Process() {
               <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                 {step.desc}
               </p>
-            </div>
+            </FadeInStaggerItem>
           ))}
-        </div>
+        </FadeInStagger>
       </div>
     </section>
   );

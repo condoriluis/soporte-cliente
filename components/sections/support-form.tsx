@@ -82,7 +82,7 @@ export default function SupportForm() {
       modalidad: undefined,
       fechaPreferida: "",
       hp: "",
-      ts: String(Date.now()),
+      ts: "",
     },
   });
 

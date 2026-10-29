@@ -134,3 +134,16 @@ model Servicio {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Testimonio {
+  id           String   @id @default(cuid())
+  nombre       String
+  cargo        String?
+  comentario   String
+  calificacion Int      @default(5)
+  aprobado     Boolean  @default(false)
+  activo       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+

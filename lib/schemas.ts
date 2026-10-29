@@ -137,3 +137,28 @@ export const diagnosticoSchema = z.object({
 });
 
 export type DiagnosticoFormData = z.infer<typeof diagnosticoSchema>;
+
+export const testimonioSchema = z.object({
+  nombre: z
+    .string()
+    .min(2, "El nombre debe tener al menos 2 caracteres.")
+    .max(80, "El nombre no puede superar 80 caracteres.")
+    .transform(sanitize),
+  cargo: z
+    .string()
+    .max(100, "El cargo o referencia no puede superar 100 caracteres.")
+    .transform(sanitize)
+    .optional()
+    .or(z.literal("")),
+  comentario: z
+    .string()
+    .min(10, "El testimonio debe tener al menos 10 caracteres.")
+    .max(600, "El testimonio no puede superar 600 caracteres.")
+    .transform(sanitize),
+  calificacion: z.coerce.number().int().min(1, "Selecciona una calificación").max(5).default(5),
+  hp: z.string().max(0, "Bot detectado").optional().or(z.literal("")),
+  ts: z.string().min(1, "Token de seguridad inválido"),
+});
+
+export type TestimonioFormData = z.infer<typeof testimonioSchema>;
+

@@ -141,80 +141,86 @@ export default function TrackTicket() {
           Rastrear ticket
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg max-h-[85vh] grid-rows-[auto_minmax(0,1fr)]">
+      <DialogContent className="sm:max-w-lg max-h-[85vh] flex flex-col gap-4">
         <DialogHeader>
-          <DialogTitle>Rastrear Ticket</DialogTitle>
+          <DialogTitle className="text-xl font-bold">Rastrear Ticket</DialogTitle>
           <DialogDescription>
             Ingresa tu número de ticket para consultar el estado actual.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-y-auto pr-1 -mr-1 space-y-4 min-h-0">
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <Input
-              value={ticketId}
-              onChange={(e) => setTicketId(e.target.value)}
-              placeholder="Ej. TK-1234"
-              disabled={isLoading}
-              className="flex-1 h-10 border-primary/40 focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-            />
-            <Button type="submit" disabled={isLoading || !ticketId.trim()}>
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Search className="w-4 h-4" />
-              )}
-            </Button>
-          </form>
+        <form onSubmit={handleSearch} className="flex gap-2 pt-1">
+          <Input
+            value={ticketId}
+            onChange={(e) => setTicketId(e.target.value)}
+            placeholder="Ej. TK-1234"
+            disabled={isLoading}
+            className="flex-1 h-10"
+          />
+          <Button
+            type="submit"
+            disabled={isLoading || !ticketId.trim()}
+            className="h-10 px-4 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Search className="w-4 h-4" />
+            )}
+          </Button>
+        </form>
 
-          {activeTicket && (
-            <div>
-              <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
-                <h4 className="font-semibold text-sm border-b pb-2 flex items-center justify-between">
-                  <span>Detalles del Ticket</span>
-                  <span
-                    className={cn(
-                      "text-xs px-2.5 py-1 rounded-full font-medium tracking-wide",
-                      getStatusColor(activeTicket.status)
-                    )}
-                  >
-                    {formatLabel(activeTicket.status)}
-                  </span>
-                </h4>
-                <div className="grid grid-cols-2 gap-y-3 text-sm">
-                  <div className="text-muted-foreground">Número:</div>
-                  <div className="font-medium">{activeTicket.code}</div>
+        {(activeTicket || (result && "notFound" in result)) && (
+          <div className="overflow-y-auto pr-1 -mr-1 space-y-4 min-h-0 flex-1">
+            {activeTicket && (
+              <div>
+                <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
+                  <h4 className="font-semibold text-sm border-b pb-2 flex items-center justify-between">
+                    <span>Detalles del Ticket</span>
+                    <span
+                      className={cn(
+                        "text-xs px-2.5 py-1 rounded-full font-medium tracking-wide",
+                        getStatusColor(activeTicket.status)
+                      )}
+                    >
+                      {formatLabel(activeTicket.status)}
+                    </span>
+                  </h4>
+                  <div className="grid grid-cols-2 gap-y-3 text-sm">
+                    <div className="text-muted-foreground">Número:</div>
+                    <div className="font-medium">{activeTicket.code}</div>
 
-                  <div className="text-muted-foreground">Asunto:</div>
-                  <div className="font-medium truncate">
-                    {activeTicket.title}
-                  </div>
+                    <div className="text-muted-foreground">Asunto:</div>
+                    <div className="font-medium truncate">
+                      {activeTicket.title}
+                    </div>
 
-                  <div className="text-muted-foreground">
-                    <Clock className="w-3.5 h-3.5 inline mr-1" />
-                    Última act.:
-                  </div>
-                  <div className="font-medium">
-                    {formatDate(activeTicket.updatedAt)}
+                    <div className="text-muted-foreground">
+                      <Clock className="w-3.5 h-3.5 inline mr-1" />
+                      Última act.:
+                    </div>
+                    <div className="font-medium">
+                      {formatDate(activeTicket.updatedAt)}
+                    </div>
                   </div>
                 </div>
+
+                {ticketResult && <TicketTimeline events={ticketResult.events} />}
               </div>
+            )}
 
-              {ticketResult && <TicketTimeline events={ticketResult.events} />}
-            </div>
-          )}
-
-          {!activeTicket && result && "notFound" in result && (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-center space-y-2">
-              <p className="text-sm font-semibold text-destructive">
-                No se encontraron resultados
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Verifica el número ingresado e intenta nuevamente.
-              </p>
-            </div>
-          )}
-        </div>
+            {!activeTicket && result && "notFound" in result && (
+              <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-center space-y-2">
+                <p className="text-sm font-semibold text-destructive">
+                  No se encontraron resultados
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Verifica el número ingresado e intenta nuevamente.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

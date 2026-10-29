@@ -183,8 +183,11 @@ export default function Navbar() {
       </div>
 
       <motion.div
-        style={{ scaleX: scrollYProgress }}
-        className="h-px origin-left bg-brand"
+        style={{
+          scaleX: scrollYProgress,
+          backgroundColor: settings.primaryColor || "var(--brand-primary)",
+        }}
+        className="h-[3px] origin-left shadow-[0_1px_4px_rgba(0,0,0,0.18)]"
       />
     </header>
   );

@@ -1,6 +1,7 @@
 const ADMIN_ONLY_ROUTES = [
   "/admin/usuarios",
   "/admin/configuracion",
+  "/admin/testimonios",
 ];
 
 const TECNICO_ROUTES = [

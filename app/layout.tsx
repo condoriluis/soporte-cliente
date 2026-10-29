@@ -73,8 +73,12 @@ export default async function RootLayout({
 
   return (
     <html lang="es" suppressHydrationWarning>
-      <head>
-        <style>{`
+      <head suppressHydrationWarning>
+        <style
+          id="system-brand-theme"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `
           :root {
             --brand-primary: ${p};
             --brand-secondary: ${s};
@@ -108,7 +112,9 @@ export default async function RootLayout({
             --sidebar-primary-foreground: #ffffff;
             --sidebar-ring: ${darkRing};
           }
-        `}</style>
+        `,
+          }}
+        />
         {settings?.logoUrl && (
           <link rel="icon" href={settings.logoUrl} />
         )}

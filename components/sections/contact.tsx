@@ -1,130 +1,133 @@
 "use client";
 
-import { Mail, MapPin, Clock, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { CONTACT } from "@/lib/contact";
 import { FadeIn } from "@/components/fade-in";
+import { SectionHeading } from "@/components/landing/section-heading";
+
+const INFO = [
+  {
+    icon: Phone,
+    label: "Teléfono / WhatsApp",
+    value: CONTACT.whatsappDisplay,
+    href: CONTACT.whatsappUrl,
+  },
+  {
+    icon: Mail,
+    label: "Correo electrónico",
+    value: CONTACT.email,
+    href: `mailto:${CONTACT.email}`,
+  },
+  {
+    icon: MapPin,
+    label: "Ubicación",
+    value: CONTACT.location,
+  },
+  {
+    icon: Clock,
+    label: "Horario de atención",
+    value: CONTACT.schedule,
+  },
+];
 
 export default function Contact() {
   return (
-    <section id="contacto" className="py-20 md:py-28 bg-muted/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn className="text-center mb-16">
-          <p
-            className="text-xs font-bold tracking-[.14em] uppercase mb-3"
-            style={{ color: "var(--brand-primary)" }}
-          >
-            Contáctanos
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            ¿Necesitas ayuda ahora?
-          </h2>
-          <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full"
-            style={{ background: "var(--brand-primary)" }}
-          />
-          <p className="mt-5 text-muted-foreground max-w-lg mx-auto">
-            Escríbenos por WhatsApp para una respuesta inmediata o completa el formulario de solicitud.
-          </p>
-        </FadeIn>
+    <section
+      id="contacto"
+      className="relative scroll-mt-20 overflow-hidden bg-ink py-20 text-ink-foreground sm:py-24 lg:py-28"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-grid bg-grid-fade text-white"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 bottom-0 h-[26rem] w-[26rem] rounded-full bg-brand/25 blur-[120px]"
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FadeIn direction="right">
-            <div
-              className="rounded-2xl border p-8 text-center flex flex-col items-center h-full"
-              style={{
-                background: "linear-gradient(135deg, color-mix(in srgb, var(--brand-primary) 5%, var(--card)), var(--card))",
-              }}
-            >
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
-              style={{ background: "color-mix(in srgb, #25D366 12%, transparent)" }}
-            >
-              <WhatsAppIcon className="w-8 h-8" style={{ color: "#25D366" }} />
-            </div>
-            <h3 className="text-xl font-bold text-foreground mb-2">WhatsApp</h3>
-            <p className="text-2xl font-extrabold mb-2" style={{ color: "var(--brand-primary)" }}>
-              {CONTACT.whatsappDisplay}
-            </p>
-            <p className="text-sm text-muted-foreground mb-6">
-              La forma más rápida de contactarnos. Respuesta inmediata en horario laboral.
-            </p>
-            <Button
-              asChild
-              size="lg"
-              className="rounded-full font-bold text-white px-8"
-              style={{ background: "#25D366" }}
-            >
-              <a href={`${CONTACT.whatsappUrl}?text=${encodeURIComponent(CONTACT.whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="w-5 h-5 mr-2" />
-                Escribir por WhatsApp
-              </a>
-            </Button>
-            </div>
-          </FadeIn>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-5">
+            <FadeIn>
+              <SectionHeading
+                index="07"
+                kicker="Contacto"
+                tone="inverted"
+                title="¿Necesitas ayuda ahora?"
+                description="Escríbenos por WhatsApp para una respuesta inmediata o completa el formulario de solicitud."
+              />
+            </FadeIn>
 
-          <FadeIn direction="left" className="h-full">
-            <div className="rounded-2xl border bg-card p-8 h-full">
-            <h3 className="text-xl font-bold text-foreground mb-6">Información de contacto</h3>
-
-            <div className="space-y-5">
-              <div className="flex items-start gap-4">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
+            <FadeIn delay={0.1}>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-12 rounded-full bg-[#25D366] px-6 text-base font-semibold text-white hover:bg-[#1fb959]"
                 >
-                  <Phone className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Teléfono / WhatsApp</p>
-                  <p className="text-sm text-muted-foreground">{CONTACT.whatsappDisplay}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
-                >
-                  <Mail className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Correo electrónico</p>
-                  <a href={`mailto:${CONTACT.email}`} className="text-sm text-muted-foreground hover:underline">
-                    {CONTACT.email}
+                  <a
+                    href={`${CONTACT.whatsappUrl}?text=${encodeURIComponent(CONTACT.whatsappMessage)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <WhatsAppIcon className="h-5 w-5" />
+                    Escribir por WhatsApp
                   </a>
-                </div>
-              </div>
+                </Button>
 
-              <div className="flex items-start gap-4">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="h-12 rounded-full border-white/20 bg-white/5 px-5 text-base font-medium text-white hover:bg-white/10 hover:text-white"
                 >
-                  <MapPin className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Ubicación</p>
-                  <p className="text-sm text-muted-foreground">{CONTACT.location}</p>
-                </div>
+                  <a href={`mailto:${CONTACT.email}`}>
+                    <Mail className="h-4 w-4" />
+                    Enviar correo
+                  </a>
+                </Button>
               </div>
+            </FadeIn>
+          </div>
 
-              <div className="flex items-start gap-4">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
-                >
-                  <Clock className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Horario de atención</p>
-                  <p className="text-sm text-muted-foreground">{CONTACT.schedule}</p>
-                </div>
+          <div className="lg:col-span-7">
+            <FadeIn delay={0.15} direction="left">
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+                {INFO.map((item) => (
+                  <div key={item.label} className="bg-ink p-6">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-brand-light">
+                      <item.icon className="h-5 w-5" />
+                    </div>
+                    <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                      {item.label}
+                    </p>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target={
+                          item.href.startsWith("http") ? "_blank" : undefined
+                        }
+                        rel={
+                          item.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        className="mt-1 block text-sm font-medium text-white transition-colors hover:text-brand-light"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="mt-1 text-sm font-medium text-white">
+                        {item.value}
+                      </p>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
-            </div>
-          </FadeIn>
+            </FadeIn>
+          </div>
         </div>
       </div>
     </section>

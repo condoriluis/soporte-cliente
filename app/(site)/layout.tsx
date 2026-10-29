@@ -1,3 +1,4 @@
+import { MotionConfig } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -14,7 +15,7 @@ export default function PublicLayout({
       disableTransitionOnChange
       storageKey="public-theme"
     >
-      {children}
+      <MotionConfig reducedMotion="user">{children}</MotionConfig>
       <Toaster richColors position="top-right" />
     </ThemeProvider>
   );

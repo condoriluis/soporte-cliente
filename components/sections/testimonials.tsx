@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import { FadeIn } from "@/components/fade-in";
+import { SectionHeading } from "@/components/landing/section-heading";
 
 interface Testimonial {
   name: string;
@@ -64,88 +65,91 @@ export default function Testimonials() {
     const track = trackRef.current;
     if (!track) return;
     const card = track.querySelector<HTMLElement>("[data-testimonial]");
-    const gap = 20; // gap-5
+    const gap = 20;
     const step = card ? card.offsetWidth + gap : track.clientWidth;
     track.scrollBy({ left: direction * step, behavior: "smooth" });
   };
 
   return (
-    <section id="testimonios" className="py-20 md:py-28 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn className="text-center mb-12">
-          <p
-            className="text-xs font-bold tracking-[.14em] uppercase mb-3"
-            style={{ color: "var(--brand-primary)" }}
-          >
-            Opiniones de clientes
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            Lo que dicen nuestros clientes
-          </h2>
-          <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full"
-            style={{ background: "var(--brand-primary)" }}
-          />
-        </FadeIn>
+    <section
+      id="testimonios"
+      className="scroll-mt-20 bg-muted/40 py-20 sm:py-24 lg:py-28"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <FadeIn>
+            <SectionHeading
+              index="04"
+              kicker="Opiniones"
+              title="Lo que dicen nuestros clientes."
+              description="Personas y negocios que ya dejaron sus equipos en nuestras manos."
+            />
+          </FadeIn>
 
-        <FadeIn>
-          <div className="relative">
-          <button
-            type="button"
-            onClick={() => scrollByCard(-1)}
-            aria-label="Testimonios anteriores"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex items-center justify-center w-10 h-10 rounded-full border bg-card text-foreground shadow-sm transition-colors hover:bg-muted -ml-20"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollByCard(1)}
-            aria-label="Siguientes testimonios"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex items-center justify-center w-10 h-10 rounded-full border bg-card text-foreground shadow-sm transition-colors hover:bg-muted -mr-20"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          <FadeIn delay={0.1}>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollByCard(-1)}
+                aria-label="Testimonios anteriores"
+                className="flex h-10 w-10 items-center justify-center rounded-full border bg-card text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByCard(1)}
+                aria-label="Siguientes testimonios"
+                className="flex h-10 w-10 items-center justify-center rounded-full border bg-card text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </FadeIn>
+        </div>
 
+        <FadeIn delay={0.1} className="mt-12">
           <div
             ref={trackRef}
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 pb-4"
+            className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-2 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0"
           >
-            {TESTIMONIALS.map((t) => (
+            {TESTIMONIALS.map((testimonial) => (
               <article
-                key={t.name}
+                key={testimonial.name}
                 data-testimonial
-                className="shrink-0 snap-start w-[82%] sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)] bg-card rounded-2xl border p-6 flex flex-col transition-shadow hover:shadow-lg"
+                className="flex w-[84%] shrink-0 snap-start flex-col rounded-2xl border bg-card p-6 transition-colors duration-300 hover:border-primary/30 sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]"
               >
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-current"
-                      style={{ color: "var(--brand-primary)" }}
-                    />
-                  ))}
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-3.5 w-3.5 fill-current text-primary"
+                      />
+                    ))}
+                  </div>
+                  <Quote className="h-6 w-6 text-primary/20" />
                 </div>
 
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                  &ldquo;{t.text}&rdquo;
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  &ldquo;{testimonial.text}&rdquo;
                 </p>
 
-                <div className="flex items-center gap-3 pt-4 mt-6 border-t border-border/50">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                    style={{ background: "var(--brand-primary)" }}
-                  >
-                    {t.initials}
+                <div className="mt-6 flex items-center gap-3 border-t border-border/70 pt-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary">
+                    {testimonial.initials}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                    <p className="text-sm font-semibold text-foreground">
+                      {testimonial.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </div>
               </article>
             ))}
-            </div>
           </div>
         </FadeIn>
       </div>

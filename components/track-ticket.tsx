@@ -135,15 +135,10 @@ export default function TrackTicket() {
         <Button
           variant="ghost"
           size="lg"
-          className="rounded-full font-semibold"
-          style={{
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,.4)",
-            background: "rgba(0,0,0,.2)",
-          }}
+          className="h-12 rounded-full border border-white/20 bg-white/5 px-5 text-base font-medium text-white hover:bg-white/10 hover:text-white"
         >
-          <Search className="w-4 h-4 mr-2" />
-          Rastrear Ticket
+          <Search className="h-4 w-4" />
+          Rastrear ticket
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg max-h-[85vh] grid-rows-[auto_minmax(0,1fr)]">

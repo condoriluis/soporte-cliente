@@ -3,15 +3,16 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Sun, Moon, Monitor } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
-  if (!mounted) return <div className="w-9 h-9" />;
+  if (!mounted) return <div className="h-9 w-9" />;
 
   const options = [
     { key: "light", icon: Sun, label: "Claro" },
@@ -33,9 +34,12 @@ export function ThemeToggle() {
       onClick={cycle}
       aria-label={`Cambiar tema (actual: ${current.label})`}
       title={`Tema: ${current.label}`}
-      className="relative flex items-center justify-center w-9 h-9 rounded-full text-foreground transition-colors hover:bg-muted"
+      className={cn(
+        "relative flex h-9 w-9 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted",
+        className,
+      )}
     >
-      <CurrentIcon className="w-4 h-4" />
+      <CurrentIcon className="h-4 w-4" />
     </button>
   );
 }

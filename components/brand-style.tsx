@@ -44,37 +44,48 @@ export default function BrandStyle({
     const darkRing = mixColor(s, 0.2, "#8ab4f8");
     const darkSidebarPrimary = mixColor(p, 0.35, "#8ab4f8");
 
-    root.style.setProperty("--brand-primary", p);
-    root.style.setProperty("--brand-secondary", s);
-    root.style.setProperty("--brand-dark", p);
-    root.style.setProperty("--brand-accent", s);
-    root.style.setProperty("--brand-light", brandLight);
-
-    root.style.setProperty("--primary", p);
-    root.style.setProperty("--primary-foreground", "#ffffff");
-    root.style.setProperty("--secondary", secondaryLight);
-    root.style.setProperty("--secondary-foreground", s);
-    root.style.setProperty("--accent", s);
-    root.style.setProperty("--accent-foreground", "#ffffff");
-    root.style.setProperty("--ring", s);
-    root.style.setProperty("--sidebar-primary", p);
-    root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
-
-    if (root.classList.contains("dark")) {
-      root.style.setProperty("--brand-dark", "#0f172a");
+    const apply = () => {
+      root.style.setProperty("--brand-primary", p);
+      root.style.setProperty("--brand-secondary", s);
+      root.style.setProperty("--brand-dark", p);
       root.style.setProperty("--brand-accent", s);
       root.style.setProperty("--brand-light", brandLight);
-      root.style.setProperty("--primary", darkPrimary);
+
+      root.style.setProperty("--primary", p);
       root.style.setProperty("--primary-foreground", "#ffffff");
-      root.style.setProperty("--secondary", darkSecondary);
-      root.style.setProperty("--secondary-foreground", darkSecondaryFg);
+      root.style.setProperty("--secondary", secondaryLight);
+      root.style.setProperty("--secondary-foreground", s);
       root.style.setProperty("--accent", s);
       root.style.setProperty("--accent-foreground", "#ffffff");
-      root.style.setProperty("--ring", darkRing);
-      root.style.setProperty("--sidebar-primary", darkSidebarPrimary);
+      root.style.setProperty("--ring", s);
+      root.style.setProperty("--sidebar-primary", p);
       root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
-      root.style.setProperty("--sidebar-ring", darkRing);
-    }
+
+      if (root.classList.contains("dark")) {
+        root.style.setProperty("--brand-dark", "#0f172a");
+        root.style.setProperty("--brand-accent", s);
+        root.style.setProperty("--brand-light", brandLight);
+        root.style.setProperty("--primary", darkPrimary);
+        root.style.setProperty("--primary-foreground", "#ffffff");
+        root.style.setProperty("--secondary", darkSecondary);
+        root.style.setProperty("--secondary-foreground", darkSecondaryFg);
+        root.style.setProperty("--accent", s);
+        root.style.setProperty("--accent-foreground", "#ffffff");
+        root.style.setProperty("--ring", darkRing);
+        root.style.setProperty("--sidebar-primary", darkSidebarPrimary);
+        root.style.setProperty("--sidebar-primary-foreground", "#ffffff");
+        root.style.setProperty("--sidebar-ring", darkRing);
+      } else {
+        root.style.removeProperty("--sidebar-ring");
+      }
+    };
+
+    apply();
+
+    const observer = new MutationObserver(apply);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
   }, [primaryColor, secondaryColor]);
 
   return null;

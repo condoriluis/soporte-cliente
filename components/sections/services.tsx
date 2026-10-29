@@ -1,12 +1,30 @@
 import {
-  Monitor, Laptop, Wrench, Thermometer, Zap, HardDrive,
-  Settings, Printer, Wifi, KeyRound, MonitorCheck, Home,
-  Building2, ArrowUpRight, ArrowRight, Clock, Sparkles,
+  Monitor,
+  Laptop,
+  Wrench,
+  Thermometer,
+  Zap,
+  HardDrive,
+  Settings,
+  Printer,
+  Wifi,
+  KeyRound,
+  MonitorCheck,
+  Home,
+  Building2,
+  ArrowRight,
+  ArrowUpRight,
+  Clock,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getServicios } from "@/lib/actions/servicio-actions";
-import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/fade-in";
+import {
+  FadeIn,
+  FadeInStagger,
+  FadeInStaggerItem,
+} from "@/components/fade-in";
 import { PreselectLink } from "@/components/preselect-link";
+import { SectionHeading } from "@/components/landing/section-heading";
 
 interface Service {
   nombre: string;
@@ -23,7 +41,7 @@ const ICONS: Record<string, LucideIcon> = {
   "Optimización de Windows": Zap,
   "Liberación de espacio": HardDrive,
   "Instalación de software": Settings,
-  "Impresoras": Printer,
+  Impresoras: Printer,
   "Wi-Fi / redes": Wifi,
   "Recuperación de acceso": KeyRound,
   "Soporte remoto": MonitorCheck,
@@ -39,7 +57,7 @@ const HIGHLIGHTS: Record<string, string> = {
   "Optimización de Windows": "Arranque y respuesta inmediatos.",
   "Liberación de espacio": "Disco ordenado, mente tranquila.",
   "Instalación de software": "Todo listo para trabajar.",
-  "Impresoras": "Sin papeles atascados ni cabezales secos.",
+  Impresoras: "Sin papeles atascados ni cabezales secos.",
   "Wi-Fi / redes": "Señal estable en toda tu casa u oficina.",
   "Recuperación de acceso": "Volvemos a entrar, sin dramas.",
   "Soporte remoto": "Te ayudamos sin moverte del sofá.",
@@ -63,80 +81,74 @@ export default async function Services() {
   const regulares = data.filter((s) => !s.popular);
 
   return (
-    <section id="servicios" className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section
+      id="servicios"
+      className="relative scroll-mt-20 overflow-hidden py-20 sm:py-24 lg:py-28"
+    >
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--brand-primary) 7%, transparent) 1px, transparent 0)",
-          backgroundSize: "26px 26px",
-          maskImage: "radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent)",
-        }}
+        className="pointer-events-none absolute inset-0 bg-grid bg-grid-fade text-foreground opacity-40"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn className="text-center mb-14 md:mb-20">
-          <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[.14em] uppercase mb-3 px-3 py-1 rounded-full text-white" style={{ background: "var(--brand-primary)" }}>
-            <Sparkles className="w-3.5 h-3.5" />
-            Nuestros servicios
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
-            Todo lo que tu equipo necesita
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Precios claros desde el inicio. El diagnóstico es sin costo y solo
-            trabajamos cuando confirmas el presupuesto.
-          </p>
-        </FadeIn>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <FadeIn>
+            <SectionHeading
+              index="01"
+              kicker="Servicios"
+              title={
+                <>
+                  Todo lo que tu equipo necesita,{" "}
+                  <span className="text-primary">en un solo lugar.</span>
+                </>
+              }
+              description="Precios claros desde el inicio. El diagnóstico es sin costo y solo trabajamos cuando confirmas el presupuesto."
+            />
+          </FadeIn>
+
+          <FadeIn delay={0.1}>
+            <a
+              href="#formulario"
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-primary"
+            >
+              Solicitar diagnóstico
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </FadeIn>
+        </div>
 
         {populares.length > 0 && (
-          <FadeInStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-            {populares.map((s) => {
-              const Icon = ICONS[s.nombre] || Settings;
+          <FadeInStagger className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {populares.map((service) => {
+              const Icon = ICONS[service.nombre] || Settings;
               return (
-                <FadeInStaggerItem key={s.nombre}>
+                <FadeInStaggerItem key={service.nombre}>
                   <PreselectLink
-                    nombre={s.nombre}
-                    className="group hover:no-underline relative flex flex-col h-full overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
-                    style={{
-                      borderColor: "transparent",
-                      background:
-                        "linear-gradient(160deg, color-mix(in srgb, var(--brand-primary) 7%, var(--card)) 0%, var(--card) 55%)",
-                      boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 14%, transparent)",
-                    }}
+                    nombre={service.nombre}
+                    className="group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-elevated"
                   >
-                    <div
-                      aria-hidden
-                      className="absolute inset-x-0 top-0 h-1"
-                      style={{ background: `linear-gradient(90deg, var(--brand-primary), var(--brand-secondary))` }}
-                    />
-                    <div className="flex items-start justify-between mb-5">
-                      <div
-                        className="w-11 h-11 flex items-center justify-center rounded-xl text-white transition-transform duration-300 group-hover:scale-110"
-                        style={{ background: `linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))` }}
-                      >
-                        <Icon className="w-5 h-5" />
+                    <div className="flex items-start justify-between">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-brand group-hover:text-white">
+                        <Icon className="h-5 w-5" />
                       </div>
-                      <ArrowUpRight
-                        className="w-4 h-4 transition-all duration-300 opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0"
-                        style={{ color: "var(--brand-primary)" }}
-                      />
+                      <ArrowUpRight className="h-4 w-4 text-muted-foreground/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
                     </div>
 
-                    <h3 className="font-bold text-foreground">{s.nombre}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-1.5 mb-5 flex-1">
-                      {s.description}
+                    <h3 className="mt-5 font-display text-base font-semibold text-foreground">
+                      {service.nombre}
+                    </h3>
+                    <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                      {service.description}
                     </p>
 
-                    <div className="flex items-center justify-between border-t pt-4" style={{ borderColor: "color-mix(in srgb, var(--brand-primary) 12%, transparent)" }}>
-                      <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <Clock className="w-4 h-4" style={{ color: "var(--brand-primary)" }} />
-                        {s.duration}
+                    <div className="mt-5 flex items-center justify-between border-t border-border/70 pt-4">
+                      <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5 text-primary" />
+                        {service.duration}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-sm font-semibold" style={{ color: "var(--brand-primary)" }}>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
                         Solicitar
-                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                       </span>
                     </div>
                   </PreselectLink>
@@ -147,40 +159,35 @@ export default async function Services() {
         )}
 
         <FadeInStagger
-          stagger={0.05}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          stagger={0.04}
+          className="mt-4 grid gap-px overflow-hidden rounded-2xl border bg-border sm:grid-cols-2 lg:grid-cols-3"
         >
-          {regulares.map((s) => {
-            const Icon = ICONS[s.nombre] || Settings;
+          {regulares.map((service) => {
+            const Icon = ICONS[service.nombre] || Settings;
             return (
-              <FadeInStaggerItem key={s.nombre}>
+              <FadeInStaggerItem key={service.nombre}>
                 <PreselectLink
-                  nombre={s.nombre}
-                  className="group hover:no-underline flex items-start gap-4 rounded-2xl border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-foreground/[0.01]"
+                  nombre={service.nombre}
+                  className="group flex h-full items-start gap-4 bg-card p-5 transition-colors duration-300 hover:bg-muted/50"
                 >
-                  <div
-                    className="w-10 h-10 shrink-0 flex items-center justify-center rounded-lg transition-colors duration-300"
-                    style={{ background: "color-mix(in srgb, var(--brand-primary) 8%, transparent)" }}
-                  >
-                    <Icon className="w-5 h-5" style={{ color: "var(--brand-primary)" }} />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-foreground">{s.nombre}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
-                      {s.description}
-                    </p>
-
-                    <div className="flex items-center justify-between mt-3">
-                      <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Clock className="w-3.5 h-3.5" style={{ color: "var(--brand-primary)" }} />
-                        {s.duration}
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--brand-primary)" }}>
-                        Solicitar
-                        <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
-                      </span>
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="font-medium text-foreground">
+                        {service.nombre}
+                      </h3>
+                      <ArrowRight className="h-4 w-4 shrink-0 -translate-x-1 text-transparent transition-all duration-300 group-hover:translate-x-0 group-hover:text-primary" />
                     </div>
+                    <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                      {service.description}
+                    </p>
+                    <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <Clock className="h-3 w-3 text-primary" />
+                      {service.duration}
+                    </span>
                   </div>
                 </PreselectLink>
               </FadeInStaggerItem>
@@ -188,14 +195,20 @@ export default async function Services() {
           })}
         </FadeInStagger>
 
-        <FadeIn className="text-center mt-12">
-          <p className="text-sm text-muted-foreground">
-            ¿No encuentras el servicio?{" "}
-            <a href="#formulario" className="font-semibold underline underline-offset-4" style={{ color: "var(--brand-primary)" }}>
+        <FadeIn className="mt-10">
+          <div className="flex flex-col items-start justify-between gap-3 rounded-2xl border bg-card p-5 sm:flex-row sm:items-center">
+            <p className="text-sm text-muted-foreground">
+              ¿No encuentras el servicio que necesitas? Cuéntanos el problema y
+              lo resolvemos.
+            </p>
+            <a
+              href="#formulario"
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-primary"
+            >
               Escríbenos
-            </a>{" "}
-            y te ayudamos a encontrar la solución.
-          </p>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
         </FadeIn>
       </div>
     </section>
